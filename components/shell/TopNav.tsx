@@ -47,7 +47,7 @@ export function TopNav({ user }: { user: SessionUser }) {
     <header className="no-print sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-md">
       <div className="mx-auto flex h-11 w-full max-w-[1400px] items-center justify-between gap-6 px-5">
         <div className="flex min-w-0 items-center gap-5">
-          <Link href="/quotations" className="display shrink-0 text-[13px] tracking-tight">
+          <Link href="/quotations" className="display shrink-0 text-[14px] tracking-tight">
             DealFlow<span className="text-primary">360</span>
           </Link>
           <nav className="flex items-center gap-0.5" aria-label="Primary">
@@ -58,7 +58,7 @@ export function TopNav({ user }: { user: SessionUser }) {
                   key={n.href}
                   href={n.href}
                   className={cn(
-                    "relative flex h-11 items-center px-2.5 text-[13px] transition-colors",
+                    "relative flex h-11 items-center px-2.5 text-[14px] transition-colors",
                     active ? "text-text" : "text-muted hover:text-text-dim",
                   )}
                   aria-current={active ? "page" : undefined}
@@ -86,11 +86,11 @@ export function TopNav({ user }: { user: SessionUser }) {
             <span className="hidden lg:inline">Sign out</span>
           </button>
           <div className="ml-2 flex items-center gap-2 border-l border-border pl-3">
-            <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-primary-soft text-[10px] font-semibold text-primary">
+            <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-primary-soft text-[11px] font-semibold text-primary">
               {initials}
             </span>
-            <span className="hidden text-[13px] md:inline">{user.name}</span>
-            <span className="hidden text-[11px] text-faint lg:inline">{roleLabel(user.role)}</span>
+            <span className="hidden text-[14px] md:inline">{user.name}</span>
+            <span className="hidden text-[12px] text-faint lg:inline">{roleLabel(user.role)}</span>
           </div>
         </div>
       </div>

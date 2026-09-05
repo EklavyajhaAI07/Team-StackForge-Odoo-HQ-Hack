@@ -32,8 +32,8 @@ export function StockArrival({
   if (open.length === 0) {
     return (
       <Card className="px-5 py-4">
-        <h3 className="text-[15px] font-semibold">Simulate stock arrival</h3>
-        <p className="mt-1 text-[13px] text-muted">No open backorders — nothing is waiting on inbound stock.</p>
+        <h3>Simulate stock arrival</h3>
+        <p className="mt-1 text-[14px] text-muted">No open backorders — nothing is waiting on inbound stock.</p>
       </Card>
     );
   }
@@ -64,8 +64,8 @@ export function StockArrival({
   return (
     <Card>
       <div className="px-5 pt-4 pb-2">
-        <h3 className="text-[15px] font-semibold">Simulate stock arrival</h3>
-        <p className="text-[12px] text-muted">Receive inbound stock, then consolidate what it unblocks.</p>
+        <h3>Simulate stock arrival</h3>
+        <p className="text-[13px] text-muted">Receive inbound stock, then consolidate what it unblocks.</p>
       </div>
       <div className="flex flex-col gap-3 px-5 pb-5">
         <Field label="Warehouse">
@@ -95,8 +95,8 @@ export function StockArrival({
 
         {prompt ? (
           <div className="rounded-[8px] border border-money/40 bg-money-soft px-3 py-3">
-            <p className="text-[13px] font-medium text-money">Consolidate remaining backorder?</p>
-            <p className="mt-0.5 text-[12px] text-muted">
+            <p className="text-[14px] font-medium text-money">Consolidate remaining backorder?</p>
+            <p className="mt-0.5 text-[13px] text-muted">
               {prompt.fulfillableQty} × {prompt.productName} can ship now in one consolidation shipment.
             </p>
             <div className="mt-2 flex gap-2">

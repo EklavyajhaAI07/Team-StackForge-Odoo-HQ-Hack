@@ -72,7 +72,7 @@ export function LoginForm() {
       </form>
 
       <div className="mt-8 border-t border-border pt-5">
-        <p className="text-[12px] text-muted">
+        <p className="text-[13px] text-muted">
           Demo accounts — password <span className="num text-text-dim">{DEMO_PASSWORD}</span>. Pick one to sign straight in.
         </p>
         <ul className="mt-2.5 flex flex-col">
@@ -89,10 +89,10 @@ export function LoginForm() {
                 className="group flex w-full items-baseline justify-between gap-3 rounded-[6px] px-2 py-1.5 text-left transition-colors hover:bg-raised disabled:opacity-50"
               >
                 <span className="flex min-w-0 items-baseline gap-2">
-                  <span className="text-[13px] font-medium">{a.name}</span>
-                  <span className="truncate text-[11px] text-faint">{a.blurb}</span>
+                  <span className="text-[14px] font-medium">{a.name}</span>
+                  <span className="truncate text-[12px] text-faint">{a.blurb}</span>
                 </span>
-                <span className="shrink-0 text-[11px] text-muted group-hover:text-text-dim">{roleLabel(a.role)}</span>
+                <span className="shrink-0 text-[12px] text-muted group-hover:text-text-dim">{roleLabel(a.role)}</span>
               </button>
             </li>
           ))}

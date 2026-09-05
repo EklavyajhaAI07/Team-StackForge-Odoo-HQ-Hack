@@ -43,8 +43,8 @@ export function Modal({
       >
         <div className="flex items-start justify-between gap-4 px-5 pt-5">
           <div>
-            <h3 className="text-[19px] font-semibold tracking-tight">{title}</h3>
-            {description ? <p className="mt-1 text-[13px] text-muted">{description}</p> : null}
+            <h3 className="text-[17px] font-semibold tracking-tight">{title}</h3>
+            {description ? <p className="mt-1 text-[14px] text-muted">{description}</p> : null}
           </div>
           <button type="button" onClick={onClose} aria-label="Close" className="rounded p-1 text-muted hover:text-text">
             <IconX size={16} />

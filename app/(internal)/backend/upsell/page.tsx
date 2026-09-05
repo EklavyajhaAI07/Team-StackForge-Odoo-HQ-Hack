@@ -23,8 +23,8 @@ export default async function UpsellPage() {
   return (
     <Card>
       <div className="px-5 pt-4 pb-2">
-        <h2 className="text-[15px] font-semibold">Learned from order history</h2>
-        <p className="text-[12px] text-muted">
+        <h2>Learned from order history</h2>
+        <p className="text-[13px] text-muted">
           How often two products were bought together across {history.length} past orders. The builder ranks suggestions by this count,
           weights promoted items 1.5×, and drops anything below {MIN_UPSELL_MARGIN_PCT}% margin. There is nothing to author here.
         </p>

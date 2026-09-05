@@ -53,7 +53,7 @@ export function AlertColumns({
             right={
               <>
                 <StatusPill status={s.status} />
-                <span className="num mt-1 block text-[12px] text-muted">{formatMoney(s.total, { whole: true })}</span>
+                <span className="num mt-1 block text-[13px] text-muted">{formatMoney(s.total, { whole: true })}</span>
               </>
             }
           />
@@ -83,7 +83,7 @@ export function AlertColumns({
               </span>
             }
             detail={`Flags above ${formatPct(a.threshold)} for this rep`}
-            right={<span className="num text-[12px] text-muted">{formatMoney(a.total, { whole: true })}</span>}
+            right={<span className="num text-[13px] text-muted">{formatMoney(a.total, { whole: true })}</span>}
           />
         ))}
       </Column>
@@ -142,9 +142,9 @@ function Column({
         <div className="flex items-center gap-2">
           <span className={count === 0 ? "text-faint" : tone === "warn" ? "text-warn" : "text-danger"}>{icon}</span>
           <h2>{title}</h2>
-          <span className="num text-[12px] text-faint">{count}</span>
+          <span className="num text-[13px] text-faint">{count}</span>
         </div>
-        <p className="mt-0.5 text-[12px] text-muted">{caption}</p>
+        <p className="mt-0.5 text-[13px] text-muted">{caption}</p>
       </header>
       {count === 0 ? <EmptyState compact title="All clear" description={empty} /> : <div className="flex flex-col gap-2">{children}</div>}
     </section>
@@ -199,16 +199,16 @@ function AlertCard({
       <div className="flex items-start justify-between gap-3">
         <Link href={href} className="min-w-0 flex-1">
           <div className="flex items-baseline gap-2">
-            <span className="truncate text-[13px] font-medium">{title}</span>
-            <span className="num text-[11px] text-faint">{number}</span>
+            <span className="truncate text-[14px] font-medium">{title}</span>
+            <span className="num text-[12px] text-faint">{number}</span>
           </div>
-          <p className="mt-1 text-[12px]">{headline}</p>
+          <p className="mt-1 text-[13px]">{headline}</p>
         </Link>
         <div className="shrink-0 text-right">{right}</div>
       </div>
       {/* Detail and the escalation share a line, so the card stays three rows tall. */}
       <div className="mt-1.5 flex items-center justify-between gap-3">
-        <p className="min-w-0 truncate text-[11px] text-muted" title={detail}>
+        <p className="min-w-0 truncate text-[12px] text-muted" title={detail}>
           {detail}
         </p>
         {canNudge ? (
@@ -216,7 +216,7 @@ function AlertCard({
             type="button"
             disabled={busy}
             onClick={nudge}
-            className="shrink-0 text-[11px] text-muted underline-offset-2 transition-colors hover:text-text hover:underline disabled:opacity-50"
+            className="shrink-0 text-[12px] text-muted underline-offset-2 transition-colors hover:text-text hover:underline disabled:opacity-50"
           >
             {busy ? "Nudging…" : "Nudge rep"}
           </button>

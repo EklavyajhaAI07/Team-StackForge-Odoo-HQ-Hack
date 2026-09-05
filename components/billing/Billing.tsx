@@ -261,7 +261,7 @@ export function Billing({
     <div className="flex flex-col gap-5">
       <section>
         <h2>Billing & collection</h2>
-        <p className="mt-1 text-[13px] text-muted">One-time billing, recurring cycles, proration and payment history for this order.</p>
+        <p className="mt-1 text-[14px] text-muted">One-time billing, recurring cycles, proration and payment history for this order.</p>
       </section>
 
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
@@ -274,7 +274,7 @@ export function Billing({
       <Card>
         <CardHeader title="Invoices" description="One-time, recurring and credit-note documents. Amounts include tax in the total column." />
         {invoices.length === 0 ? (
-          <CardBody><p className="text-[13px] text-muted">No invoices have been posted yet.</p></CardBody>
+          <CardBody><p className="text-[14px] text-muted">No invoices have been posted yet.</p></CardBody>
         ) : (
           <TableWrap>
             <Table>
@@ -306,7 +306,7 @@ export function Billing({
       <Card>
         <CardHeader title="Recurring schedule" description="The next three cycles created when the order was confirmed. Generate an invoice when a scheduled cycle is due." />
         {schedule.length === 0 ? (
-          <CardBody><p className="text-[13px] text-muted">This order has no recurring subscription lines.</p></CardBody>
+          <CardBody><p className="text-[14px] text-muted">This order has no recurring subscription lines.</p></CardBody>
         ) : (
           <TableWrap>
             <Table>
@@ -316,7 +316,7 @@ export function Billing({
                   const due = new Date(entry.billOn).getTime() <= asOf;
                   return (
                     <tr key={entry.id}>
-                      <Td><div className="font-medium">{entry.productName}</div><div className="text-[11px] text-muted">{entry.planName}</div></Td>
+                      <Td><div className="font-medium">{entry.productName}</div><div className="text-[12px] text-muted">{entry.planName}</div></Td>
                       <Td className="num">{formatDate(entry.billOn)}</Td>
                       <Td numeric>{formatMoney(entry.amount)}</Td>
                       <Td><Pill tone={entry.status === "INVOICED" ? "money" : due ? "warn" : "neutral"}>{entry.status === "INVOICED" ? "Invoiced" : due ? "Due now" : "Scheduled"}</Pill></Td>
@@ -339,7 +339,7 @@ export function Billing({
               <tbody>
                 {subscriptions.map((line) => (
                   <tr key={line.id}>
-                    <Td><div className="font-medium">{line.productName}</div><div className="text-[11px] text-muted">{line.planName}</div></Td>
+                    <Td><div className="font-medium">{line.productName}</div><div className="text-[12px] text-muted">{line.planName}</div></Td>
                     <Td numeric className={line.qty === 0 ? "text-muted" : undefined}>{line.qty === 0 ? "Cancelled" : line.qty}</Td>
                     <Td numeric>{formatMoney(line.netUnit)}</Td>
                     <Td><Pill tone={line.cancelRule === "PRORATED_CREDIT" ? "money" : "neutral"}>{line.cancelRule === "PRORATED_CREDIT" ? "Prorated credit" : "No refund"}</Pill></Td>
@@ -352,20 +352,20 @@ export function Billing({
         </Card>
       ) : null}
 
-      {!canManage ? <p className="text-[12px] text-muted">Billing is read-only for your role. Finance or an admin can manage invoices, payments and subscription changes.</p> : null}
+      {!canManage ? <p className="text-[13px] text-muted">Billing is read-only for your role. Finance or an admin can manage invoices, payments and subscription changes.</p> : null}
 
       <Modal open={!!quantityLine} onClose={() => setQuantityLine(null)} title="Change subscription quantity" description={quantityLine ? `${quantityLine.productName} · ${quantityLine.planName}` : undefined} footer={<><Button variant="ghost" onClick={() => setQuantityLine(null)}>Cancel</Button><Button variant="secondary" loading={busy === "quantity-preview"} onClick={previewQuantity}>Preview proration</Button><Button variant="primary" disabled={!quantityPreview} loading={busy === "quantity-apply"} onClick={applyQuantity}>Apply change</Button></>}>
         <div className="flex flex-col gap-4">
           <Field label="New quantity"><Input numeric type="number" min={1} value={newQty} onChange={(event) => { setNewQty(event.target.value); setQuantityPreview(null); }} /></Field>
           <Field label="Effective date"><Input type="date" value={effectiveAt} onChange={(event) => { setEffectiveAt(event.target.value); setQuantityPreview(null); }} /></Field>
-          {quantityPreview ? <PreviewCard preview={quantityPreview} /> : <p className="text-[12px] text-muted">Preview first to see the current-cycle charge or credit before changing future billing entries.</p>}
+          {quantityPreview ? <PreviewCard preview={quantityPreview} /> : <p className="text-[13px] text-muted">Preview first to see the current-cycle charge or credit before changing future billing entries.</p>}
         </div>
       </Modal>
 
       <Modal open={!!cancelLine} onClose={() => setCancelLine(null)} title="Cancel subscription line" description={cancelLine ? `${cancelLine.productName} · ${cancelLine.cancelRule === "PRORATED_CREDIT" ? "prorated credit policy" : "no-refund policy"}` : undefined} footer={<><Button variant="ghost" onClick={() => setCancelLine(null)}>Keep subscription</Button><Button variant="secondary" loading={busy === "cancel-preview"} onClick={previewCancel}>Preview cancellation</Button><Button variant="danger" disabled={!cancelPreview} loading={busy === "cancel-apply"} onClick={applyCancel}>Cancel line</Button></>}>
         <div className="flex flex-col gap-4">
           <Field label="Effective date"><Input type="date" value={effectiveAt} onChange={(event) => { setEffectiveAt(event.target.value); setCancelPreview(null); }} /></Field>
-          {cancelPreview ? <CancellationCard preview={cancelPreview} /> : <p className="text-[12px] text-muted">Future billing entries will be removed. Preview to see whether the current cycle also receives a credit note.</p>}
+          {cancelPreview ? <CancellationCard preview={cancelPreview} /> : <p className="text-[13px] text-muted">Future billing entries will be removed. Preview to see whether the current cycle also receives a credit note.</p>}
         </div>
       </Modal>
 
@@ -380,16 +380,16 @@ export function Billing({
 }
 
 function Metric({ label, value, tone = "neutral" }: { label: string; value: string; tone?: "neutral" | "money" | "warn" }) {
-  return <Card className="px-4 py-3"><p className="text-[12px] text-muted">{label}</p><p className={cn("num mt-1 text-[19px] font-semibold", tone === "money" && "text-money", tone === "warn" && "text-warn")}>{value}</p></Card>;
+  return <Card className="px-4 py-3"><p className="text-[13px] text-muted">{label}</p><p className={cn("num mt-1 text-[22px] font-semibold", tone === "money" && "text-money", tone === "warn" && "text-warn")}>{value}</p></Card>;
 }
 
 function PreviewCard({ preview }: { preview: ProrationPreview }) {
   const result = preview.result;
   const label = result.kind === "INVOICE" ? "Prorated charge" : result.kind === "CREDIT_NOTE" ? "Prorated credit" : "No current-cycle document";
-  return <div className="rounded-[8px] border border-border bg-bg/40 px-3 py-3"><div className="flex items-center justify-between gap-3"><Pill tone={previewTone(result.kind)}>{label}</Pill><span className={cn("num font-semibold", result.kind === "CREDIT_NOTE" && "text-money")}>{result.amount ? `${result.kind === "CREDIT_NOTE" ? "−" : "+"}${formatMoney(result.amount)}` : "—"}</span></div><p className="mt-2 text-[13px] text-muted">{result.explanation}</p><p className="mt-1 text-[12px] text-muted">{preview.cycle.remainingDays} of {preview.cycle.periodDays} days remain · future cycle: <span className="num">{formatMoney(result.newCycleAmount)}</span></p></div>;
+  return <div className="rounded-[8px] border border-border bg-bg/40 px-3 py-3"><div className="flex items-center justify-between gap-3"><Pill tone={previewTone(result.kind)}>{label}</Pill><span className={cn("num font-semibold", result.kind === "CREDIT_NOTE" && "text-money")}>{result.amount ? `${result.kind === "CREDIT_NOTE" ? "−" : "+"}${formatMoney(result.amount)}` : "—"}</span></div><p className="mt-2 text-[14px] text-muted">{result.explanation}</p><p className="mt-1 text-[13px] text-muted">{preview.cycle.remainingDays} of {preview.cycle.periodDays} days remain · future cycle: <span className="num">{formatMoney(result.newCycleAmount)}</span></p></div>;
 }
 
 function CancellationCard({ preview }: { preview: CancellationPreview }) {
   const result = preview.result;
-  return <div className="rounded-[8px] border border-border bg-bg/40 px-3 py-3"><div className="flex items-center justify-between gap-3"><Pill tone={previewTone(result.kind)}>{result.kind === "CREDIT_NOTE" ? "Credit note" : "No credit note"}</Pill>{result.amount ? <span className="num font-semibold text-money">−{formatMoney(result.amount)}</span> : null}</div><p className="mt-2 text-[13px] text-muted">{result.explanation}</p><p className="mt-1 text-[12px] text-muted">{preview.cycle.remainingDays} of {preview.cycle.periodDays} days remain. Future scheduled cycles will be removed.</p></div>;
+  return <div className="rounded-[8px] border border-border bg-bg/40 px-3 py-3"><div className="flex items-center justify-between gap-3"><Pill tone={previewTone(result.kind)}>{result.kind === "CREDIT_NOTE" ? "Credit note" : "No credit note"}</Pill>{result.amount ? <span className="num font-semibold text-money">−{formatMoney(result.amount)}</span> : null}</div><p className="mt-2 text-[14px] text-muted">{result.explanation}</p><p className="mt-1 text-[13px] text-muted">{preview.cycle.remainingDays} of {preview.cycle.periodDays} days remain. Future scheduled cycles will be removed.</p></div>;
 }

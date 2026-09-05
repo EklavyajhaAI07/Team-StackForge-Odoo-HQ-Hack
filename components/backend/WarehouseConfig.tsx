@@ -91,8 +91,8 @@ export function WarehouseConfig({
       <Card>
         <div className="flex items-start justify-between gap-4 px-5 pt-4 pb-2">
           <div>
-            <h2 className="text-[15px] font-semibold">Warehouses</h2>
-            <p className="text-[12px] text-muted">Shipping cost is charged once per shipment, and decides which split is cheapest.</p>
+            <h2>Warehouses</h2>
+            <p className="text-[13px] text-muted">Shipping cost is charged once per shipment, and decides which split is cheapest.</p>
           </div>
           {canEdit ? (
             <Button variant="secondary" icon={<IconPlus size={14} />} onClick={() => setAdding(true)}>
@@ -160,7 +160,7 @@ export function WarehouseConfig({
                   <tr key={p.id}>
                     <td>
                       <div className="font-medium">{p.name}</div>
-                      <div className="num text-[11px] text-muted">{p.sku}</div>
+                      <div className="num text-[12px] text-muted">{p.sku}</div>
                     </td>
                     {warehouses.map((w) => (
                       <td key={w.id} className="num">

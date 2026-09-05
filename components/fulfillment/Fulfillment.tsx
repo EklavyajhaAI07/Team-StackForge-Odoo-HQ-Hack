@@ -102,8 +102,8 @@ export function Fulfillment({
         {remaining.length > 0 ? (
           <Card>
             <div className="px-5 pt-4 pb-1">
-              <h3 className="text-[15px] font-semibold">Suggested warehouse split</h3>
-              <p className="text-[12px] text-muted">
+              <h3>Suggested warehouse split</h3>
+              <p className="text-[13px] text-muted">
                 Greedy by coverage, then by shipping cost. Compare the options and accept one, or set the quantities yourself.
               </p>
             </div>
@@ -111,10 +111,10 @@ export function Fulfillment({
               {plans.map((plan, i) => (
                 <div key={plan.key} className={cn("rounded-[12px] border p-4", i === 0 ? "border-primary bg-primary-soft/40" : "border-border")}>
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-[14px] font-semibold">{plan.label}</p>
+                    <p className="text-[15px] font-semibold">{plan.label}</p>
                     {i === 0 ? <Pill tone="primary">Recommended</Pill> : null}
                   </div>
-                  <dl className="mt-3 flex flex-col gap-1 text-[12px]">
+                  <dl className="mt-3 flex flex-col gap-1 text-[13px]">
                     {plan.shipments.map((s, si) => (
                       <div key={si} className="flex items-baseline justify-between gap-2">
                         <dt className="text-muted">
@@ -130,13 +130,13 @@ export function Fulfillment({
                       </div>
                     ))}
                   </dl>
-                  <ul className="mt-3 flex flex-col gap-1 border-t border-border pt-2 text-[11px] text-muted">
+                  <ul className="mt-3 flex flex-col gap-1 border-t border-border pt-2 text-[12px] text-muted">
                     {plan.explanation.map((line, li) => (
                       <li key={li}>{line}</li>
                     ))}
                   </ul>
                   <div className="mt-3 flex items-center justify-between">
-                    <span className="num text-[13px]">{formatMoney(plan.totalCost, { whole: true })} shipping</span>
+                    <span className="num text-[14px]">{formatMoney(plan.totalCost, { whole: true })} shipping</span>
                     {canDecide ? (
                       <Button size="sm" variant={i === 0 ? "primary" : "secondary"} loading={busy === plan.key} onClick={() => acceptPlan(plan)}>
                         {i === 0 ? "Accept suggested split" : "Accept this plan"}
@@ -148,27 +148,27 @@ export function Fulfillment({
             </div>
             {canDecide ? (
               <div className="flex items-center justify-between border-t border-border px-5 py-3">
-                <p className="text-[12px] text-muted">Need a different allocation? Set per-warehouse quantities by hand.</p>
+                <p className="text-[13px] text-muted">Need a different allocation? Set per-warehouse quantities by hand.</p>
                 <Button size="sm" variant="secondary" onClick={() => setOverrideOpen(true)}>
                   Manual override
                 </Button>
               </div>
             ) : null}
-            {error ? <p className="px-5 pb-4 text-[12px] text-danger">{error}</p> : null}
+            {error ? <p className="px-5 pb-4 text-[13px] text-danger">{error}</p> : null}
           </Card>
         ) : (
           <Card className="px-5 py-4">
             <div className="flex items-center gap-2">
               <IconTruck size={16} className="text-money" />
-              <p className="text-[14px] font-medium">Every ordered unit is on a shipment</p>
+              <p className="text-[15px] font-medium">Every ordered unit is on a shipment</p>
             </div>
-            <p className="mt-1 text-[13px] text-muted">Nothing left to allocate. Move shipments along below.</p>
+            <p className="mt-1 text-[14px] text-muted">Nothing left to allocate. Move shipments along below.</p>
           </Card>
         )}
 
         <Card>
           <div className="flex items-center justify-between px-5 pt-4 pb-2">
-            <h3 className="text-[15px] font-semibold">Shipments</h3>
+            <h3>Shipments</h3>
             <StatusPill status={order.status} map={ORDER_STATUS} />
           </div>
           {order.shipments.length === 0 ? (
@@ -192,7 +192,7 @@ export function Fulfillment({
                     <tr key={s.id}>
                       <td>
                         <div className="font-medium">{s.warehouseName}</div>
-                        <div className="text-[11px] text-muted">{s.warehouseCity}</div>
+                        <div className="text-[12px] text-muted">{s.warehouseCity}</div>
                       </td>
                       <td className="text-muted">{s.lines.map((l) => `${l.name} × ${l.qty}`).join(", ")}</td>
                       <td className="num">{formatMoney(s.cost, { whole: true })}</td>
@@ -225,8 +225,8 @@ export function Fulfillment({
           <Card>
             <div className="flex items-center justify-between px-5 pt-4 pb-2">
               <div>
-                <h3 className="text-[15px] font-semibold">Backorders</h3>
-                <p className="text-[12px] text-muted">Units no warehouse could supply when the split was accepted.</p>
+                <h3>Backorders</h3>
+                <p className="text-[13px] text-muted">Units no warehouse could supply when the split was accepted.</p>
               </div>
               {canDecide && openBackorders.length > 0 ? (
                 <Button size="sm" variant="primary" loading={busy === "consolidate"} onClick={consolidate}>
@@ -237,7 +237,7 @@ export function Fulfillment({
             <ul className="flex flex-col gap-2 px-5 pb-5">
               {order.backorders.map((b) => (
                 <li key={b.id} className="flex items-center justify-between rounded-[8px] border border-border px-3 py-2">
-                  <span className="flex items-center gap-2 text-[13px]">
+                  <span className="flex items-center gap-2 text-[14px]">
                     <IconBox size={14} className={b.status === "OPEN" ? "text-warn" : "text-money"} />
                     {b.name} <span className="num text-muted">× {b.qty}</span>
                   </span>
@@ -252,9 +252,9 @@ export function Fulfillment({
       <div className="col-span-12 flex flex-col gap-5 xl:col-span-4">
         <Card>
           <div className="px-5 pt-4 pb-2">
-            <h3 className="text-[15px] font-semibold">Order</h3>
+            <h3>Order</h3>
           </div>
-          <dl className="grid grid-cols-2 gap-y-2 px-5 pb-5 text-[13px]">
+          <dl className="grid grid-cols-2 gap-y-2 px-5 pb-5 text-[14px]">
             <dt className="text-muted">Status</dt>
             <dd className="text-right">
               <StatusPill status={order.status} map={ORDER_STATUS} />
@@ -270,10 +270,10 @@ export function Fulfillment({
           </dl>
           {nonShippable.length > 0 ? (
             <div className="mx-5 mb-5 rounded-[8px] border border-border px-3 py-2">
-              <p className="text-[12px] text-muted">Delivered by the team, not from a warehouse:</p>
+              <p className="text-[13px] text-muted">Delivered by the team, not from a warehouse:</p>
               <ul className="mt-1 flex flex-col gap-0.5">
                 {nonShippable.map((n) => (
-                  <li key={n.productId} className="flex items-center justify-between text-[12px]">
+                  <li key={n.productId} className="flex items-center justify-between text-[13px]">
                     <span>{n.name}</span>
                     <span className="num text-muted">× {n.qty}</span>
                   </li>
@@ -287,8 +287,8 @@ export function Fulfillment({
 
         <Card>
           <div className="px-5 pt-4 pb-2">
-            <h3 className="text-[15px] font-semibold">Stock on hand</h3>
-            <p className="text-[12px] text-muted">Only the products on this order.</p>
+            <h3>Stock on hand</h3>
+            <p className="text-[13px] text-muted">Only the products on this order.</p>
           </div>
           <div className="overflow-x-auto pb-2">
             <table className="table">

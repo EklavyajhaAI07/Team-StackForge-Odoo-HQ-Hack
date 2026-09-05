@@ -56,16 +56,16 @@ export function ApprovalActions({ quotationId, step, role }: { quotationId: stri
   return (
     <Card>
       <div className="px-5 pt-4 pb-2">
-        <h3 className="text-[15px] font-semibold">
+        <h3>
           Step {step}: {role === "FINANCE" ? "finance" : "sales manager"} decision
         </h3>
-        <p className="text-[12px] text-muted">Your name, the time and your reason are written to the audit log.</p>
+        <p className="text-[13px] text-muted">Your name, the time and your reason are written to the audit log.</p>
       </div>
       <div className="flex flex-col gap-3 px-5 pb-5">
         <Field label="Note (optional, for approvals)">
           <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. Strategic account, agreed with regional head" rows={2} />
         </Field>
-        {error ? <p className="text-[12px] text-danger">{error}</p> : null}
+        {error ? <p className="text-[13px] text-danger">{error}</p> : null}
         <div className="flex flex-wrap gap-2">
           <Button variant="primary" icon={<IconCheck size={14} />} loading={busy === "APPROVE"} onClick={() => act("APPROVE", note)}>
             Approve

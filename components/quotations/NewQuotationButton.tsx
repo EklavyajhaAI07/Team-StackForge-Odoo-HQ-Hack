@@ -61,7 +61,7 @@ export function NewQuotationButton({ customers }: { customers: CustomerOption[] 
           </>
         }
       >
-        {error ? <p className="mb-3 text-[13px] text-danger">{error}</p> : null}
+        {error ? <p className="mb-3 text-[14px] text-danger">{error}</p> : null}
         <ul className="flex flex-col gap-1">
           {customers.map((c) => (
             <li key={c.id}>
@@ -74,8 +74,8 @@ export function NewQuotationButton({ customers }: { customers: CustomerOption[] 
                 )}
               >
                 <span>
-                  <span className="block text-[14px] font-medium">{c.company}</span>
-                  <span className="block text-[12px] text-muted">
+                  <span className="block text-[15px] font-medium">{c.company}</span>
+                  <span className="block text-[13px] text-muted">
                     {c.name} · {c.city}
                   </span>
                 </span>

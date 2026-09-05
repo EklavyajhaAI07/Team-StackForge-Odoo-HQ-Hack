@@ -58,11 +58,11 @@ export function ConfirmOrderPanel({
   return (
     <Card className="max-w-[640px]">
       <div className="px-5 pt-5">
-        <h3 className="text-[15px] font-semibold">Confirm the order</h3>
-        <p className="mt-1 text-[13px] text-muted">
+        <h3>Confirm the order</h3>
+        <p className="mt-1 text-[14px] text-muted">
           Confirming creates the order, posts the one-time invoice and lays down the recurring billing schedule. Then the warehouse split is computed.
         </p>
-        <ul className="mt-4 flex flex-col gap-1.5 text-[13px]">
+        <ul className="mt-4 flex flex-col gap-1.5 text-[14px]">
           <li className="flex items-center gap-2">
             <IconBox size={14} className="text-muted" />
             {physicalLines} physical line{physicalLines === 1 ? "" : "s"} to ship
@@ -72,7 +72,7 @@ export function ConfirmOrderPanel({
             {recurringLines} subscription line{recurringLines === 1 ? "" : "s"} to schedule
           </li>
         </ul>
-        {error ? <p className="mt-3 text-[13px] text-danger">{error}</p> : null}
+        {error ? <p className="mt-3 text-[14px] text-danger">{error}</p> : null}
       </div>
       <div className="px-5 pb-5 pt-4">
         {canConfirm ? (
@@ -80,7 +80,7 @@ export function ConfirmOrderPanel({
             Confirm order
           </Button>
         ) : (
-          <p className="text-[13px] text-muted">
+          <p className="text-[14px] text-muted">
             The owning rep, their sales manager or an admin confirms the order. Fulfillment and billing open to finance once they have.
           </p>
         )}

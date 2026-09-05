@@ -96,7 +96,7 @@ export function PriceListConfig({
               <tr key={p.id}>
                 <td>
                   <div className="font-medium">{p.name}</div>
-                  <div className="num text-[11px] text-muted">{p.sku}</div>
+                  <div className="num text-[12px] text-muted">{p.sku}</div>
                 </td>
                 <td className="num text-muted">{formatMoney(p.listPrice, { whole: true })}</td>
                 {tiers.map((t) => (

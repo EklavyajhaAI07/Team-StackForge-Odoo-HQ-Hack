@@ -59,8 +59,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           >
             <span className={cn("mt-1 h-2 w-2 shrink-0 rounded-full", toneBar[t.tone ?? "primary"])} />
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-medium leading-5">{t.title}</p>
-              {t.description ? <p className="mt-0.5 text-[12px] leading-5 text-muted">{t.description}</p> : null}
+              <p className="text-[14px] font-medium leading-5">{t.title}</p>
+              {t.description ? <p className="mt-0.5 text-[13px] leading-5 text-muted">{t.description}</p> : null}
             </div>
             <button
               type="button"

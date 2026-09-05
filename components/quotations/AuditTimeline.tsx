@@ -43,11 +43,11 @@ export async function AuditTimeline({ quotationId, orderId }: { quotationId: str
   return (
     <section className="card">
       <div className="px-5 pt-4 pb-2">
-        <h3 className="text-[15px] font-semibold">Audit timeline</h3>
-        <p className="text-[12px] text-muted">Every approval, rejection and edit — who, when and why. Oldest first.</p>
+        <h3>Audit timeline</h3>
+        <p className="text-[13px] text-muted">Every approval, rejection and edit — who, when and why. Oldest first.</p>
       </div>
       {events.length === 0 ? (
-        <p className="px-5 pb-5 text-[13px] text-muted">Nothing recorded yet.</p>
+        <p className="px-5 pb-5 text-[14px] text-muted">Nothing recorded yet.</p>
       ) : (
         <ol className="px-5 pb-5">
           {events.map((e, i) => {
@@ -67,11 +67,11 @@ export async function AuditTimeline({ quotationId, orderId }: { quotationId: str
                 </div>
                 <div className="min-w-0 flex-1 pb-1">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                    <p className="text-[13px] font-medium">{auditLabel(e.action)}</p>
-                    <p className="num text-[11px] text-muted">{formatDateTime(e.createdAt)}</p>
+                    <p className="text-[14px] font-medium">{auditLabel(e.action)}</p>
+                    <p className="num text-[12px] text-muted">{formatDateTime(e.createdAt)}</p>
                   </div>
-                  {detail ? <p className="mt-0.5 text-[12px] text-muted">{detail}</p> : null}
-                  <p className="mt-0.5 text-[11px] text-muted">
+                  {detail ? <p className="mt-0.5 text-[13px] text-muted">{detail}</p> : null}
+                  <p className="mt-0.5 text-[12px] text-muted">
                     by <span className="text-text">{actor}</span>
                   </p>
                 </div>

@@ -38,7 +38,7 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
       <PageHeader
         title="Reports"
         context={`${totals.quotations} quotation${totals.quotations === 1 ? "" : "s"} · ${summary}`}
-        actions={<p className="print-only text-[11px] text-muted">Generated {formatDate(new Date())}</p>}
+        actions={<p className="print-only text-[12px] text-muted">Generated {formatDate(new Date())}</p>}
       />
       <ReportFilters filters={scoped} reps={can(user, "reports:all") ? reps : []} categories={categories} products={products} />
       <ReportTable rows={rows} totals={totals} summary={summary} />

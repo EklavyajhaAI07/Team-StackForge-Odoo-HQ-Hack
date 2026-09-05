@@ -25,8 +25,8 @@ export function SaveBar({
   return (
     <div className="flex items-start justify-between gap-4 px-5 pt-4 pb-2">
       <div>
-        <h2 className="text-[15px] font-semibold">{title}</h2>
-        <p className="text-[12px] text-muted">{description}</p>
+        <h2>{title}</h2>
+        <p className="text-[13px] text-muted">{description}</p>
       </div>
       <div className="flex items-center gap-2">
         {extra}

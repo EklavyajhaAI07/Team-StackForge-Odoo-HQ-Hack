@@ -81,7 +81,7 @@ export function DiscountMatrix({
       <div className="flex items-start justify-between gap-4 border-b border-border px-4 py-3">
         <div>
           <h2>Discount ceilings</h2>
-          <p className="mt-0.5 text-[12px] text-muted">
+          <p className="mt-0.5 text-[13px] text-muted">
             The most a rep may discount before approval is needed. Services are deliberately strictest.
           </p>
         </div>
@@ -129,7 +129,7 @@ export function DiscountMatrix({
                           onChange={(e) => setDraft((d) => ({ ...d, [key]: e.target.value }))}
                           aria-label={`${tier} ${c.name} ceiling`}
                         />
-                        <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-muted">%</span>
+                        <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[12px] text-muted">%</span>
                       </div>
                     </td>
                   );
@@ -138,7 +138,7 @@ export function DiscountMatrix({
             ))}
           </tbody>
         </table>
-        <p className="mt-3 text-[12px] text-muted">
+        <p className="mt-3 text-[13px] text-muted">
           An empty cell means no discount is allowed for that combination, so any discount counts fully as an overage.
         </p>
       </div>

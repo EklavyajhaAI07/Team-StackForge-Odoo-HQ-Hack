@@ -97,9 +97,9 @@ export function ApprovalThresholds({ config, canEdit }: { config: Config; canEdi
 
       <Card className="h-fit">
         <div className="px-5 pt-4 pb-2">
-          <h2 className="text-[15px] font-semibold">How a quotation routes</h2>
+          <h2>How a quotation routes</h2>
         </div>
-        <ol className="flex flex-col gap-3 px-5 pb-5 text-[13px]">
+        <ol className="flex flex-col gap-3 px-5 pb-5 text-[14px]">
           <li>
             <span className="font-medium text-money">No approval</span>
             <p className="text-muted">Every line sits within its ceiling.</p>

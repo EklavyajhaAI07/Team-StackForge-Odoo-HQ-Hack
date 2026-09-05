@@ -76,7 +76,7 @@ export function ManualOverride({
               {warehouses.map((w) => (
                 <th key={w.id} className="num">
                   {w.name}
-                  <div className="num text-[10px] font-normal text-muted">{formatMoney(w.shippingCostWeight, { whole: true })}/shipment</div>
+                  <div className="num text-[11px] font-normal text-muted">{formatMoney(w.shippingCostWeight, { whole: true })}/shipment</div>
                 </th>
               ))}
               <th className="num">Assigned</th>
@@ -106,7 +106,7 @@ export function ManualOverride({
                           onChange={(e) => setAlloc((a) => ({ ...a, [w.id]: { ...a[w.id], [d.productId]: e.target.value } }))}
                           aria-label={`${d.name} at ${w.name}`}
                         />
-                        <div className="text-[10px] text-muted">{onHand} on hand</div>
+                        <div className="text-[11px] text-muted">{onHand} on hand</div>
                       </td>
                     );
                   })}
@@ -123,7 +123,7 @@ export function ManualOverride({
       {errors.length > 0 ? (
         <ul className="flex flex-col gap-1">
           {errors.map((e, i) => (
-            <li key={i} className="text-[12px] text-danger">
+            <li key={i} className="text-[13px] text-danger">
               {e}
             </li>
           ))}
@@ -131,7 +131,7 @@ export function ManualOverride({
       ) : null}
 
       <div className="flex items-center justify-between">
-        <p className="text-[12px] text-muted">
+        <p className="text-[13px] text-muted">
           {balanced ? "Quantities balance — ready to apply." : "Assign every unit before applying."}
           {overStock ? " One or more cells exceed stock on hand." : ""}
         </p>

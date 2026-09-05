@@ -50,7 +50,7 @@ export function ProductPicker({
                 setQuery("");
               }}
               className={cn(
-                "h-8 rounded-[8px] px-3 text-[13px] font-medium transition-colors",
+                "h-8 rounded-[8px] px-3 text-[14px] font-medium transition-colors",
                 !query && category === c.id ? "bg-raised text-text" : "text-muted hover:text-text",
               )}
             >
@@ -66,7 +66,7 @@ export function ProductPicker({
 
       <div className="mt-3 max-h-[300px] overflow-auto border-t border-border">
         {items.length === 0 ? (
-          <p className="px-4 py-6 text-[13px] text-muted">No products match — try another word or category.</p>
+          <p className="px-4 py-6 text-[14px] text-muted">No products match — try another word or category.</p>
         ) : (
           <ul>
             {items.map((p) => {
@@ -79,10 +79,10 @@ export function ProductPicker({
                 <li key={p.id} className="flex items-center gap-3 border-b border-border px-4 py-2 last:border-b-0 hover:bg-raised/60">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="truncate text-[13px] font-medium">{p.name}</span>
+                      <span className="truncate text-[14px] font-medium">{p.name}</span>
                       {p.isPromoted ? <Pill tone="primary">Promoted</Pill> : null}
                     </div>
-                    <div className="num text-[11px] text-muted">
+                    <div className="num text-[12px] text-muted">
                       {p.sku} · per {p.unit}
                     </div>
                   </div>
@@ -117,9 +117,9 @@ export function ProductPicker({
                     </Select>
                   ) : null}
                   <div className="w-[120px] text-right">
-                    <div className="num text-[13px]">{formatMoney(price)}</div>
+                    <div className="num text-[14px]">{formatMoney(price)}</div>
                     {p.tierPrice != null && p.tierPrice !== p.listPrice ? (
-                      <div className="text-[11px] text-info">{tierLabel} price</div>
+                      <div className="text-[12px] text-info">{tierLabel} price</div>
                     ) : null}
                   </div>
                   <Button

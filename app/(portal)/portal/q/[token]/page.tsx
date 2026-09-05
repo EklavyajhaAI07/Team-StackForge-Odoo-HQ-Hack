@@ -25,7 +25,7 @@ export default async function PortalQuotationPage({
     if (s === "1") {
       return (
         <main className="mx-auto max-w-[720px] px-6 py-16">
-          <h1 className="text-[24px]">We could not open your quotation</h1>
+          <h1 className="text-[26px]">We could not open your quotation</h1>
           <p className="mt-3 text-muted">Your browser did not keep the sign-in cookie. Enable cookies for this site and open the link again.</p>
         </main>
       );

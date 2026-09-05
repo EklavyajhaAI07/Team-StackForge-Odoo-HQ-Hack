@@ -100,12 +100,12 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
           <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-money-soft text-money">
             <IconCheck size={22} />
           </span>
-          <h1 className="mt-4 text-[24px]">Thank you — quotation confirmed</h1>
-          <p className="mt-2 text-[14px] text-muted">
+          <h1 className="mt-4 text-[26px]">Thank you — quotation confirmed</h1>
+          <p className="mt-2 text-[15px] text-muted">
             <span className="num">{quotation.number}</span> is confirmed for {quotation.company}. Our team will be in touch about delivery and invoicing.
           </p>
-          <p className="num mt-6 text-[24px] font-semibold">{formatMoney(quotation.totals.total)}</p>
-          <p className="text-[12px] text-muted">including tax</p>
+          <p className="num mt-6 text-[26px] font-semibold">{formatMoney(quotation.totals.total)}</p>
+          <p className="text-[13px] text-muted">including tax</p>
         </div>
       </main>
     );
@@ -115,9 +115,9 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
     <main className="mx-auto w-full max-w-[720px] px-6 pb-32 pt-12">
       <header className="flex items-start justify-between gap-6">
         <div>
-          <p className="text-[13px] text-muted">Quotation for {quotation.company}</p>
-          <h1 className="num mt-1 text-[30px] font-semibold">{quotation.number}</h1>
-          <p className="mt-2 text-[13px] text-muted">
+          <p className="text-[14px] text-muted">Quotation for {quotation.company}</p>
+          <h1 className="num mt-1 text-[34px] font-semibold">{quotation.number}</h1>
+          <p className="mt-2 text-[14px] text-muted">
             Prepared by {quotation.repName} · Valid until {formatDate(validUntil)}
           </p>
         </div>
@@ -127,7 +127,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
       </header>
 
       {awaitingUs ? (
-        <p className="mt-6 rounded-[12px] border border-warn/40 bg-warn-soft px-4 py-3 text-[13px]">
+        <p className="mt-6 rounded-[12px] border border-warn/40 bg-warn-soft px-4 py-3 text-[14px]">
           Your requested terms are with our approvals team. We will come back to you shortly.
         </p>
       ) : null}
@@ -148,7 +148,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
               <tr key={l.id}>
                 <td>
                   <div className="font-medium">{l.name}</div>
-                  <div className="text-[12px] text-muted">
+                  <div className="text-[13px] text-muted">
                     {l.variantValue ? `${l.variantValue} · ` : ""}
                     {l.planName ? `Billed ${l.planName.toLowerCase()} · ` : ""}
                     per {l.unit}
@@ -163,7 +163,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
                   {l.messages.length > 0 ? (
                     <ul className="mt-1.5 flex flex-col gap-1">
                       {l.messages.map((m) => (
-                        <li key={m.id} className="text-[12px]">
+                        <li key={m.id} className="text-[13px]">
                           <span className={cn("font-medium", m.authorType === "REP" ? "text-primary" : "text-muted")}>
                             {m.authorType === "REP" ? quotation.repName : "You"}
                           </span>
@@ -176,7 +176,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
 
                   {openLine === l.id ? (
                     <div className="mt-2 rounded-[8px] border border-border bg-raised px-3 py-3">
-                      <label className="text-[12px] text-muted" htmlFor={`c-${l.id}`}>
+                      <label className="text-[13px] text-muted" htmlFor={`c-${l.id}`}>
                         Ask a question or propose a discount
                       </label>
                       <Textarea
@@ -189,7 +189,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
                         placeholder="e.g. Can you match the price we had last year?"
                       />
                       <div className="mt-2 flex items-end gap-2">
-                        <label className="flex flex-col gap-1 text-[12px] text-muted">
+                        <label className="flex flex-col gap-1 text-[13px] text-muted">
                           Discount you would like
                           <div className="relative">
                             <Input
@@ -204,7 +204,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
                               onChange={(e) => setCounter(e.target.value)}
                               placeholder={String(l.discountPct)}
                             />
-                            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-muted">%</span>
+                            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[12px] text-muted">%</span>
                           </div>
                         </label>
                         <Button size="sm" variant="primary" loading={busy} onClick={() => send(l.id)}>
@@ -218,7 +218,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
                   ) : (
                     <button
                       type="button"
-                      className="mt-1.5 text-[12px] font-medium text-primary hover:underline"
+                      className="mt-1.5 text-[13px] font-medium text-primary hover:underline"
                       onClick={() => {
                         setOpenLine(l.id);
                         setComment("");
@@ -253,7 +253,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
               <td colSpan={4} className="text-right">
                 Total
               </td>
-              <td className="num text-[15px]">{formatMoney(quotation.totals.total)}</td>
+              <td className="num text-[16px]">{formatMoney(quotation.totals.total)}</td>
             </tr>
           </tfoot>
         </table>
@@ -262,7 +262,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
       {notice ? (
         <p
           className={cn(
-            "mt-4 rounded-[8px] px-4 py-3 text-[13px]",
+            "mt-4 rounded-[8px] px-4 py-3 text-[14px]",
             notice.tone === "danger" && "bg-danger-soft text-danger",
             notice.tone === "warn" && "bg-warn-soft text-warn",
             notice.tone === "money" && "bg-money-soft text-money",
@@ -276,8 +276,8 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
       <div className="fixed inset-x-0 bottom-0 border-t border-border bg-surface/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-[720px] items-center justify-between gap-4 px-6 py-3">
           <div className="min-w-0">
-            <p className="text-[12px] text-muted">Total including tax</p>
-            <p className="num text-[19px] font-semibold">{formatMoney(quotation.totals.total)}</p>
+            <p className="text-[13px] text-muted">Total including tax</p>
+            <p className="num text-[22px] font-semibold">{formatMoney(quotation.totals.total)}</p>
           </div>
           <div className="flex items-center gap-2">
             <Button

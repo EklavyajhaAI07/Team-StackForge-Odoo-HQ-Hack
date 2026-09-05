@@ -70,8 +70,8 @@ export function CounterInbox({ quotationId, counters, canAnswer }: { quotationId
     <Card className="border-primary/40">
       <div className="flex items-center justify-between px-5 pt-4 pb-2">
         <div>
-          <h3 className="text-[15px] font-semibold">Requested changes</h3>
-          <p className="text-[12px] text-muted">Accepting re-runs the discount policy, so an over-ceiling price returns to approval on its own.</p>
+          <h3>Requested changes</h3>
+          <p className="text-[13px] text-muted">Accepting re-runs the discount policy, so an over-ceiling price returns to approval on its own.</p>
         </div>
         <Pill tone="primary">{counters.length}</Pill>
       </div>
@@ -82,15 +82,15 @@ export function CounterInbox({ quotationId, counters, canAnswer }: { quotationId
             <li key={c.id} className="rounded-[8px] border border-border bg-bg/40 px-3 py-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-[13px] font-medium">{c.lineName}</p>
-                  <p className="mt-0.5 text-[12px] text-muted">{c.body}</p>
+                  <p className="text-[14px] font-medium">{c.lineName}</p>
+                  <p className="mt-0.5 text-[13px] text-muted">{c.body}</p>
                 </div>
                 <span className="shrink-0 text-right">
-                  <span className="num block text-[15px] font-semibold">{c.counterDiscountPct}%</span>
-                  <span className="num block text-[11px] text-muted">now {c.currentDiscountPct}%</span>
+                  <span className="num block text-[16px] font-semibold">{c.counterDiscountPct}%</span>
+                  <span className="num block text-[12px] text-muted">now {c.currentDiscountPct}%</span>
                 </span>
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
+              <div className="mt-2 flex flex-wrap items-center gap-2 text-[12px]">
                 <span className="text-muted">{relativeTime(c.createdAt)}</span>
                 {over > 0 ? (
                   <Pill tone="danger">
@@ -127,7 +127,7 @@ export function CounterInbox({ quotationId, counters, canAnswer }: { quotationId
                   </div>
                 </>
               ) : (
-                <p className="mt-2 text-[12px] text-muted">Only the owning rep can answer this.</p>
+                <p className="mt-2 text-[13px] text-muted">Only the owning rep can answer this.</p>
               )}
             </li>
           );

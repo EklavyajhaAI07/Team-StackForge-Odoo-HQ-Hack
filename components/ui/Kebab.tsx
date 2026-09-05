@@ -56,7 +56,7 @@ export function Kebab({ items, align = "right", label = "More actions" }: { item
                 key={i}
                 role="menuitem"
                 href={it.href}
-                className={cn("block px-3 py-2 text-[13px] hover:bg-primary-soft", it.danger && "text-danger")}
+                className={cn("block px-3 py-2 text-[14px] hover:bg-primary-soft", it.danger && "text-danger")}
               >
                 {it.label}
               </a>
@@ -71,7 +71,7 @@ export function Kebab({ items, align = "right", label = "More actions" }: { item
                   it.onSelect?.();
                 }}
                 className={cn(
-                  "block w-full px-3 py-2 text-left text-[13px] hover:bg-primary-soft disabled:opacity-50",
+                  "block w-full px-3 py-2 text-left text-[14px] hover:bg-primary-soft disabled:opacity-50",
                   it.danger && "text-danger",
                 )}
               >

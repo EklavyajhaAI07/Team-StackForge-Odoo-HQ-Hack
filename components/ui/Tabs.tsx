@@ -18,7 +18,7 @@ export function Tabs({ items, className }: { items: TabItem[]; className?: strin
             key={it.href}
             href={it.href}
             className={cn(
-              "-mb-px flex h-8 shrink-0 items-center gap-1.5 border-b px-2.5 text-[13px] transition-colors",
+              "-mb-px flex h-8 shrink-0 items-center gap-1.5 border-b px-2.5 text-[14px] transition-colors",
               active ? "border-text text-text" : "border-transparent text-muted hover:text-text-dim",
             )}
             aria-current={active ? "page" : undefined}

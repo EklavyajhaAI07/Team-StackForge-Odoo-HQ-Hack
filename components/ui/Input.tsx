@@ -40,14 +40,14 @@ export function Field({
 }) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <label htmlFor={htmlFor} className="text-[13px] text-muted">
+      <label htmlFor={htmlFor} className="text-[14px] text-muted">
         {label}
       </label>
       {children}
       {error ? (
-        <p className="text-[12px] text-danger">{error}</p>
+        <p className="text-[13px] text-danger">{error}</p>
       ) : hint ? (
-        <p className="text-[12px] text-muted">{hint}</p>
+        <p className="text-[13px] text-muted">{hint}</p>
       ) : null}
     </div>
   );

@@ -38,8 +38,8 @@ export function CartTable({
   return (
     <Card>
       <div className="flex items-center justify-between px-4 pt-4 pb-2">
-        <h3 className="text-[15px] font-semibold">Cart</h3>
-        <span className="text-[12px] text-muted">
+        <h3>Cart</h3>
+        <span className="text-[13px] text-muted">
           {lines.length} line{lines.length === 1 ? "" : "s"}
         </span>
       </div>
@@ -66,12 +66,12 @@ export function CartTable({
                 return (
                   <tr key={l.id}>
                     <td>
-                      <div className="text-[13px] font-medium">{l.name}</div>
-                      <div className="mt-0.5 flex items-center gap-2 text-[11px] text-muted">
+                      <div className="text-[14px] font-medium">{l.name}</div>
+                      <div className="mt-0.5 flex items-center gap-2 text-[12px] text-muted">
                         <span className="num">{l.sku}</span>
                         {l.variants.length > 0 ? (
                           canEdit ? (
-                            <Select dense value={l.variantId ?? ""} onChange={(e) => onPatch(l.id, { variantId: e.target.value })} className="h-6 w-[120px] py-0 text-[11px]">
+                            <Select dense value={l.variantId ?? ""} onChange={(e) => onPatch(l.id, { variantId: e.target.value })} className="h-6 w-[120px] py-0 text-[12px]">
                               {l.variants.map((v) => (
                                 <option key={v.id} value={v.id}>
                                   {v.value}
@@ -84,7 +84,7 @@ export function CartTable({
                         ) : null}
                         {l.isRecurring ? (
                           canEdit ? (
-                            <Select dense value={l.planId ?? ""} onChange={(e) => onPatch(l.id, { planId: e.target.value })} className="h-6 w-[150px] py-0 text-[11px]">
+                            <Select dense value={l.planId ?? ""} onChange={(e) => onPatch(l.id, { planId: e.target.value })} className="h-6 w-[150px] py-0 text-[12px]">
                               {plans.map((p) => (
                                 <option key={p.id} value={p.id}>
                                   {p.name}
@@ -144,9 +144,9 @@ export function CartTable({
                               }}
                               aria-label="Discount percent"
                             />
-                            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-muted">%</span>
+                            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[12px] text-muted">%</span>
                           </div>
-                          <span className={cn("text-[10px]", over > 0 ? "text-danger" : "text-muted")}>
+                          <span className={cn("text-[11px]", over > 0 ? "text-danger" : "text-muted")}>
                             {over > 0 ? `${over.toFixed(1)} over ${l.ceilingPct}%` : `ceiling ${l.ceilingPct}%`}
                           </span>
                         </div>
@@ -173,11 +173,11 @@ export function CartTable({
       <div className="flex flex-wrap items-end justify-between gap-4 border-t border-border px-4 py-4">
         {canEdit && lines.length > 0 ? (
           <div className="flex items-end gap-2">
-            <label className="flex flex-col gap-1 text-[12px] text-muted">
+            <label className="flex flex-col gap-1 text-[13px] text-muted">
               Order-level discount
               <div className="relative">
                 <Input numeric dense type="number" min={0} max={100} step={0.5} className="w-24 pr-6" value={orderPct} onChange={(e) => setOrderPct(e.target.value)} placeholder="0" />
-                <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[11px] text-muted">%</span>
+                <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[12px] text-muted">%</span>
               </div>
             </label>
             <Button
@@ -195,7 +195,7 @@ export function CartTable({
         ) : (
           <div />
         )}
-        <dl className="grid min-w-[260px] grid-cols-[1fr_auto] gap-x-6 gap-y-1 text-[13px]">
+        <dl className="grid min-w-[260px] grid-cols-[1fr_auto] gap-x-6 gap-y-1 text-[14px]">
           <dt className="text-muted">Subtotal (list)</dt>
           <dd className="num text-right">{formatMoney(totals.list)}</dd>
           <dt className="text-muted">Discount</dt>
@@ -203,7 +203,7 @@ export function CartTable({
           <dt className="text-muted">Tax</dt>
           <dd className="num text-right">{formatMoney(totals.tax)}</dd>
           <dt className="border-t border-border pt-1 font-semibold">Total</dt>
-          <dd className="border-t border-border pt-1 text-right text-[15px] font-semibold">
+          <dd className="border-t border-border pt-1 text-right text-[16px] font-semibold">
             <NumberTicker value={totals.total} format={(n) => formatMoney(Math.round(n))} className="num" />
           </dd>
         </dl>

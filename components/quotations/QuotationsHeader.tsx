@@ -27,7 +27,7 @@ export function QuotationsHeader({
               role="tab"
               aria-selected={view === "table"}
               className={cn(
-                "flex h-6 items-center gap-1.5 rounded-[5px] px-2 text-[12px] transition-colors",
+                "flex h-6 items-center gap-1.5 rounded-[5px] px-2 text-[13px] transition-colors",
                 view === "table" ? "bg-raised text-text" : "text-muted hover:text-text",
               )}
             >
@@ -38,7 +38,7 @@ export function QuotationsHeader({
               role="tab"
               aria-selected={view === "kanban"}
               className={cn(
-                "flex h-6 items-center gap-1.5 rounded-[5px] px-2 text-[12px] transition-colors",
+                "flex h-6 items-center gap-1.5 rounded-[5px] px-2 text-[13px] transition-colors",
                 view === "kanban" ? "bg-raised text-text" : "text-muted hover:text-text",
               )}
             >

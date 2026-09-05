@@ -26,19 +26,20 @@ export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; ma
   const router = useRouter();
   return (
     <TableWrap>
-      <Table className="table-fixed min-w-[980px]">
-        {/* Explicit widths stop eight columns from drifting apart across a wide screen. */}
+      <Table className="table-fixed min-w-[1080px]">
+        {/* Explicit widths stop eight columns from drifting apart across a wide screen.
+            Each is sized so its longest real value fits on one line. */}
         <colgroup>
-          <col className="w-[116px]" />
+          <col className="w-[132px]" />
           {/* Only the customer column breathes; the rest hold their width. */}
           <col />
-          <col className="w-[110px]" />
-          <col className="w-[132px]" />
+          <col className="w-[124px]" />
+          <col className="w-[152px]" />
+          <col className="w-[124px]" />
+          <col className="w-[62px]" />
+          <col className="w-[126px]" />
           <col className="w-[96px]" />
-          <col className="w-[56px]" />
-          <col className="w-[112px]" />
-          <col className="w-[84px]" />
-          <col className="w-[36px]" />
+          <col className="w-[40px]" />
         </colgroup>
         <thead>
           <tr>

@@ -49,29 +49,29 @@ export function RiskRail({
 
         <div className="mx-5 mt-4 grid grid-cols-2 gap-3 border-t border-border pt-4">
           <div>
-            <p className="text-[12px] text-muted">Live margin</p>
-            <p className={cn("display mt-0.5 text-[24px] font-semibold", marginTone)}>
+            <p className="text-[13px] text-muted">Live margin</p>
+            <p className={cn("display mt-0.5 text-[26px] font-semibold", marginTone)}>
               <NumberTicker value={risk.marginPct} format={(n) => formatPct(n)} />
             </p>
           </div>
           <div className="text-right">
-            <p className="text-[12px] text-muted">Order total</p>
-            <p className="display mt-0.5 text-[24px] font-semibold">
+            <p className="text-[13px] text-muted">Order total</p>
+            <p className="display mt-0.5 text-[26px] font-semibold">
               <NumberTicker value={totals.total} format={(n) => formatMoney(Math.round(n), { whole: true })} />
             </p>
           </div>
         </div>
 
         <div className="mx-5 mt-4 border-t border-border pt-4">
-          <p className="text-[12px] text-muted">Per-line policy</p>
+          <p className="text-[13px] text-muted">Per-line policy</p>
           {lineCount === 0 ? (
-            <p className="mt-1 text-[13px] text-muted">Add lines to see ceilings.</p>
+            <p className="mt-1 text-[14px] text-muted">Add lines to see ceilings.</p>
           ) : overLines.length === 0 ? (
-            <p className="mt-1 text-[13px] text-money">All lines are within their ceilings.</p>
+            <p className="mt-1 text-[14px] text-money">All lines are within their ceilings.</p>
           ) : (
             <ul className="mt-2 flex flex-col gap-1.5">
               {overLines.map((p) => (
-                <li key={p.lineId} className="flex items-start gap-2 rounded-[8px] bg-danger-soft px-2.5 py-1.5 text-[12px] text-danger">
+                <li key={p.lineId} className="flex items-start gap-2 rounded-[8px] bg-danger-soft px-2.5 py-1.5 text-[13px] text-danger">
                   <span className="mt-[5px] h-1.5 w-1.5 shrink-0 rounded-full bg-danger" />
                   <span>
                     <span className="font-medium">{p.name}</span>: <span className="num">{p.overage.toFixed(1)}</span> pts over its{" "}
@@ -84,8 +84,8 @@ export function RiskRail({
         </div>
 
         <div className="mx-5 mt-4 border-t border-border pt-4 pb-5">
-          <p className="text-[12px] text-muted">Routing</p>
-          <p className="mt-1 text-[13px]">
+          <p className="text-[13px] text-muted">Routing</p>
+          <p className="mt-1 text-[14px]">
             {decision.kind === "AUTO_APPROVED"
               ? "Within policy — no approval needed."
               : decision.kind === "MANAGER"

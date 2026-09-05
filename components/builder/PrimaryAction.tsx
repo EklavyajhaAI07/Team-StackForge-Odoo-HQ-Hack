@@ -98,12 +98,12 @@ export function PrimaryAction({
         {auto ? "Confirm & fulfil" : "Send for approval"}
       </Button>
     ) : (
-      <p className="text-[12px] text-muted">Only the owning rep (or a manager) can submit this draft.</p>
+      <p className="text-[13px] text-muted">Only the owning rep (or a manager) can submit this draft.</p>
     );
   } else if (s === "PENDING_MANAGER" || s === "PENDING_FINANCE") {
     body = (
       <div className="flex flex-col gap-2">
-        <p className="text-[12px] text-warn">Waiting for {s === "PENDING_MANAGER" ? "the sales manager" : "finance"} — lines are locked.</p>
+        <p className="text-[13px] text-warn">Waiting for {s === "PENDING_MANAGER" ? "the sales manager" : "finance"} — lines are locked.</p>
         <LinkButton href={`${base}/approval`} variant="secondary" className="w-full">
           View approval
         </LinkButton>
@@ -154,7 +154,7 @@ export function PrimaryAction({
         Revise quotation
       </Button>
     ) : (
-      <p className="text-[12px] text-muted">Rejected — the owning rep can reopen it.</p>
+      <p className="text-[13px] text-muted">Rejected — the owning rep can reopen it.</p>
     );
   }
 
@@ -179,7 +179,7 @@ export function PrimaryAction({
           </>
         }
       >
-        <code className="num block break-all rounded-[8px] border border-border bg-bg px-3 py-2 text-[12px]">{link}</code>
+        <code className="num block break-all rounded-[8px] border border-border bg-bg px-3 py-2 text-[13px]">{link}</code>
       </Modal>
     </>
   );

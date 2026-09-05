@@ -15,7 +15,7 @@ export function RiskChip({
   managerMax?: number;
 }) {
   if (blended <= 0 && maxLineOverage <= 0) {
-    return <span className="text-[12px] text-faint">Within policy</span>;
+    return <span className="whitespace-nowrap text-[13px] text-faint">Within policy</span>;
   }
   const tone = blended <= managerMax ? "warn" : "danger";
   return (

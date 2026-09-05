@@ -13,20 +13,20 @@ export function KpiRow({ kpis }: { kpis: Kpis }) {
   return (
     <div className="card grid grid-cols-2 divide-x divide-border overflow-hidden xl:grid-cols-4">
       <Tile label="Open pipeline" hint="Not yet confirmed or rejected">
-        <NumberTicker value={kpis.openPipelineValue} format={(n) => formatMoneyCompact(Math.round(n))} className="display text-[26px]" />
+        <NumberTicker value={kpis.openPipelineValue} format={(n) => formatMoneyCompact(Math.round(n))} className="display text-[30px]" />
       </Tile>
       <Tile label="Average margin" hint="Revenue-weighted across open quotations">
-        <NumberTicker value={kpis.avgMarginPct} format={(n) => formatPct(n)} className={`display text-[26px] ${marginTone}`} />
+        <NumberTicker value={kpis.avgMarginPct} format={(n) => formatPct(n)} className={`display text-[30px] ${marginTone}`} />
       </Tile>
       <Tile label="Pending approvals" hint="Waiting on a manager or finance">
         <NumberTicker
           value={kpis.pendingApprovals}
           format={(n) => String(Math.round(n))}
-          className={`display text-[26px] ${kpis.pendingApprovals > 0 ? "text-warn" : "text-muted"}`}
+          className={`display text-[30px] ${kpis.pendingApprovals > 0 ? "text-warn" : "text-muted"}`}
         />
       </Tile>
       <Tile label="Confirmed this week" hint={`${formatMoneyCompact(kpis.confirmedThisWeekValue)} booked`}>
-        <NumberTicker value={kpis.confirmedThisWeek} format={(n) => String(Math.round(n))} className="display text-[26px] text-money" />
+        <NumberTicker value={kpis.confirmedThisWeek} format={(n) => String(Math.round(n))} className="display text-[30px] text-money" />
       </Tile>
     </div>
   );
@@ -35,9 +35,9 @@ export function KpiRow({ kpis }: { kpis: Kpis }) {
 function Tile({ label, hint, children }: { label: string; hint: string; children: React.ReactNode }) {
   return (
     <div className="px-4 py-3">
-      <p className="text-[12px] text-muted">{label}</p>
+      <p className="text-[13px] text-muted">{label}</p>
       <div className="mt-1.5">{children}</div>
-      <p className="mt-1 text-[11px] text-faint">{hint}</p>
+      <p className="mt-1 text-[12px] text-faint">{hint}</p>
     </div>
   );
 }

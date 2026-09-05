@@ -116,8 +116,8 @@ export function ProductsConfig({
     <Card>
       <div className="flex flex-wrap items-start justify-between gap-3 px-5 pt-4 pb-2">
         <div>
-          <h2 className="text-[15px] font-semibold">Catalogue</h2>
-          <p className="text-[12px] text-muted">
+          <h2>Catalogue</h2>
+          <p className="text-[13px] text-muted">
             {products.length} products. Promoted items are weighted 1.5× when the upsell panel ranks suggestions.
           </p>
         </div>
@@ -155,7 +155,7 @@ export function ProductsConfig({
                     <span className="font-medium">{p.name}</span>
                     {p.kind === "RECURRING" ? <Pill tone="info">Subscription</Pill> : null}
                   </div>
-                  <div className="num text-[11px] text-muted">
+                  <div className="num text-[12px] text-muted">
                     {p.sku} · per {p.unit}
                     {p.attributeName ? ` · ${p.attributeName}: ${p.variants.map((v) => v.value).join(", ")}` : ""}
                   </div>
@@ -203,7 +203,7 @@ export function ProductsConfig({
             ))}
           </tbody>
         </table>
-        {visible.length === 0 ? <p className="py-6 text-[13px] text-muted">Nothing matches that search.</p> : null}
+        {visible.length === 0 ? <p className="py-6 text-[14px] text-muted">Nothing matches that search.</p> : null}
       </div>
 
       <Modal
@@ -258,7 +258,7 @@ export function ProductsConfig({
             <Input numeric type="number" min={0} max={100} value={draft.taxPct} onChange={(e) => setDraft((d) => ({ ...d, taxPct: e.target.value }))} />
           </Field>
           <Field label="Promoted" hint="Weighted 1.5× in upsell ranking">
-            <label className="flex h-9 items-center gap-2 text-[13px]">
+            <label className="flex h-9 items-center gap-2 text-[14px]">
               <input type="checkbox" checked={draft.isPromoted} onChange={(e) => setDraft((d) => ({ ...d, isPromoted: e.target.checked }))} />
               Show as promoted
             </label>
