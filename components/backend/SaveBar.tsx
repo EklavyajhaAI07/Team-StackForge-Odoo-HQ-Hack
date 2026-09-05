@@ -1,0 +1,39 @@
+"use client";
+
+import { Button } from "@/components/ui/Button";
+
+/** Shared header row for the plain-CRUD backend screens. */
+export function SaveBar({
+  title,
+  description,
+  dirty,
+  busy,
+  disabled,
+  onSave,
+  label = "Save changes",
+  extra,
+}: {
+  title: string;
+  description: string;
+  dirty: boolean;
+  busy: boolean;
+  disabled?: boolean;
+  onSave: () => void;
+  label?: string;
+  extra?: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 px-5 pt-4 pb-2">
+      <div>
+        <h2 className="text-[15px] font-semibold">{title}</h2>
+        <p className="text-[12px] text-muted">{description}</p>
+      </div>
+      <div className="flex items-center gap-2">
+        {extra}
+        <Button variant="primary" loading={busy} disabled={!dirty || disabled} onClick={onSave}>
+          {label}
+        </Button>
+      </div>
+    </div>
+  );
+}

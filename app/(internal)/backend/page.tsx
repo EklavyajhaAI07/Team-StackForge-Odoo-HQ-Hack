@@ -1,14 +1,29 @@
 import type { Metadata } from "next";
-import { EmptyState } from "@/components/ui/EmptyState";
+import { prisma } from "@/lib/db";
+import { requireSessionUser } from "@/lib/auth";
+import { can } from "@/lib/rbac";
+import { DiscountMatrix } from "@/components/backend/DiscountMatrix";
 
-export const metadata: Metadata = { title: "Backend" };
+export const metadata: Metadata = { title: "Discount policy" };
 
-export default function BackendPage() {
+const TIERS = ["BRONZE", "SILVER", "GOLD"] as const;
+
+export default async function DiscountPolicyPage() {
+  const user = await requireSessionUser();
+  const [categories, policies] = await Promise.all([
+    prisma.category.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+    prisma.discountPolicy.findMany(),
+  ]);
+
+  const cells: Record<string, number> = {};
+  for (const p of policies) cells[`${p.tier}:${p.categoryId}`] = p.ceilingPct;
+
   return (
-    <>
-      <h1>Backend</h1>
-      <p className="mt-1 text-[13px] text-muted">Products, price lists, discount policy, approval thresholds, warehouses, plans.</p>
-      <EmptyState className="mt-6" title="Configuration hub arrives with Phase P2" description="Plain CRUD screens, built right after the quotation builder." />
-    </>
+    <DiscountMatrix
+      tiers={[...TIERS]}
+      categories={categories}
+      cells={cells}
+      canEdit={can(user, "config:discounts")}
+    />
   );
 }

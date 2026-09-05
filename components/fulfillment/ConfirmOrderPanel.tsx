@@ -80,7 +80,9 @@ export function ConfirmOrderPanel({
             Confirm order
           </Button>
         ) : (
-          <p className="text-[13px] text-muted">Only the owning rep, a manager or finance can confirm this order.</p>
+          <p className="text-[13px] text-muted">
+            The owning rep, their sales manager or an admin confirms the order. Fulfillment and billing open to finance once they have.
+          </p>
         )}
       </div>
     </Card>
