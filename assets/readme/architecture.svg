@@ -1,76 +1,155 @@
-<svg width="1200" height="610" viewBox="0 0 1200 610" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">DealFlow360 architecture</title>
-  <desc id="desc">Architecture showing internal and customer access surfaces, API handlers, pure business engines, Prisma and PostgreSQL, AuditEvent, Server-Sent Events, auth realms and RBAC.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" role="img" aria-label="DealFlow360 architecture: config, pure engines, workflow and audit layers">
+  <title>DealFlow360 architecture — four layers from configuration down to the audit trail</title>
+
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="610" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0D1426"/>
-      <stop offset="1" stop-color="#0A101E"/>
+    <linearGradient id="a-panel" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#12151b"/>
+      <stop offset="60%" stop-color="#0c0e13"/>
+      <stop offset="100%" stop-color="#090b10"/>
     </linearGradient>
-    <linearGradient id="accent" x1="320" y1="0" x2="850" y2="610" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#67E8F9"/>
-      <stop offset="0.52" stop-color="#818CF8"/>
-      <stop offset="1" stop-color="#C084FC"/>
+    <pattern id="a-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M30 0H0v30" fill="none" stroke="#5b7cfa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+
+    <linearGradient id="f-config" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3d4a72"/><stop offset="100%" stop-color="#1d2438"/>
     </linearGradient>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#6D7FA8"/>
-    </marker>
+    <linearGradient id="f-engine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4a63c9"/><stop offset="100%" stop-color="#212a49"/>
+    </linearGradient>
+    <linearGradient id="f-flow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2f7f6a"/><stop offset="100%" stop-color="#1a2c2c"/>
+    </linearGradient>
+    <linearGradient id="f-audit" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6a5330"/><stop offset="100%" stop-color="#26201a"/>
+    </linearGradient>
+
+    <style>
+      @keyframes fall {
+        0%   { opacity: 0; transform: translateY(0); }
+        8%   { opacity: 1; }
+        92%  { opacity: 1; }
+        100% { opacity: 0; transform: translateY(468px); }
+      }
+      @keyframes bob   { 0%,100% { transform: translateY(0); }   50% { transform: translateY(-5px); } }
+      @keyframes dashRun { to { stroke-dashoffset: -44; } }
+      @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+      .l1 { animation: bob 8s ease-in-out 0s   infinite; }
+      .l2 { animation: bob 8s ease-in-out .6s  infinite; }
+      .l3 { animation: bob 8s ease-in-out 1.2s infinite; }
+      .l4 { animation: bob 8s ease-in-out 1.8s infinite; }
+
+      .p1 { animation: fall 4.4s linear 0s    infinite; }
+      .p2 { animation: fall 4.4s linear 1.45s infinite; }
+      .p3 { animation: fall 4.4s linear 2.9s  infinite; }
+
+      .wire { stroke-dasharray: 5 6; animation: dashRun 1.6s linear infinite; }
+      .in   { animation: fadeUp .6s ease-out both; }
+      .in2  { animation: fadeUp .6s ease-out .12s both; }
+      .in3  { animation: fadeUp .6s ease-out .24s both; }
+      .in4  { animation: fadeUp .6s ease-out .36s both; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .l1,.l2,.l3,.l4,.p1,.p2,.p3,.wire,.in,.in2,.in3,.in4 { animation: none !important; }
+        .wire { stroke-dasharray: 5 6; }
+      }
+      .lbl  { font-family: ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    </style>
   </defs>
 
-  <rect width="1200" height="610" rx="24" fill="url(#bg)"/>
-  <rect x="1" y="1" width="1198" height="608" rx="23" stroke="#263550"/>
+  <rect width="1200" height="760" rx="16" fill="url(#a-panel)"/>
+  <rect width="1200" height="760" rx="16" fill="url(#a-grid)"/>
+  <rect width="1200" height="760" rx="16" fill="none" stroke="#ffffff" stroke-opacity="0.09"/>
 
-  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
-    <text x="54" y="54" fill="#F8FAFC" font-size="26" font-weight="800">Architecture that separates access, rules, workflow and proof</text>
-    <text x="54" y="82" fill="#8190AA" font-size="14">Verified from the available repository README</text>
+  <text class="lbl in" x="40" y="46" font-size="17" font-weight="600" fill="#e7e9ee">Architecture</text>
+  <text class="lbl in" x="40" y="68" font-size="12.5" fill="#838b9b">A quotation falls through four layers. Only the engines decide anything, and every decision lands in the audit trail.</text>
 
-    <rect x="54" y="120" width="260" height="118" rx="18" fill="#111C31" stroke="#304160"/>
-    <text x="78" y="151" fill="#67E8F9" font-size="12" font-weight="800" letter-spacing="1.1">INTERNAL SURFACE</text>
-    <text x="78" y="184" fill="#F1F5F9" font-size="20" font-weight="750">app/(internal)</text>
-    <text x="78" y="211" fill="#94A3B8" font-size="14">JWT-internal realm</text>
-
-    <rect x="54" y="270" width="260" height="118" rx="18" fill="#111C31" stroke="#304160"/>
-    <text x="78" y="301" fill="#C4B5FD" font-size="12" font-weight="800" letter-spacing="1.1">CUSTOMER SURFACE</text>
-    <text x="78" y="334" fill="#F1F5F9" font-size="20" font-weight="750">app/(portal)</text>
-    <text x="78" y="361" fill="#94A3B8" font-size="14">Restricted customer view</text>
-
-    <rect x="374" y="179" width="218" height="150" rx="18" fill="#111C31" stroke="#34496C"/>
-    <text x="398" y="211" fill="#A5B4FC" font-size="12" font-weight="800" letter-spacing="1.1">WORKFLOW EDGE</text>
-    <text x="398" y="246" fill="#F8FAFC" font-size="22" font-weight="800">app/api/*</text>
-    <text x="398" y="276" fill="#94A3B8" font-size="14">Resolve data</text>
-    <text x="398" y="300" fill="#94A3B8" font-size="14">Execute mutations</text>
-
-    <rect x="650" y="134" width="238" height="105" rx="18" fill="#111C31" stroke="#3F527A"/>
-    <text x="674" y="165" fill="#67E8F9" font-size="12" font-weight="800" letter-spacing="1.1">RULES</text>
-    <text x="674" y="199" fill="#F8FAFC" font-size="21" font-weight="800">lib/engine/*</text>
-    <text x="674" y="222" fill="#94A3B8" font-size="13">Pure functions · no DB calls</text>
-
-    <rect x="650" y="278" width="238" height="105" rx="18" fill="#111C31" stroke="#3F527A"/>
-    <text x="674" y="309" fill="#A5B4FC" font-size="12" font-weight="800" letter-spacing="1.1">PERSISTENCE</text>
-    <text x="674" y="343" fill="#F8FAFC" font-size="21" font-weight="800">Prisma</text>
-    <text x="674" y="366" fill="#94A3B8" font-size="13">PostgreSQL · migrations · seed</text>
-
-    <rect x="948" y="134" width="198" height="105" rx="18" fill="#111C31" stroke="#4D4673"/>
-    <text x="972" y="165" fill="#C4B5FD" font-size="12" font-weight="800" letter-spacing="1.1">PROOF</text>
-    <text x="972" y="199" fill="#F8FAFC" font-size="21" font-weight="800">AuditEvent</text>
-    <text x="972" y="222" fill="#94A3B8" font-size="13">Mutation trace</text>
-
-    <rect x="948" y="278" width="198" height="105" rx="18" fill="#111C31" stroke="#4D4673"/>
-    <text x="972" y="309" fill="#C4B5FD" font-size="12" font-weight="800" letter-spacing="1.1">REALTIME</text>
-    <text x="972" y="343" fill="#F8FAFC" font-size="21" font-weight="800">SSE</text>
-    <text x="972" y="366" fill="#94A3B8" font-size="13">Server-Sent Events</text>
-
-    <path d="M314 179H365" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
-    <path d="M314 329H365" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
-    <path d="M592 224H640" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
-    <path d="M769 239V268" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
-    <path d="M888 185H938" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
-    <path d="M888 331H938" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
-
-    <rect x="54" y="445" width="1092" height="105" rx="20" fill="#0F192B" stroke="#2C3A59"/>
-    <text x="80" y="477" fill="#93A4C2" font-size="12" font-weight="800" letter-spacing="1.2">CROSS-CUTTING GOVERNANCE</text>
-    <text x="80" y="512" fill="#F1F5F9" font-size="20" font-weight="750">Auth realms + RBAC + audit + SSE + money utilities</text>
-    <path d="M80 528H1108" stroke="url(#accent)" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
-
-    <text x="54" y="584" fill="#60708D" font-size="12">Rules → workflow → persistence → audit / realtime, with access control spanning the system.</text>
+  <!-- ════ LAYER 1 · CONFIG ════ -->
+  <g class="l1">
+    <path d="M330,160 L600,82 L870,160 L600,238 Z" fill="url(#f-config)" stroke="#8ea2ff" stroke-opacity="0.45"/>
+    <path d="M330,160 L600,238 L600,262 L330,184 Z" fill="#141827"/>
+    <path d="M870,160 L600,238 L600,262 L870,184 Z" fill="#0e1220"/>
+    <text class="lbl" x="600" y="150" text-anchor="middle" font-size="15" font-weight="600" fill="#dfe4f2">CONFIG</text>
+    <text class="mono" x="600" y="172" text-anchor="middle" font-size="10.5" fill="#9aa5c0">DiscountPolicy · ApprovalConfig · PriceListItem · Stock · SubscriptionPlan</text>
   </g>
+  <g class="in">
+    <line x1="900" y1="176" x2="1010" y2="176" stroke="#5b7cfa" stroke-opacity="0.5"/>
+    <text class="lbl" x="1018" y="172" font-size="11.5" fill="#98a2b8">Ceilings and</text>
+    <text class="lbl" x="1018" y="187" font-size="11.5" fill="#98a2b8">thresholds, editable</text>
+  </g>
+
+  <!-- ════ LAYER 2 · ENGINES ════ -->
+  <g class="l2">
+    <path d="M330,312 L600,234 L870,312 L600,390 Z" fill="url(#f-engine)" stroke="#9fb0ff" stroke-opacity="0.6"/>
+    <path d="M330,312 L600,390 L600,414 L330,336 Z" fill="#161c33"/>
+    <path d="M870,312 L600,390 L600,414 L870,336 Z" fill="#101529"/>
+    <text class="lbl" x="600" y="300" text-anchor="middle" font-size="15" font-weight="600" fill="#eaeefb">PURE ENGINES</text>
+    <text class="mono" x="600" y="322" text-anchor="middle" font-size="10.5" fill="#b9c3e0">risk · routing · split · proration · anomaly · upsell</text>
+    <text class="lbl" x="600" y="342" text-anchor="middle" font-size="10" fill="#8f9bbb">inputs → outputs, no database calls inside the maths</text>
+  </g>
+  <g class="in2">
+    <line x1="900" y1="326" x2="1010" y2="326" stroke="#5b7cfa" stroke-opacity="0.5"/>
+    <text class="lbl" x="1018" y="322" font-size="11.5" fill="#98a2b8">Deterministic and</text>
+    <text class="lbl" x="1018" y="337" font-size="11.5" fill="#98a2b8">unit-tested</text>
+  </g>
+  <g class="in2">
+    <line x1="300" y1="326" x2="190" y2="326" stroke="#5b7cfa" stroke-opacity="0.5"/>
+    <text class="lbl" x="182" y="322" text-anchor="end" font-size="11.5" fill="#98a2b8">Same functions serve</text>
+    <text class="lbl" x="182" y="337" text-anchor="end" font-size="11.5" fill="#98a2b8">screen and API</text>
+  </g>
+
+  <!-- ════ LAYER 3 · WORKFLOW ════ -->
+  <g class="l3">
+    <path d="M330,464 L600,386 L870,464 L600,542 Z" fill="url(#f-flow)" stroke="#6fe0b4" stroke-opacity="0.5"/>
+    <path d="M330,464 L600,542 L600,566 L330,488 Z" fill="#13251f"/>
+    <path d="M870,464 L600,542 L600,566 L870,488 Z" fill="#0d1a17"/>
+    <text class="lbl" x="600" y="452" text-anchor="middle" font-size="15" font-weight="600" fill="#dff6ec">WORKFLOW</text>
+    <text class="mono" x="600" y="474" text-anchor="middle" font-size="10.5" fill="#a4d3c3">34 route handlers · zod · RBAC · Prisma · SSE</text>
+    <text class="lbl" x="600" y="494" text-anchor="middle" font-size="10" fill="#8fb5a8">validate → authorise → persist → audit → emit</text>
+  </g>
+  <g class="in3">
+    <line x1="900" y1="478" x2="1010" y2="478" stroke="#3fcf8e" stroke-opacity="0.45"/>
+    <text class="lbl" x="1018" y="474" font-size="11.5" fill="#98a2b8">Server components read,</text>
+    <text class="lbl" x="1018" y="489" font-size="11.5" fill="#98a2b8">route handlers write</text>
+  </g>
+
+  <!-- ════ LAYER 4 · AUDIT ════ -->
+  <g class="l4">
+    <path d="M330,616 L600,538 L870,616 L600,694 Z" fill="url(#f-audit)" stroke="#e0a132" stroke-opacity="0.45"/>
+    <path d="M330,616 L600,694 L600,718 L330,640 Z" fill="#221b12"/>
+    <path d="M870,616 L600,694 L600,718 L870,640 Z" fill="#191410"/>
+    <text class="lbl" x="600" y="604" text-anchor="middle" font-size="15" font-weight="600" fill="#f6e6cd">AUDIT TRAIL</text>
+    <text class="mono" x="600" y="626" text-anchor="middle" font-size="10.5" fill="#d5b98c">AuditEvent — who, when, what, why</text>
+    <text class="lbl" x="600" y="646" text-anchor="middle" font-size="10" fill="#b7a081">19 recorded actions, newest last on every tab</text>
+  </g>
+  <g class="in4">
+    <line x1="900" y1="630" x2="1010" y2="630" stroke="#e0a132" stroke-opacity="0.45"/>
+    <text class="lbl" x="1018" y="626" font-size="11.5" fill="#98a2b8">Nothing mutates</text>
+    <text class="lbl" x="1018" y="641" font-size="11.5" fill="#98a2b8">without a record</text>
+  </g>
+
+  <!-- falling data pulses through the whole stack -->
+  <g>
+    <circle class="p1" cx="600" cy="150" r="4.5" fill="#8ea2ff"/>
+    <circle class="p2" cx="556" cy="150" r="3.5" fill="#3fcf8e"/>
+    <circle class="p3" cx="644" cy="150" r="3.5" fill="#e0a132"/>
+  </g>
+
+  <!-- the two realms feeding in -->
+  <g class="in">
+    <rect x="40" y="120" width="176" height="58" rx="9" fill="#141821" stroke="#5b7cfa" stroke-opacity="0.35"/>
+    <text class="lbl" x="56" y="143" font-size="12" font-weight="600" fill="#cfd6e6">Internal realm</text>
+    <text class="lbl" x="56" y="162" font-size="10.5" fill="#838b9b">JWT · rep, manager, finance</text>
+    <path class="wire" d="M216,150 C270,150 280,160 330,160" fill="none" stroke="#5b7cfa" stroke-opacity="0.55" stroke-width="1.5"/>
+  </g>
+  <g class="in">
+    <rect x="40" y="196" width="176" height="58" rx="9" fill="#141821" stroke="#3fcf8e" stroke-opacity="0.35"/>
+    <text class="lbl" x="56" y="219" font-size="12" font-weight="600" fill="#cfd6e6">Portal realm</text>
+    <text class="lbl" x="56" y="238" font-size="10.5" fill="#838b9b">Separate JWT · one quotation</text>
+    <path class="wire" d="M216,226 C280,226 300,190 336,172" fill="none" stroke="#3fcf8e" stroke-opacity="0.5" stroke-width="1.5"/>
+  </g>
+
+  <text class="lbl" x="40" y="726" font-size="11" fill="#6b7280">Postgres 15 · Prisma 6 · Next.js 16 App Router · no runtime network calls</text>
 </svg>

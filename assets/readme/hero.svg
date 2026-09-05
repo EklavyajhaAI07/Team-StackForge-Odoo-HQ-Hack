@@ -1,82 +1,161 @@
-<svg width="1200" height="390" viewBox="0 0 1200 390" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">DealFlow360</title>
-  <desc id="desc">Premium banner for DealFlow360, a self-governing B2B sales operations platform built by Team StackForge for Odoo Hackathon 2026 Finals.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-label="DealFlow360 — quotations that route their own approvals">
+  <title>DealFlow360 — quotations that route their own approvals</title>
+
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="390" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0B1020"/>
-      <stop offset="0.52" stop-color="#10182C"/>
-      <stop offset="1" stop-color="#0C1222"/>
+    <linearGradient id="h-panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#12151b"/>
+      <stop offset="55%" stop-color="#0c0e13"/>
+      <stop offset="100%" stop-color="#0a0c11"/>
     </linearGradient>
-    <linearGradient id="line" x1="150" y1="90" x2="1020" y2="300" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6EE7F9"/>
-      <stop offset="0.5" stop-color="#818CF8"/>
-      <stop offset="1" stop-color="#C084FC"/>
+    <radialGradient id="h-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5b7cfa" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#5b7cfa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="h-top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2b3550"/>
+      <stop offset="100%" stop-color="#171d2b"/>
     </linearGradient>
-    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="18" result="blur"/>
-      <feColorMatrix in="blur" type="matrix" values="0.3 0 0 0 0.2  0 0.45 0 0 0.35  0 0 0.7 0 0.8  0 0 0 0.45 0"/>
-    </filter>
+    <linearGradient id="h-top2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#31406b"/>
+      <stop offset="100%" stop-color="#1a2136"/>
+    </linearGradient>
+    <linearGradient id="h-top3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3a4f8f"/>
+      <stop offset="100%" stop-color="#1d2740"/>
+    </linearGradient>
+    <pattern id="h-grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0v26" fill="none" stroke="#5b7cfa" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+
+    <style>
+      .fx { animation-fill-mode: both; }
+      @keyframes riseIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+      @keyframes floatA { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+      @keyframes floatB { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-11px); } }
+      @keyframes floatC { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+      @keyframes sweep  { from { stroke-dashoffset: 384; } to { stroke-dashoffset: 96; } }
+      @keyframes drop   { 0% { opacity:0; transform: translateY(-26px); }
+                          12% { opacity:1; }
+                          78% { opacity:1; }
+                          100% { opacity:0; transform: translateY(150px); } }
+      @keyframes blink  { 0%,100% { opacity:1; } 50% { opacity:0.25; } }
+      @keyframes shimmer{ 0% { transform: translateX(-260px);} 100% { transform: translateX(1460px);} }
+
+      .w1 { animation: riseIn .7s ease-out .05s; }
+      .w2 { animation: riseIn .7s ease-out .18s; }
+      .w3 { animation: riseIn .7s ease-out .30s; }
+      .w4 { animation: riseIn .7s ease-out .42s; }
+
+      .layerA { animation: floatA 7s ease-in-out infinite; }
+      .layerB { animation: floatB 7s ease-in-out .5s infinite; }
+      .layerC { animation: floatC 7s ease-in-out 1s infinite; }
+
+      .arc  { animation: sweep 3.2s cubic-bezier(.22,1,.36,1) infinite alternate; }
+      .pulse1 { animation: drop 3.4s linear infinite; }
+      .pulse2 { animation: drop 3.4s linear 1.15s infinite; }
+      .pulse3 { animation: drop 3.4s linear 2.3s infinite; }
+      .dot  { animation: blink 2.4s ease-in-out infinite; }
+      .shine{ animation: shimmer 6s ease-in-out infinite; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fx, .w1,.w2,.w3,.w4,.layerA,.layerB,.layerC,.arc,.pulse1,.pulse2,.pulse3,.dot,.shine {
+          animation: none !important;
+        }
+      }
+    </style>
   </defs>
 
-  <rect width="1200" height="390" rx="26" fill="url(#bg)"/>
-  <rect x="1" y="1" width="1198" height="388" rx="25" stroke="#2A3656" stroke-opacity="0.9"/>
+  <rect width="1200" height="340" rx="16" fill="url(#h-panel)"/>
+  <rect width="1200" height="340" rx="16" fill="url(#h-grid)"/>
+  <ellipse cx="905" cy="150" rx="330" ry="200" fill="url(#h-glow)"/>
+  <rect width="1200" height="340" rx="16" fill="none" stroke="#ffffff" stroke-opacity="0.09"/>
 
-  <circle cx="1010" cy="66" r="130" fill="#6EE7F9" fill-opacity="0.06" filter="url(#glow)"/>
-  <circle cx="1050" cy="330" r="155" fill="#A78BFA" fill-opacity="0.07" filter="url(#glow)"/>
-
-  <g opacity="0.35">
-    <path d="M760 45H1135" stroke="#263452"/>
-    <path d="M760 85H1135" stroke="#263452"/>
-    <path d="M760 125H1135" stroke="#263452"/>
-    <path d="M760 165H1135" stroke="#263452"/>
-    <path d="M760 205H1135" stroke="#263452"/>
-    <path d="M760 245H1135" stroke="#263452"/>
-    <path d="M760 285H1135" stroke="#263452"/>
-    <path d="M760 325H1135" stroke="#263452"/>
+  <!-- travelling highlight along the top edge -->
+  <g clip-path="inset(0 round 16px)">
+    <rect class="fx shine" x="0" y="0" width="220" height="2" fill="#5b7cfa" opacity="0.5"/>
   </g>
 
-  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
-    <rect x="66" y="54" width="184" height="34" rx="17" fill="#151F37" stroke="#2D3D63"/>
-    <circle cx="86" cy="71" r="5" fill="#6EE7F9"/>
-    <text x="101" y="76" fill="#C7D2FE" font-size="13" font-weight="700" letter-spacing="1.1">TEAM STACKFORGE</text>
-
-    <text x="64" y="168" fill="#F8FAFC" font-size="62" font-weight="800" letter-spacing="-2.4">DealFlow360</text>
-    <text x="66" y="209" fill="#AEBBD6" font-size="21" font-weight="500">Self-governing B2B sales operations.</text>
-    <text x="66" y="240" fill="#7F8DAA" font-size="16">Pure engines. Governed workflow. Audit-first mutations. Realtime updates.</text>
-
-    <g transform="translate(66 284)">
-      <rect width="122" height="34" rx="9" fill="#131D32" stroke="#30405F"/>
-      <text x="18" y="22" fill="#DCE7FF" font-size="13" font-weight="650">NEXT.JS 16</text>
-
-      <rect x="134" width="122" height="34" rx="9" fill="#131D32" stroke="#30405F"/>
-      <text x="157" y="22" fill="#DCE7FF" font-size="13" font-weight="650">POSTGRESQL</text>
-
-      <rect x="268" width="96" height="34" rx="9" fill="#131D32" stroke="#30405F"/>
-      <text x="292" y="22" fill="#DCE7FF" font-size="13" font-weight="650">PRISMA</text>
-
-      <rect x="376" width="72" height="34" rx="9" fill="#131D32" stroke="#30405F"/>
-      <text x="401" y="22" fill="#DCE7FF" font-size="13" font-weight="650">SSE</text>
+  <!-- ── left: wordmark and claim ── -->
+  <g font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+    <g class="fx w1">
+      <text x="72" y="104" font-size="46" font-weight="700" fill="#e7e9ee" letter-spacing="-1.4">DealFlow<tspan fill="#5b7cfa">360</tspan></text>
     </g>
 
-    <g transform="translate(750 70)">
-      <path d="M45 38C45 21.431 58.431 8 75 8H252C268.569 8 282 21.431 282 38V78C282 94.569 268.569 108 252 108H75C58.431 108 45 94.569 45 78V38Z" fill="#111B30" stroke="#34476C"/>
-      <text x="76" y="47" fill="#94A3B8" font-size="12" font-weight="700" letter-spacing="1">BUSINESS RULES</text>
-      <text x="76" y="76" fill="#F8FAFC" font-size="20" font-weight="750">Pure engines</text>
-
-      <path d="M164 108V132" stroke="url(#line)" stroke-width="3"/>
-      <circle cx="164" cy="120" r="4" fill="#818CF8"/>
-
-      <path d="M8 161C8 144.431 21.431 131 38 131H290C306.569 131 320 144.431 320 161V202C320 218.569 306.569 232 290 232H38C21.431 232 8 218.569 8 202V161Z" fill="#111B30" stroke="#34476C"/>
-      <text x="39" y="170" fill="#94A3B8" font-size="12" font-weight="700" letter-spacing="1">WORKFLOW</text>
-      <text x="39" y="200" fill="#F8FAFC" font-size="20" font-weight="750">API → AuditEvent → SSE</text>
-
-      <path d="M164 232V254" stroke="url(#line)" stroke-width="3"/>
-      <circle cx="164" cy="244" r="4" fill="#C084FC"/>
-
-      <rect x="31" y="254" width="266" height="49" rx="16" fill="#161B31" stroke="#4B3E6C"/>
-      <text x="65" y="284" fill="#E9D5FF" font-size="14" font-weight="700">RBAC + SEPARATE ACCESS SURFACES</text>
+    <g class="fx w2">
+      <text x="74" y="146" font-size="19" font-weight="500" fill="#c3c9d6" letter-spacing="-0.3">Quotations that route their own approvals.</text>
     </g>
 
-    <text x="66" y="360" fill="#687895" font-size="12" font-weight="650" letter-spacing="1.2">ODOO HACKATHON 2026 FINALS</text>
+    <g class="fx w3">
+      <text x="74" y="176" font-size="13.5" fill="#838b9b">Discount governance, warehouse splitting and hybrid billing —</text>
+      <text x="74" y="196" font-size="13.5" fill="#838b9b">decided by application logic, logged to an audit trail, on localhost.</text>
+    </g>
+
+    <!-- stat chips -->
+    <g class="fx w4" font-size="12">
+      <g transform="translate(74,224)">
+        <rect width="128" height="46" rx="8" fill="#191d25" stroke="#ffffff" stroke-opacity="0.09"/>
+        <text x="12" y="19" fill="#838b9b" font-size="11">Pure engines</text>
+        <text x="12" y="36" fill="#e7e9ee" font-size="15" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">6</text>
+      </g>
+      <g transform="translate(214,224)">
+        <rect width="128" height="46" rx="8" fill="#191d25" stroke="#ffffff" stroke-opacity="0.09"/>
+        <text x="12" y="19" fill="#838b9b" font-size="11">Route handlers</text>
+        <text x="12" y="36" fill="#e7e9ee" font-size="15" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">34</text>
+      </g>
+      <g transform="translate(354,224)">
+        <rect width="150" height="46" rx="8" fill="#191d25" stroke="#ffffff" stroke-opacity="0.09"/>
+        <text x="12" y="19" fill="#838b9b" font-size="11">Judge-flow assertions</text>
+        <text x="12" y="36" fill="#3fcf8e" font-size="15" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">54 passing</text>
+      </g>
+      <g transform="translate(516,224)">
+        <rect width="132" height="46" rx="8" fill="#191d25" stroke="#ffffff" stroke-opacity="0.09"/>
+        <text x="12" y="19" fill="#838b9b" font-size="11">Runtime network</text>
+        <text x="12" y="36" fill="#3fcf8e" font-size="15" font-weight="600" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">zero calls</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ── right: the risk gauge over a floating layer stack ── -->
+  <g transform="translate(900,184)">
+
+    <!-- layer 3 (bottom) -->
+    <g class="fx layerC">
+      <path d="M0,86 L150,42 L300,86 L150,130 Z" fill="url(#h-top)" stroke="#5b7cfa" stroke-opacity="0.35"/>
+      <path d="M0,86 L150,130 L150,146 L0,102 Z" fill="#0f1320"/>
+      <path d="M300,86 L150,130 L150,146 L300,102 Z" fill="#0b0e18"/>
+      <text x="150" y="94" text-anchor="middle" font-size="11.5" fill="#8f9ab5" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">Audit trail</text>
+    </g>
+
+    <!-- layer 2 (middle) -->
+    <g class="fx layerB">
+      <path d="M0,26 L150,-18 L300,26 L150,70 Z" fill="url(#h-top2)" stroke="#5b7cfa" stroke-opacity="0.45"/>
+      <path d="M0,26 L150,70 L150,86 L0,42 Z" fill="#111629"/>
+      <path d="M300,26 L150,70 L150,86 L300,42 Z" fill="#0c1020"/>
+      <text x="150" y="34" text-anchor="middle" font-size="11.5" fill="#aab4cc" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">Workflow &amp; SSE</text>
+    </g>
+
+    <!-- layer 1 (top) -->
+    <g class="fx layerA">
+      <path d="M0,-34 L150,-78 L300,-34 L150,10 Z" fill="url(#h-top3)" stroke="#7f97ff" stroke-opacity="0.55"/>
+      <path d="M0,-34 L150,10 L150,26 L0,-18 Z" fill="#141a30"/>
+      <path d="M300,-34 L150,10 L150,26 L300,-18 Z" fill="#0e1226"/>
+      <text x="150" y="-26" text-anchor="middle" font-size="11.5" fill="#c9d2e8" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">Pure engines</text>
+    </g>
+
+    <!-- data pulses falling through the stack -->
+    <g>
+      <circle class="fx pulse1" cx="150" cy="-60" r="3.5" fill="#5b7cfa"/>
+      <circle class="fx pulse2" cx="118" cy="-60" r="3" fill="#3fcf8e"/>
+      <circle class="fx pulse3" cx="182" cy="-60" r="3" fill="#e0a132"/>
+    </g>
+
+    <!-- risk gauge -->
+    <g transform="translate(150,-118)">
+      <circle r="52" fill="none" stroke="#1b2030" stroke-width="9" stroke-dasharray="245 400" stroke-linecap="round" transform="rotate(135)"/>
+      <circle class="fx arc" r="52" fill="none" stroke="#e0a132" stroke-width="9" stroke-dasharray="245 400" stroke-dashoffset="384" stroke-linecap="round" transform="rotate(135)"/>
+      <text y="6" text-anchor="middle" font-size="27" font-weight="700" fill="#e7e9ee" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">4.6</text>
+      <text y="23" text-anchor="middle" font-size="9.5" fill="#838b9b" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">pts over ceiling</text>
+      <circle class="fx dot" cx="0" cy="-52" r="3" fill="#e0a132"/>
+    </g>
   </g>
 </svg>
