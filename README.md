@@ -1,4 +1,4 @@
-# DealFlow360
+![DealFlow360 Logo](./app/public/logo.svg)
 
 <p align="center">
   <img src="./assets/readme/hero.svg" alt="DealFlow360 — Self-governing B2B sales operations" width="100%" />
