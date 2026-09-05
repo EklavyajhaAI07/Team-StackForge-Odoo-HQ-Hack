@@ -5,9 +5,11 @@ import { requireSessionUser } from "@/lib/auth";
 import { can } from "@/lib/rbac";
 import { suggestUpsells } from "@/lib/engine/upsell";
 import { activePortalUrl } from "@/lib/portal-url";
-import { EDITABLE_STATUSES, getConfig, getPolicyCeilings, getQuotationDetail, getTierPrices } from "@/lib/services/quotation";
+import { EDITABLE_STATUSES, getConfig, getPolicyCeilings, getQuotationDetail, getTierPrices, openCounters } from "@/lib/services/quotation";
 import { Builder } from "@/components/builder/Builder";
 import type { BuilderLine, CatalogItem } from "@/components/builder/types";
+import { CounterInbox, type CounterView } from "@/components/quotations/CounterInbox";
+import { LiveQuotation } from "@/components/quotations/LiveQuotation";
 
 export const metadata: Metadata = { title: "Builder" };
 
@@ -84,8 +86,33 @@ export default async function BuilderPage({ params }: { params: Promise<{ id: st
     canRevise: owns,
   };
 
+  const counters: CounterView[] = openCounters(q.messages).flatMap((m) => {
+    const line = q.lines.find((l) => l.id === m.lineId);
+    if (!line || m.counterDiscountPct == null) return [];
+    return [
+      {
+        id: m.id,
+        lineId: m.lineId,
+        lineName: line.product.name,
+        body: m.body,
+        counterDiscountPct: m.counterDiscountPct,
+        currentDiscountPct: line.discountPct,
+        ceilingPct: ceilings.get(line.product.categoryId) ?? 0,
+        createdAt: m.createdAt.toISOString(),
+        lineTotalAfter: Math.round(line.qty * line.unitPrice * (1 - m.counterDiscountPct / 100)),
+      },
+    ];
+  });
+
   return (
-    <Builder
+    <>
+      <LiveQuotation quotationId={q.id} />
+      {counters.length > 0 ? (
+        <div className="mb-5">
+          <CounterInbox quotationId={q.id} counters={counters} canAnswer={owns} />
+        </div>
+      ) : null}
+      <Builder
       quotation={{ id: q.id, number: q.number, status: q.status, repId: q.repId, customerCompany: q.customer.company, customerTier: q.customer.tier }}
       lines={lines}
       catalog={catalog}
@@ -97,6 +124,7 @@ export default async function BuilderPage({ params }: { params: Promise<{ id: st
       permissions={permissions}
       portalUrl={activePortalUrl(q.portalTokens)}
       serverVersion={q.lastActivityAt.toISOString()}
-    />
+      />
+    </>
   );
 }
