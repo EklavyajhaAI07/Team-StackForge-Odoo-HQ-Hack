@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth";
+import { Logo } from "@/components/shell/Logo";
 import { LoginForm } from "@/components/auth/LoginForm";
 
 export default async function LoginPage() {
@@ -12,9 +13,7 @@ export default async function LoginPage() {
       <section className="relative hidden flex-col justify-between overflow-hidden border-r border-border px-12 py-12 lg:flex">
         <div className="ambient" aria-hidden />
         <div className="relative">
-          <p className="display text-[16px] tracking-tight">
-            DealFlow<span className="text-primary">360</span>
-          </p>
+          <Logo withWordmark size={34} priority />
         </div>
 
         <div className="relative max-w-[440px]">
@@ -45,9 +44,7 @@ export default async function LoginPage() {
       {/* Right: the form, aligned left rather than floating in the middle of a dark field. */}
       <section className="flex min-h-screen flex-col justify-center px-6 py-12 sm:px-12">
         <div className="w-full max-w-[360px]">
-          <p className="display mb-9 text-[16px] tracking-tight lg:hidden">
-            DealFlow<span className="text-primary">360</span>
-          </p>
+          <div className="mb-9 lg:hidden"><Logo withWordmark size={26} priority /></div>
           <h2 className="text-[22px]">Sign in</h2>
           <p className="mt-1 text-[14px] text-muted">Use a work account to open the sales desk.</p>
           <LoginForm />

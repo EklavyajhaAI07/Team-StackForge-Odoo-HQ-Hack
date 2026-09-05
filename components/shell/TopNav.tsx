@@ -8,6 +8,7 @@ import type { SessionUser } from "@/lib/auth";
 import { roleLabel } from "@/lib/rbac";
 import { useToast } from "@/components/ui/Toast";
 import { IconLogout, IconRefresh, IconGrid } from "@/components/ui/icons";
+import { Logo } from "./Logo";
 
 const NAV = [
   { href: "/quotations", label: "Quotations" },
@@ -47,8 +48,8 @@ export function TopNav({ user }: { user: SessionUser }) {
     <header className="no-print sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-md">
       <div className="mx-auto flex h-11 w-full max-w-[1400px] items-center justify-between gap-6 px-5">
         <div className="flex min-w-0 items-center gap-5">
-          <Link href="/quotations" className="display shrink-0 text-[14px] tracking-tight">
-            DealFlow<span className="text-primary">360</span>
+          <Link href="/quotations" className="shrink-0" aria-label="DealFlow360 home">
+            <Logo withWordmark size={26} priority />
           </Link>
           <nav className="flex items-center gap-0.5" aria-label="Primary">
             {NAV.map((n) => {

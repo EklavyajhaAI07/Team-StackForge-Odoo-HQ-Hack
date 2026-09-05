@@ -9,6 +9,7 @@ import { IconCheck, IconX } from "@/components/ui/icons";
 import { cn } from "@/lib/cn";
 import { formatDate, formatDateTime } from "@/lib/format";
 import { formatMoney, formatPct } from "@/lib/money";
+import { Logo } from "@/components/shell/Logo";
 import type { PortalView } from "@/lib/services/portal";
 
 /** Customer-facing status wording. Internal step names never reach this screen. */
@@ -96,6 +97,12 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
   if (locked) {
     return (
       <main className="mx-auto w-full max-w-[720px] px-6 py-16">
+        <div className="mb-8 flex items-center justify-center gap-2.5">
+          <Logo size={24} />
+          <span className="display text-[15px] tracking-tight text-text">
+            DealFlow<span className="text-primary">360</span>
+          </span>
+        </div>
         <div className="card px-6 py-8 text-center">
           <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-money-soft text-money">
             <IconCheck size={22} />
@@ -113,6 +120,14 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
 
   return (
     <main className="mx-auto w-full max-w-[720px] px-6 pb-32 pt-12">
+      {/* Letterhead. Mark only: the artwork's wordmark is white and would vanish on this ground. */}
+      <div className="mb-8 flex items-center gap-2.5 border-b border-border pb-5">
+        <Logo size={26} priority />
+        <span className="display text-[16px] tracking-tight text-text">
+          DealFlow<span className="text-primary">360</span>
+        </span>
+      </div>
+
       <header className="flex items-start justify-between gap-6">
         <div>
           <p className="text-[14px] text-muted">Quotation for {quotation.company}</p>

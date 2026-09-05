@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth";
+import { Logo } from "@/components/shell/Logo";
 import { SignupForm } from "@/components/auth/SignupForm";
 
 export const metadata: Metadata = { title: "Create an account · DealFlow360" };
@@ -14,9 +15,7 @@ export default async function SignupPage() {
       <section className="relative hidden flex-col justify-between overflow-hidden border-r border-border px-12 py-12 lg:flex">
         <div className="ambient" aria-hidden />
         <div className="relative">
-          <p className="display text-[16px] tracking-tight">
-            DealFlow<span className="text-primary">360</span>
-          </p>
+          <Logo withWordmark size={34} priority />
         </div>
 
         <div className="relative max-w-[440px]">
@@ -46,9 +45,7 @@ export default async function SignupPage() {
 
       <section className="flex min-h-screen flex-col justify-center px-6 py-12 sm:px-12">
         <div className="w-full max-w-[360px]">
-          <p className="display mb-9 text-[16px] tracking-tight lg:hidden">
-            DealFlow<span className="text-primary">360</span>
-          </p>
+          <div className="mb-9 lg:hidden"><Logo withWordmark size={26} priority /></div>
           <h2 className="text-[22px]">Create an account</h2>
           <p className="mt-1 text-[14px] text-muted">Standard credentials, no email confirmation needed.</p>
           <SignupForm />

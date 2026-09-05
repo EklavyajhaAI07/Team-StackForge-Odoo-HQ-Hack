@@ -3,7 +3,7 @@ import "../globals.css";
 import { fontClassNames } from "../fonts";
 
 export const metadata: Metadata = {
-  title: "Your quotation",
+  title: "Your quotation · DealFlow360",
   robots: { index: false, follow: false },
 };
 
