@@ -1,0 +1,76 @@
+<svg width="1200" height="610" viewBox="0 0 1200 610" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">DealFlow360 architecture</title>
+  <desc id="desc">Architecture showing internal and customer access surfaces, API handlers, pure business engines, Prisma and PostgreSQL, AuditEvent, Server-Sent Events, auth realms and RBAC.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="610" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D1426"/>
+      <stop offset="1" stop-color="#0A101E"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="320" y1="0" x2="850" y2="610" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67E8F9"/>
+      <stop offset="0.52" stop-color="#818CF8"/>
+      <stop offset="1" stop-color="#C084FC"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6D7FA8"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="610" rx="24" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1198" height="608" rx="23" stroke="#263550"/>
+
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <text x="54" y="54" fill="#F8FAFC" font-size="26" font-weight="800">Architecture that separates access, rules, workflow and proof</text>
+    <text x="54" y="82" fill="#8190AA" font-size="14">Verified from the available repository README</text>
+
+    <rect x="54" y="120" width="260" height="118" rx="18" fill="#111C31" stroke="#304160"/>
+    <text x="78" y="151" fill="#67E8F9" font-size="12" font-weight="800" letter-spacing="1.1">INTERNAL SURFACE</text>
+    <text x="78" y="184" fill="#F1F5F9" font-size="20" font-weight="750">app/(internal)</text>
+    <text x="78" y="211" fill="#94A3B8" font-size="14">JWT-internal realm</text>
+
+    <rect x="54" y="270" width="260" height="118" rx="18" fill="#111C31" stroke="#304160"/>
+    <text x="78" y="301" fill="#C4B5FD" font-size="12" font-weight="800" letter-spacing="1.1">CUSTOMER SURFACE</text>
+    <text x="78" y="334" fill="#F1F5F9" font-size="20" font-weight="750">app/(portal)</text>
+    <text x="78" y="361" fill="#94A3B8" font-size="14">Restricted customer view</text>
+
+    <rect x="374" y="179" width="218" height="150" rx="18" fill="#111C31" stroke="#34496C"/>
+    <text x="398" y="211" fill="#A5B4FC" font-size="12" font-weight="800" letter-spacing="1.1">WORKFLOW EDGE</text>
+    <text x="398" y="246" fill="#F8FAFC" font-size="22" font-weight="800">app/api/*</text>
+    <text x="398" y="276" fill="#94A3B8" font-size="14">Resolve data</text>
+    <text x="398" y="300" fill="#94A3B8" font-size="14">Execute mutations</text>
+
+    <rect x="650" y="134" width="238" height="105" rx="18" fill="#111C31" stroke="#3F527A"/>
+    <text x="674" y="165" fill="#67E8F9" font-size="12" font-weight="800" letter-spacing="1.1">RULES</text>
+    <text x="674" y="199" fill="#F8FAFC" font-size="21" font-weight="800">lib/engine/*</text>
+    <text x="674" y="222" fill="#94A3B8" font-size="13">Pure functions · no DB calls</text>
+
+    <rect x="650" y="278" width="238" height="105" rx="18" fill="#111C31" stroke="#3F527A"/>
+    <text x="674" y="309" fill="#A5B4FC" font-size="12" font-weight="800" letter-spacing="1.1">PERSISTENCE</text>
+    <text x="674" y="343" fill="#F8FAFC" font-size="21" font-weight="800">Prisma</text>
+    <text x="674" y="366" fill="#94A3B8" font-size="13">PostgreSQL · migrations · seed</text>
+
+    <rect x="948" y="134" width="198" height="105" rx="18" fill="#111C31" stroke="#4D4673"/>
+    <text x="972" y="165" fill="#C4B5FD" font-size="12" font-weight="800" letter-spacing="1.1">PROOF</text>
+    <text x="972" y="199" fill="#F8FAFC" font-size="21" font-weight="800">AuditEvent</text>
+    <text x="972" y="222" fill="#94A3B8" font-size="13">Mutation trace</text>
+
+    <rect x="948" y="278" width="198" height="105" rx="18" fill="#111C31" stroke="#4D4673"/>
+    <text x="972" y="309" fill="#C4B5FD" font-size="12" font-weight="800" letter-spacing="1.1">REALTIME</text>
+    <text x="972" y="343" fill="#F8FAFC" font-size="21" font-weight="800">SSE</text>
+    <text x="972" y="366" fill="#94A3B8" font-size="13">Server-Sent Events</text>
+
+    <path d="M314 179H365" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M314 329H365" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M592 224H640" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M769 239V268" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M888 185H938" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M888 331H938" stroke="#6D7FA8" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="54" y="445" width="1092" height="105" rx="20" fill="#0F192B" stroke="#2C3A59"/>
+    <text x="80" y="477" fill="#93A4C2" font-size="12" font-weight="800" letter-spacing="1.2">CROSS-CUTTING GOVERNANCE</text>
+    <text x="80" y="512" fill="#F1F5F9" font-size="20" font-weight="750">Auth realms + RBAC + audit + SSE + money utilities</text>
+    <path d="M80 528H1108" stroke="url(#accent)" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+
+    <text x="54" y="584" fill="#60708D" font-size="12">Rules → workflow → persistence → audit / realtime, with access control spanning the system.</text>
+  </g>
+</svg>

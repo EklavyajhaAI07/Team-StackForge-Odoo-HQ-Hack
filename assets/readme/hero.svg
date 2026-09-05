@@ -1,0 +1,82 @@
+<svg width="1200" height="390" viewBox="0 0 1200 390" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">DealFlow360</title>
+  <desc id="desc">Premium banner for DealFlow360, a self-governing B2B sales operations platform built by Team StackForge for Odoo Hackathon 2026 Finals.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1020"/>
+      <stop offset="0.52" stop-color="#10182C"/>
+      <stop offset="1" stop-color="#0C1222"/>
+    </linearGradient>
+    <linearGradient id="line" x1="150" y1="90" x2="1020" y2="300" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6EE7F9"/>
+      <stop offset="0.5" stop-color="#818CF8"/>
+      <stop offset="1" stop-color="#C084FC"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0.3 0 0 0 0.2  0 0.45 0 0 0.35  0 0 0.7 0 0.8  0 0 0 0.45 0"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="390" rx="26" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1198" height="388" rx="25" stroke="#2A3656" stroke-opacity="0.9"/>
+
+  <circle cx="1010" cy="66" r="130" fill="#6EE7F9" fill-opacity="0.06" filter="url(#glow)"/>
+  <circle cx="1050" cy="330" r="155" fill="#A78BFA" fill-opacity="0.07" filter="url(#glow)"/>
+
+  <g opacity="0.35">
+    <path d="M760 45H1135" stroke="#263452"/>
+    <path d="M760 85H1135" stroke="#263452"/>
+    <path d="M760 125H1135" stroke="#263452"/>
+    <path d="M760 165H1135" stroke="#263452"/>
+    <path d="M760 205H1135" stroke="#263452"/>
+    <path d="M760 245H1135" stroke="#263452"/>
+    <path d="M760 285H1135" stroke="#263452"/>
+    <path d="M760 325H1135" stroke="#263452"/>
+  </g>
+
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <rect x="66" y="54" width="184" height="34" rx="17" fill="#151F37" stroke="#2D3D63"/>
+    <circle cx="86" cy="71" r="5" fill="#6EE7F9"/>
+    <text x="101" y="76" fill="#C7D2FE" font-size="13" font-weight="700" letter-spacing="1.1">TEAM STACKFORGE</text>
+
+    <text x="64" y="168" fill="#F8FAFC" font-size="62" font-weight="800" letter-spacing="-2.4">DealFlow360</text>
+    <text x="66" y="209" fill="#AEBBD6" font-size="21" font-weight="500">Self-governing B2B sales operations.</text>
+    <text x="66" y="240" fill="#7F8DAA" font-size="16">Pure engines. Governed workflow. Audit-first mutations. Realtime updates.</text>
+
+    <g transform="translate(66 284)">
+      <rect width="122" height="34" rx="9" fill="#131D32" stroke="#30405F"/>
+      <text x="18" y="22" fill="#DCE7FF" font-size="13" font-weight="650">NEXT.JS 16</text>
+
+      <rect x="134" width="122" height="34" rx="9" fill="#131D32" stroke="#30405F"/>
+      <text x="157" y="22" fill="#DCE7FF" font-size="13" font-weight="650">POSTGRESQL</text>
+
+      <rect x="268" width="96" height="34" rx="9" fill="#131D32" stroke="#30405F"/>
+      <text x="292" y="22" fill="#DCE7FF" font-size="13" font-weight="650">PRISMA</text>
+
+      <rect x="376" width="72" height="34" rx="9" fill="#131D32" stroke="#30405F"/>
+      <text x="401" y="22" fill="#DCE7FF" font-size="13" font-weight="650">SSE</text>
+    </g>
+
+    <g transform="translate(750 70)">
+      <path d="M45 38C45 21.431 58.431 8 75 8H252C268.569 8 282 21.431 282 38V78C282 94.569 268.569 108 252 108H75C58.431 108 45 94.569 45 78V38Z" fill="#111B30" stroke="#34476C"/>
+      <text x="76" y="47" fill="#94A3B8" font-size="12" font-weight="700" letter-spacing="1">BUSINESS RULES</text>
+      <text x="76" y="76" fill="#F8FAFC" font-size="20" font-weight="750">Pure engines</text>
+
+      <path d="M164 108V132" stroke="url(#line)" stroke-width="3"/>
+      <circle cx="164" cy="120" r="4" fill="#818CF8"/>
+
+      <path d="M8 161C8 144.431 21.431 131 38 131H290C306.569 131 320 144.431 320 161V202C320 218.569 306.569 232 290 232H38C21.431 232 8 218.569 8 202V161Z" fill="#111B30" stroke="#34476C"/>
+      <text x="39" y="170" fill="#94A3B8" font-size="12" font-weight="700" letter-spacing="1">WORKFLOW</text>
+      <text x="39" y="200" fill="#F8FAFC" font-size="20" font-weight="750">API → AuditEvent → SSE</text>
+
+      <path d="M164 232V254" stroke="url(#line)" stroke-width="3"/>
+      <circle cx="164" cy="244" r="4" fill="#C084FC"/>
+
+      <rect x="31" y="254" width="266" height="49" rx="16" fill="#161B31" stroke="#4B3E6C"/>
+      <text x="65" y="284" fill="#E9D5FF" font-size="14" font-weight="700">RBAC + SEPARATE ACCESS SURFACES</text>
+    </g>
+
+    <text x="66" y="360" fill="#687895" font-size="12" font-weight="650" letter-spacing="1.2">ODOO HACKATHON 2026 FINALS</text>
+  </g>
+</svg>

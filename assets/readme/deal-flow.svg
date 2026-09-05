@@ -1,0 +1,79 @@
+<svg width="1200" height="330" viewBox="0 0 1200 330" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Verified DealFlow360 flow</title>
+  <desc id="desc">Quotation flows through risk scoring, approval routing, warehouse split, billing proration, restricted customer portal, audit event and server-sent event.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D1426"/>
+      <stop offset="1" stop-color="#0A101E"/>
+    </linearGradient>
+    <linearGradient id="path" x1="80" y1="0" x2="1110" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67E8F9"/>
+      <stop offset="0.55" stop-color="#818CF8"/>
+      <stop offset="1" stop-color="#C084FC"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8292B3"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="330" rx="24" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1198" height="328" rx="23" stroke="#263550"/>
+
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <text x="54" y="54" fill="#F8FAFC" font-size="25" font-weight="800">Verified deal execution path</text>
+    <text x="54" y="80" fill="#7E8DA7" font-size="13">Only stages supported by the available repository documentation are shown.</text>
+
+    <path d="M104 165H1090" stroke="url(#path)" stroke-width="4" stroke-linecap="round" opacity="0.55"/>
+
+    <g>
+      <circle cx="104" cy="165" r="34" fill="#111D31" stroke="#4C637E" stroke-width="2"/>
+      <text x="104" y="170" text-anchor="middle" fill="#F8FAFC" font-size="14" font-weight="800">01</text>
+      <text x="104" y="225" text-anchor="middle" fill="#E2E8F0" font-size="14" font-weight="700">Quotation</text>
+    </g>
+
+    <g>
+      <circle cx="274" cy="165" r="34" fill="#111D31" stroke="#4C637E" stroke-width="2"/>
+      <text x="274" y="170" text-anchor="middle" fill="#F8FAFC" font-size="14" font-weight="800">02</text>
+      <text x="274" y="225" text-anchor="middle" fill="#E2E8F0" font-size="14" font-weight="700">Risk</text>
+      <text x="274" y="244" text-anchor="middle" fill="#7F8DA8" font-size="12">scoring</text>
+    </g>
+
+    <g>
+      <circle cx="444" cy="165" r="34" fill="#111D31" stroke="#53658B" stroke-width="2"/>
+      <text x="444" y="170" text-anchor="middle" fill="#F8FAFC" font-size="14" font-weight="800">03</text>
+      <text x="444" y="225" text-anchor="middle" fill="#E2E8F0" font-size="14" font-weight="700">Approval</text>
+      <text x="444" y="244" text-anchor="middle" fill="#7F8DA8" font-size="12">routing</text>
+    </g>
+
+    <g>
+      <circle cx="614" cy="165" r="34" fill="#111D31" stroke="#5E5F92" stroke-width="2"/>
+      <text x="614" y="170" text-anchor="middle" fill="#F8FAFC" font-size="14" font-weight="800">04</text>
+      <text x="614" y="225" text-anchor="middle" fill="#E2E8F0" font-size="14" font-weight="700">Warehouse</text>
+      <text x="614" y="244" text-anchor="middle" fill="#7F8DA8" font-size="12">split</text>
+    </g>
+
+    <g>
+      <circle cx="784" cy="165" r="34" fill="#111D31" stroke="#6C5E97" stroke-width="2"/>
+      <text x="784" y="170" text-anchor="middle" fill="#F8FAFC" font-size="14" font-weight="800">05</text>
+      <text x="784" y="225" text-anchor="middle" fill="#E2E8F0" font-size="14" font-weight="700">Billing</text>
+      <text x="784" y="244" text-anchor="middle" fill="#7F8DA8" font-size="12">proration</text>
+    </g>
+
+    <g>
+      <circle cx="954" cy="165" r="34" fill="#111D31" stroke="#765E9E" stroke-width="2"/>
+      <text x="954" y="170" text-anchor="middle" fill="#F8FAFC" font-size="14" font-weight="800">06</text>
+      <text x="954" y="225" text-anchor="middle" fill="#E2E8F0" font-size="14" font-weight="700">Customer</text>
+      <text x="954" y="244" text-anchor="middle" fill="#7F8DA8" font-size="12">portal</text>
+    </g>
+
+    <g>
+      <circle cx="1090" cy="165" r="34" fill="#161A31" stroke="#8A63A5" stroke-width="2"/>
+      <text x="1090" y="159" text-anchor="middle" fill="#F8FAFC" font-size="12" font-weight="800">AUDIT</text>
+      <text x="1090" y="177" text-anchor="middle" fill="#F8FAFC" font-size="12" font-weight="800">+ SSE</text>
+      <text x="1090" y="225" text-anchor="middle" fill="#E2E8F0" font-size="14" font-weight="700">Trace + live</text>
+      <text x="1090" y="244" text-anchor="middle" fill="#7F8DA8" font-size="12">event</text>
+    </g>
+
+    <text x="54" y="298" fill="#60708D" font-size="12">Engine concerns are independently testable; mutation routes write AuditEvent and emit Server-Sent Events.</text>
+  </g>
+</svg>
