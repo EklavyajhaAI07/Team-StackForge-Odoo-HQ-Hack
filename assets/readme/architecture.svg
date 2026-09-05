@@ -106,7 +106,7 @@
     <path d="M330,464 L600,542 L600,566 L330,488 Z" fill="#13251f"/>
     <path d="M870,464 L600,542 L600,566 L870,488 Z" fill="#0d1a17"/>
     <text class="lbl" x="600" y="452" text-anchor="middle" font-size="15" font-weight="600" fill="#dff6ec">WORKFLOW</text>
-    <text class="mono" x="600" y="474" text-anchor="middle" font-size="10.5" fill="#a4d3c3">34 route handlers · zod · RBAC · Prisma · SSE</text>
+    <text class="mono" x="600" y="474" text-anchor="middle" font-size="10.5" fill="#a4d3c3">35 route handlers · zod · RBAC · Prisma · SSE</text>
     <text class="lbl" x="600" y="494" text-anchor="middle" font-size="10" fill="#8fb5a8">validate → authorise → persist → audit → emit</text>
   </g>
   <g class="in3">
