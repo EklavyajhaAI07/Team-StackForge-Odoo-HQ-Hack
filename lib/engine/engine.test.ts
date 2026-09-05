@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { computeRisk, effectiveListPrice } from "./risk";
 import { routeQuotation } from "./routing";
-import { prorateQtyChange, prorateCancel, buildSchedule, currentCycle } from "./proration";
+import { addInterval, calculateProration, prorateQtyChange, prorateCancel, buildSchedule, currentCycle } from "./proration";
 import { planSplit } from "./split";
 
 // ── Risk (§5.1) ─────────────────────────────────────────────────────────────
@@ -90,6 +90,24 @@ test("proration: decrease credits under PRORATED_CREDIT, nothing under NO_REFUND
   const sched = buildSchedule({ anchor: new Date("2026-01-31T00:00:00Z"), interval: "MONTHLY", cycles: 3, amountPerCycle: 1000 });
   assert.equal(sched.length, 3);
   assert.equal(sched[0].billOn.toISOString().slice(0, 10), "2026-01-31");
+});
+
+test("proration: date-based preview handles boundary days and month-end anchors without date drift", () => {
+  const increase = calculateProration({
+    currentQuantity: 4,
+    newQuantity: 6,
+    unitPrice: 10_000,
+    billingPeriodStart: new Date("2026-01-31T00:00:00Z"),
+    billingPeriodEnd: new Date("2026-02-28T00:00:00Z"),
+    prorationDate: new Date("2026-02-14T00:00:00Z"),
+  });
+  assert.deepEqual(increase, { proratedCharge: 10_000, proratedCredit: 0, daysUsed: 14, daysInPeriod: 28, unusedDays: 14 });
+  assert.equal(addInterval(new Date("2026-01-31T00:00:00Z"), "MONTHLY").toISOString().slice(0, 10), "2026-02-28");
+  assert.equal(addInterval(new Date("2028-01-31T00:00:00Z"), "MONTHLY").toISOString().slice(0, 10), "2028-02-29");
+  assert.throws(
+    () => calculateProration({ currentQuantity: 1, newQuantity: 2, unitPrice: 100, billingPeriodStart: new Date("2026-04-01"), billingPeriodEnd: new Date("2026-05-01"), prorationDate: new Date("2026-03-31") }),
+    /within the billing period/,
+  );
 });
 
 // ── Split (§5.3) ────────────────────────────────────────────────────────────
