@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { IconGrid, IconList } from "@/components/ui/icons";
+import { PageHeader } from "@/components/shell/PageHeader";
 import { NewQuotationButton, type CustomerOption } from "./NewQuotationButton";
 
 export function QuotationsHeader({
@@ -15,40 +16,38 @@ export function QuotationsHeader({
   canCreate: boolean;
 }) {
   return (
-    <div className="mb-5 flex items-end justify-between gap-4">
-      <div>
-        <h1>{view === "table" ? "Quotations" : "Pipeline"}</h1>
-        <p className="mt-1 text-[13px] text-muted">
-          {count} open and recent quotation{count === 1 ? "" : "s"} across the team
-        </p>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="flex rounded-[8px] border border-border-strong bg-surface p-0.5" role="tablist" aria-label="View">
-          <Link
-            href="/quotations"
-            role="tab"
-            aria-selected={view === "table"}
-            className={cn(
-              "flex h-7 items-center gap-1.5 rounded-[6px] px-2.5 text-[13px]",
-              view === "table" ? "bg-raised text-text" : "text-muted hover:text-text",
-            )}
-          >
-            <IconList size={14} /> Table
-          </Link>
-          <Link
-            href="/pipeline"
-            role="tab"
-            aria-selected={view === "kanban"}
-            className={cn(
-              "flex h-7 items-center gap-1.5 rounded-[6px] px-2.5 text-[13px]",
-              view === "kanban" ? "bg-raised text-text" : "text-muted hover:text-text",
-            )}
-          >
-            <IconGrid size={14} /> Kanban
-          </Link>
-        </div>
-        {canCreate ? <NewQuotationButton customers={customers} /> : null}
-      </div>
-    </div>
+    <PageHeader
+      title={view === "table" ? "Quotations" : "Pipeline"}
+      context={`${count} open and recent across the team`}
+      actions={
+        <>
+          <div className="flex rounded-[6px] border border-border p-px" role="tablist" aria-label="View">
+            <Link
+              href="/quotations"
+              role="tab"
+              aria-selected={view === "table"}
+              className={cn(
+                "flex h-6 items-center gap-1.5 rounded-[5px] px-2 text-[12px] transition-colors",
+                view === "table" ? "bg-raised text-text" : "text-muted hover:text-text",
+              )}
+            >
+              <IconList size={12} /> Table
+            </Link>
+            <Link
+              href="/pipeline"
+              role="tab"
+              aria-selected={view === "kanban"}
+              className={cn(
+                "flex h-6 items-center gap-1.5 rounded-[5px] px-2 text-[12px] transition-colors",
+                view === "kanban" ? "bg-raised text-text" : "text-muted hover:text-text",
+              )}
+            >
+              <IconGrid size={12} /> Board
+            </Link>
+          </div>
+          {canCreate ? <NewQuotationButton customers={customers} /> : null}
+        </>
+      }
+    />
   );
 }

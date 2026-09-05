@@ -26,7 +26,20 @@ export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; ma
   const router = useRouter();
   return (
     <TableWrap>
-      <Table>
+      <Table className="table-fixed min-w-[980px]">
+        {/* Explicit widths stop eight columns from drifting apart across a wide screen. */}
+        <colgroup>
+          <col className="w-[116px]" />
+          {/* Only the customer column breathes; the rest hold their width. */}
+          <col />
+          <col className="w-[110px]" />
+          <col className="w-[132px]" />
+          <col className="w-[96px]" />
+          <col className="w-[56px]" />
+          <col className="w-[112px]" />
+          <col className="w-[84px]" />
+          <col className="w-[36px]" />
+        </colgroup>
         <thead>
           <tr>
             <Th>Number</Th>
@@ -36,31 +49,34 @@ export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; ma
             <Th>Risk</Th>
             <Th numeric>Lines</Th>
             <Th numeric>Total</Th>
-            <Th>Last activity</Th>
+            <Th>Activity</Th>
             <Th aria-label="Actions" />
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
             <tr key={r.id} className="row-link" onClick={() => router.push(`/quotations/${r.id}`)}>
-              <Td className="num">{r.number}</Td>
+              {/* Identifiers are mono but stay left-aligned under their own header. */}
+              <Td className="num text-left text-text-dim">{r.number}</Td>
               <Td>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{r.company}</span>
+                <span className="flex items-center gap-2">
+                  <span className="truncate font-medium">{r.company}</span>
                   <TierPill tier={r.tier} />
-                </div>
+                </span>
               </Td>
-              <Td className="text-muted">{r.rep}</Td>
+              <Td className="truncate text-muted">{r.rep}</Td>
               <Td>
                 <StatusPill status={r.status} />
               </Td>
               <Td>
                 <RiskChip blended={r.blended} maxLineOverage={r.maxLineOverage} managerMax={managerMax} />
               </Td>
-              <Td numeric>{r.lineCount}</Td>
-              <Td numeric>{formatMoney(r.total)}</Td>
+              <Td numeric className="num text-muted">
+                {r.lineCount}
+              </Td>
+              <Td numeric>{formatMoney(r.total, { whole: true })}</Td>
               <Td className="text-muted">{relativeTime(r.lastActivityAt)}</Td>
-              <Td className="w-10 text-right">
+              <Td className="text-right">
                 <Kebab
                   items={[
                     { label: "Open builder", href: `/quotations/${r.id}` },

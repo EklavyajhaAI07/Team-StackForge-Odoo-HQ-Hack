@@ -39,8 +39,8 @@ export function ReportFilters({
   const isFiltered = !isDefaultFilters(filters);
 
   return (
-    <div className="no-print card mb-4 px-4 py-3">
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+    <div className="no-print mb-3 flex flex-wrap items-end gap-2.5">
+      <div className="flex flex-wrap items-end gap-2.5 [&>div]:w-[168px]">
         <Field label="Period">
           <Select dense value={filters.period} onChange={(e) => set("period", e.target.value)} disabled={pending}>
             {PERIODS.map((p) => (
@@ -93,12 +93,11 @@ export function ReportFilters({
           </Select>
         </Field>
       </div>
+      {/* Sits on the same baseline as the selects rather than orphaned on its own row. */}
       {isFiltered ? (
-        <div className="mt-3 flex justify-end">
-          <Button size="sm" variant="ghost" onClick={() => startTransition(() => router.push("/reports", { scroll: false }))}>
-            Clear filters
-          </Button>
-        </div>
+        <Button size="sm" variant="ghost" onClick={() => startTransition(() => router.push("/reports", { scroll: false }))}>
+          Clear filters
+        </Button>
       ) : null}
     </div>
   );

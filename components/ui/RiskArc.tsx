@@ -64,12 +64,8 @@ export function RiskArc({
           <ThresholdTick size={size} r={r} stroke={stroke} fraction={Math.min(1, managerMax / scaleMax)} />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <NumberTicker
-            value={value}
-            format={(n) => n.toFixed(1)}
-            className="display text-[34px] font-bold leading-none tracking-tight"
-          />
-          <span className="mt-1 text-[12px] text-muted">pts over ceiling</span>
+          <NumberTicker value={value} format={(n) => n.toFixed(1)} className="display text-[36px] leading-none" />
+          <span className="mt-1 text-[11px] text-muted">pts over ceiling</span>
         </div>
       </div>
       <p className="mt-1 text-[13px] text-muted">{label}</p>

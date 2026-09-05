@@ -204,7 +204,7 @@ export function CartTable({
           <dd className="num text-right">{formatMoney(totals.tax)}</dd>
           <dt className="border-t border-border pt-1 font-semibold">Total</dt>
           <dd className="border-t border-border pt-1 text-right text-[15px] font-semibold">
-            <NumberTicker value={totals.total} format={(n) => formatMoney(Math.round(n))} />
+            <NumberTicker value={totals.total} format={(n) => formatMoney(Math.round(n))} className="num" />
           </dd>
         </dl>
       </div>

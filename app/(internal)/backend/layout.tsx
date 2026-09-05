@@ -1,6 +1,7 @@
 import { Tabs } from "@/components/ui/Tabs";
 import { requireSessionUser } from "@/lib/auth";
 import { can } from "@/lib/rbac";
+import { PageHeader } from "@/components/shell/PageHeader";
 
 export default async function BackendLayout({ children }: { children: React.ReactNode }) {
   const user = await requireSessionUser();
@@ -8,16 +9,12 @@ export default async function BackendLayout({ children }: { children: React.Reac
 
   return (
     <>
-      <div className="mb-1">
-        <h1>Backend</h1>
-        <p className="mt-1 text-[13px] text-muted">
-          {full
-            ? "Everything the engines read at runtime: ceilings, thresholds, prices, stock and plans."
-            : "You can set discount ceilings here. The remaining configuration is admin-only."}
-        </p>
-      </div>
+      <PageHeader
+        title="Backend"
+        context={full ? "What the engines read at runtime" : "Discount ceilings only — the rest is admin-only"}
+      />
       <Tabs
-        className="mb-5"
+        className="mb-4"
         items={[
           { href: "/backend", label: "Discount policy", exact: true },
           { href: "/backend/approvals", label: "Approval thresholds" },

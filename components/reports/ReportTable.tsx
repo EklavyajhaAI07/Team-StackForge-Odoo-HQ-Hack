@@ -52,9 +52,10 @@ export function ReportTable({ rows, totals, summary }: { rows: ReportRow[]; tota
 
   return (
     <>
-      <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
-        <p className="text-[13px] text-muted print-only-block">{summary}</p>
-        <div className="no-print flex gap-2">
+      <div className="mb-2.5 flex flex-wrap items-end justify-between gap-3">
+        {/* On screen the filter summary already sits in the page header; this copy is for the printout. */}
+        <p className="hidden text-[12px] text-muted print-only-block">{summary}</p>
+        <div className="no-print ml-auto flex gap-2">
           <Button size="sm" variant="secondary" icon={<IconDownload size={14} />} onClick={exportCsv} disabled={rows.length === 0}>
             Export CSV
           </Button>

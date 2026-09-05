@@ -1,64 +1,110 @@
 @import "tailwindcss";
 
-/* ───────────────────────── Meridian tokens (§3.1) ───────────────────────── */
+/* ───────────────────────── Meridian tokens ─────────────────────────
+   Design thesis (§3): a trading desk for deals. Calm, dark, dense, and
+   restrained, with exactly one loud element — the risk rail on the builder.
+
+   Two deliberate departures from the original §3.1/§3.3 recipe, made after
+   the first build read as generic:
+   1. The ground is near-neutral rather than indigo-tinted. A single-hue wash
+      over every surface is what makes a dark UI look templated; keeping the
+      greys neutral lets the semantic colours actually mean something.
+   2. Primary buttons are a solid fill, not an indigo→violet gradient. That
+      gradient is the most recognisable machine-generated tell there is. The
+      tactile press from §3.3 is kept, because that part was good.
+   ------------------------------------------------------------------ */
 
 :root,
 [data-theme="internal"] {
   color-scheme: dark;
-  --bg: #101423;
-  --surface: #171c30;
-  --raised: #1e2440;
-  --border: rgba(163, 178, 255, 0.1);
-  --border-strong: rgba(163, 178, 255, 0.22);
-  --text: #edf0fb;
-  --muted: #9aa5c8;
-  --primary: #7c8cff;
-  --primary-hover: #93a0ff;
-  --primary-2: #6a5cff;
-  --money: #3ecf8e;
-  --warn: #f5b942;
-  --danger: #f0654e;
-  --info: #6fb7ff;
-  --money-soft: rgba(62, 207, 142, 0.14);
-  --warn-soft: rgba(245, 185, 66, 0.14);
-  --danger-soft: rgba(240, 101, 78, 0.14);
-  --info-soft: rgba(111, 183, 255, 0.14);
-  --primary-soft: rgba(124, 140, 255, 0.14);
-  --neutral-soft: rgba(154, 165, 200, 0.14);
+
+  /* Ground: neutral slate, a hint cool. Steps are close together so the
+     interface reads as one calm surface rather than stacked boxes. */
+  --bg: #0c0e13;
+  --surface: #12151b;
+  --raised: #191d25;
+  --overlay: #1e232c;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --text: #e7e9ee;
+  --text-dim: #b6bcc8;
+  --muted: #838b9b;
+  --faint: #5d6474;
+
+  /* Interactive. Deeper and less lavender than the stock indigo, so it reads
+     as a tool rather than a landing page. */
+  --primary: #5b7cfa;
+  --primary-hover: #7290ff;
+  --primary-2: #4d6ae8;
+  --on-primary: #0a0c10;
+
+  /* Semantic. Colour is meaning: mint money, amber waiting, coral risk. */
+  --money: #3fcf8e;
+  --money-dim: #2fa471;
+  --warn: #e0a132;
+  --danger: #e5614b;
+  --info: #58a6f0;
+
+  --money-soft: rgba(63, 207, 142, 0.12);
+  --warn-soft: rgba(224, 161, 50, 0.12);
+  --danger-soft: rgba(229, 97, 75, 0.12);
+  --info-soft: rgba(88, 166, 240, 0.12);
+  --primary-soft: rgba(91, 124, 250, 0.14);
+  --neutral-soft: rgba(255, 255, 255, 0.06);
+
+  --radius-shell: 14px;
+  --radius-card: 10px;
+  --radius-control: 6px;
 }
 
+/* Customer portal: warm, light, paper. The opposite of the internal desk, so
+   nobody in the room has to ask which screen they are looking at. */
 [data-theme="portal"] {
   color-scheme: light;
-  --bg: #f6f5f1;
+
+  --bg: #f5f4f0;
   --surface: #ffffff;
-  --raised: #f1efe8;
-  --border: #e4e1d8;
-  --border-strong: #d2ceC2;
-  --text: #1b1e28;
-  --muted: #6b7080;
-  --primary: #5563e8;
-  --primary-hover: #4553d6;
-  --primary-2: #4b3fe0;
-  --money: #1f9f68;
-  --warn: #b7821a;
-  --danger: #cf4a35;
-  --info: #2f7fd0;
-  --money-soft: rgba(31, 159, 104, 0.12);
-  --warn-soft: rgba(183, 130, 26, 0.12);
-  --danger-soft: rgba(207, 74, 53, 0.12);
-  --info-soft: rgba(47, 127, 208, 0.12);
-  --primary-soft: rgba(85, 99, 232, 0.12);
-  --neutral-soft: rgba(107, 112, 128, 0.12);
+  --raised: #f2f0ea;
+  --overlay: #ffffff;
+  --border: #e3e0d7;
+  --border-strong: #cfcabc;
+
+  --text: #1a1d24;
+  --text-dim: #414754;
+  --muted: #6a7080;
+  --faint: #8d93a1;
+
+  --primary: #3f52c9;
+  --primary-hover: #35459f;
+  --primary-2: #35459f;
+  --on-primary: #ffffff;
+
+  --money: #16875a;
+  --money-dim: #0f6f49;
+  --warn: #9a6a12;
+  --danger: #bc4530;
+  --info: #2a6fb5;
+
+  --money-soft: rgba(22, 135, 90, 0.1);
+  --warn-soft: rgba(154, 106, 18, 0.1);
+  --danger-soft: rgba(188, 69, 48, 0.1);
+  --info-soft: rgba(42, 111, 181, 0.1);
+  --primary-soft: rgba(63, 82, 201, 0.1);
+  --neutral-soft: rgba(26, 29, 36, 0.06);
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-raised: var(--raised);
+  --color-overlay: var(--overlay);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
   --color-text: var(--text);
+  --color-text-dim: var(--text-dim);
   --color-muted: var(--muted);
+  --color-faint: var(--faint);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-2: var(--primary-2);
@@ -73,13 +119,13 @@
   --color-primary-soft: var(--primary-soft);
   --color-neutral-soft: var(--neutral-soft);
 
-  --font-display: var(--font-bricolage), "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-instrument), "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --radius-shell: 16px;
-  --radius-card: 12px;
-  --radius-control: 8px;
+  --radius-shell: 14px;
+  --radius-card: 10px;
+  --radius-control: 6px;
 }
 
 /* ───────────────────────── Base ───────────────────────── */
@@ -93,7 +139,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -103,37 +149,57 @@ body {
   background: var(--primary-soft);
 }
 
-h1,
-h2,
-h3,
+/* A dense tool wants a quiet, compact hierarchy carried by weight and colour
+   rather than by size. Page titles sit close to body size on purpose.
+
+   Headings are set in the UI face, not the display face. Bricolage Grotesque has a
+   long swash tail on its capital Q which is lovely at 34px and reads as a stray
+   underline at 19px — and "Quotations" is the title on screen most of the day.
+   The display face is kept for what it is good at: large figures and the one headline. */
+h1 {
+  font-family: var(--font-sans);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.014em;
+  line-height: 1.25;
+}
+h2 {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.008em;
+  line-height: 1.3;
+}
+h3 {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.004em;
+  line-height: 1.35;
+}
+
+/* The one place large type is welcome: a single figure that owns its panel. */
 .display {
   font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  letter-spacing: -0.022em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
 }
 
-h1 {
-  font-size: 30px;
-  font-weight: 700;
-}
-h2 {
-  font-size: 24px;
-}
-h3 {
-  font-size: 19px;
-}
-
+/* Mono is for figures inside tables and for identifiers, never for prose. */
 .num,
 .mono {
   font-family: var(--font-mono);
-  font-weight: 500;
+  font-weight: 450;
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "zero" 1;
+  letter-spacing: -0.01em;
 }
 
 label,
 .label {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--muted);
 }
 
@@ -151,8 +217,8 @@ textarea {
 
 :focus-visible {
   outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline-offset: 1px;
+  border-radius: 3px;
 }
 
 /* ───────────────────────── Controls ───────────────────────── */
@@ -161,88 +227,87 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 36px;
-  padding: 0 14px;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px;
   border-radius: var(--radius-control);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
   border: 1px solid transparent;
   transition:
-    background-color 150ms ease-out,
-    border-color 150ms ease-out,
-    color 150ms ease-out,
-    transform 150ms ease-out,
-    box-shadow 150ms ease-out,
-    opacity 150ms ease-out;
+    background-color 140ms ease-out,
+    border-color 140ms ease-out,
+    color 140ms ease-out,
+    transform 90ms ease-out,
+    opacity 140ms ease-out;
   cursor: pointer;
   user-select: none;
 }
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
+/* A near-white fill at 45% is still the brightest thing on a dark screen, which draws
+   the eye to the one control that cannot be used. Disabled primaries drop to a flat chip. */
+.btn-primary:disabled {
+  background: var(--raised);
+  color: var(--faint);
+  opacity: 1;
+}
 .btn-sm {
-  height: 30px;
-  padding: 0 10px;
-  font-size: 13px;
+  height: 26px;
+  padding: 0 9px;
+  font-size: 12px;
 }
 .btn-lg {
-  height: 42px;
-  padding: 0 18px;
-  font-size: 15px;
+  height: 36px;
+  padding: 0 15px;
+  font-size: 13px;
 }
 
-/* The one "3D" element: gradient, inset highlight, press compresses the shadow (§3.3). */
+/* Solid, high-contrast, no gradient. The press is the whole tactile story. */
 .btn-primary {
-  color: #fff;
-  background: linear-gradient(180deg, var(--primary), var(--primary-2));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 2px 10px rgba(108, 110, 255, 0.35);
+  background: var(--text);
+  color: var(--bg);
+  border-color: transparent;
+  font-weight: 550;
 }
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.26),
-    0 4px 14px rgba(108, 110, 255, 0.42);
+  background: #ffffff;
+}
+[data-theme="portal"] .btn-primary {
+  background: var(--text);
+  color: #fff;
+}
+[data-theme="portal"] .btn-primary:hover:not(:disabled) {
+  background: #000;
 }
 .btn-primary:active:not(:disabled) {
   transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 1px 3px rgba(108, 110, 255, 0.3);
 }
 
 .btn-money {
-  color: #08261a;
-  background: linear-gradient(180deg, #4fdca0, var(--money));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 2px 10px rgba(62, 207, 142, 0.3);
-}
-[data-theme="portal"] .btn-money {
-  color: #fff;
-  background: linear-gradient(180deg, #27b276, var(--money));
+  background: var(--money);
+  color: #04231a;
+  font-weight: 550;
 }
 .btn-money:hover:not(:disabled) {
-  transform: translateY(-1px);
+  background: #4ade9c;
 }
 .btn-money:active:not(:disabled) {
   transform: translateY(1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 1px 3px rgba(62, 207, 142, 0.25);
 }
 
 .btn-secondary {
-  background: var(--raised);
+  background: transparent;
   border-color: var(--border-strong);
-  color: var(--text);
+  color: var(--text-dim);
 }
 .btn-secondary:hover:not(:disabled) {
-  border-color: var(--primary);
+  background: var(--raised);
+  color: var(--text);
+  border-color: var(--border-strong);
 }
 .btn-secondary:active:not(:disabled) {
   transform: translateY(1px);
@@ -256,63 +321,74 @@ textarea {
   background: var(--raised);
   color: var(--text);
 }
+.btn-ghost:active:not(:disabled) {
+  transform: translateY(1px);
+}
 
 .btn-danger {
-  background: var(--danger-soft);
-  border-color: rgba(240, 101, 78, 0.35);
+  background: transparent;
+  border-color: rgba(229, 97, 75, 0.4);
   color: var(--danger);
 }
 .btn-danger:hover:not(:disabled) {
-  background: rgba(240, 101, 78, 0.22);
+  background: var(--danger-soft);
+}
+.btn-danger:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .input {
-  height: 36px;
+  height: 30px;
   width: 100%;
-  padding: 0 10px;
+  padding: 0 9px;
   border-radius: var(--radius-control);
   background: var(--bg);
   border: 1px solid var(--border-strong);
   color: var(--text);
+  font-size: 13px;
   transition:
-    border-color 150ms ease-out,
-    box-shadow 150ms ease-out;
+    border-color 140ms ease-out,
+    box-shadow 140ms ease-out;
 }
 [data-theme="portal"] .input {
   background: var(--surface);
 }
 .input::placeholder {
-  color: var(--muted);
-  opacity: 0.7;
+  color: var(--faint);
 }
 .input:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-soft);
 }
+.input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 .input-sm {
-  height: 30px;
-  padding: 0 8px;
-  font-size: 13px;
+  height: 26px;
+  padding: 0 7px;
+  font-size: 12px;
 }
 textarea.input {
   height: auto;
-  min-height: 84px;
-  padding: 8px 10px;
+  min-height: 66px;
+  padding: 7px 9px;
   resize: vertical;
+  line-height: 1.5;
 }
 select.input {
   appearance: none;
+  padding-right: 26px;
   background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
     linear-gradient(135deg, var(--muted) 50%, transparent 50%);
   background-position:
-    calc(100% - 14px) 50%,
+    calc(100% - 13px) 50%,
     calc(100% - 9px) 50%;
   background-size:
-    5px 5px,
-    5px 5px;
+    4px 4px,
+    4px 4px;
   background-repeat: no-repeat;
-  padding-right: 28px;
 }
 .input-num {
   font-family: var(--font-mono);
@@ -334,27 +410,29 @@ select.input {
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 22px;
-  padding: 0 9px;
-  border-radius: 999px;
-  font-size: 12px;
+  gap: 5px;
+  height: 19px;
+  padding: 0 7px;
+  border-radius: 4px;
+  font-size: 11px;
   font-weight: 500;
   line-height: 1;
   white-space: nowrap;
   transition:
-    background-color 200ms ease-out,
-    color 200ms ease-out;
+    background-color 180ms ease-out,
+    color 180ms ease-out;
 }
 .pill-dot::before {
   content: "";
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 999px;
   background: currentColor;
+  flex: none;
 }
 
-/* ───────────────────────── Tables (§3.5) ───────────────────────── */
+/* ───────────────────────── Tables ─────────────────────────
+   Dense by design: a rep should see a whole pipeline without scrolling. */
 
 .table-wrap {
   overflow: auto;
@@ -368,6 +446,11 @@ select.input {
   border-spacing: 0;
   font-size: 13px;
 }
+/* With a colgroup, auto layout hands every spare pixel to the widest column and the
+   row drifts apart across a wide screen. Fixed layout honours the declared widths. */
+.table-fixed {
+  table-layout: fixed;
+}
 .table thead th {
   position: sticky;
   top: 0;
@@ -375,15 +458,18 @@ select.input {
   background: var(--surface);
   color: var(--muted);
   font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: none;
   text-align: left;
-  height: 40px;
-  padding: 0 12px;
+  height: 30px;
+  padding: 0 10px;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
 .table tbody td {
-  height: 44px;
-  padding: 0 12px;
+  height: 36px;
+  padding: 0 10px;
   border-bottom: 1px solid var(--border);
   vertical-align: middle;
 }
@@ -400,21 +486,28 @@ select.input {
 .table td.num {
   text-align: right;
   font-family: var(--font-mono);
-  font-weight: 500;
+  font-weight: 450;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+/* A numeric header must sit over its own column, not float away from it. */
+.table thead th.num {
+  font-family: var(--font-sans);
+  font-weight: 500;
 }
 .table tfoot td {
-  height: 44px;
-  padding: 0 12px;
+  height: 36px;
+  padding: 0 10px;
   border-top: 1px solid var(--border-strong);
   font-weight: 600;
+  background: var(--surface);
 }
 
 /* ───────────────────────── Motion (§3.4) ───────────────────────── */
 
 @keyframes df-flash {
   from {
-    background-color: var(--raised);
+    background-color: var(--primary-soft);
   }
   to {
     background-color: transparent;
@@ -428,13 +521,15 @@ tr.flash td {
 }
 
 .risk-arc {
-  transition: stroke-dashoffset 500ms ease-out, stroke 300ms ease-out;
+  transition:
+    stroke-dashoffset 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    stroke 300ms ease-out;
 }
 
 @keyframes df-toast-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
   }
   to {
     opacity: 1;
@@ -442,10 +537,10 @@ tr.flash td {
   }
 }
 .toast {
-  animation: df-toast-in 180ms ease-out;
+  animation: df-toast-in 160ms ease-out;
 }
 
-/* Login screen: the only ambient animation in the app. */
+/* The only ambient motion in the app, on the login screen alone. */
 @keyframes df-drift {
   from {
     transform: rotate(0deg);
@@ -456,18 +551,11 @@ tr.flash td {
 }
 .ambient {
   position: absolute;
-  inset: -40%;
-  background: conic-gradient(
-    from 0deg,
-    #6a5cff,
-    #1b2a6b,
-    #101423,
-    #2c3a8f,
-    #6a5cff
-  );
-  opacity: 0.35;
-  filter: blur(60px);
-  animation: df-drift 30s linear infinite;
+  inset: -45%;
+  background: conic-gradient(from 0deg, #2a3aa0, #0c0e13, #1b2a6b, #0c0e13, #2a3aa0);
+  opacity: 0.5;
+  filter: blur(90px);
+  animation: df-drift 40s linear infinite;
   pointer-events: none;
 }
 
@@ -492,11 +580,13 @@ tr.flash td {
   [data-theme="internal"] {
     --bg: #ffffff;
     --surface: #ffffff;
-    --raised: #f3f3f3;
-    --border: #d9d9d9;
-    --border-strong: #bbbbbb;
-    --text: #111111;
-    --muted: #555555;
+    --raised: #f4f4f5;
+    --border: #dcdcdf;
+    --border-strong: #b8b8bd;
+    --text: #101014;
+    --text-dim: #303038;
+    --muted: #55555f;
+    --faint: #77777f;
     color-scheme: light;
   }
   .no-print {
@@ -504,22 +594,22 @@ tr.flash td {
   }
   body {
     background: #fff;
+    font-size: 11px;
   }
   .table-wrap {
     overflow: visible;
     border: none;
   }
-  .print-only,
-  .print-only-block {
-    display: block !important;
-  }
-  /* Rows must not break across pages, and the sticky header would repeat oddly. */
   .table thead th {
     position: static;
     color: #333;
   }
   .table tbody tr {
     break-inside: avoid;
+  }
+  .print-only,
+  .print-only-block {
+    display: block !important;
   }
   @page {
     margin: 14mm;

@@ -4,6 +4,7 @@ import { can } from "@/lib/rbac";
 import { loadDealHealth } from "@/lib/services/dashboard";
 import { AlertColumns } from "@/components/dashboard/AlertColumns";
 import { KpiRow } from "@/components/dashboard/KpiRow";
+import { PageHeader } from "@/components/shell/PageHeader";
 
 export const metadata: Metadata = { title: "Deal health" };
 
@@ -14,18 +15,14 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <div className="mb-5">
-        <h1>Deal health</h1>
-        <p className="mt-1 text-[13px] text-muted">
-          {total === 0
-            ? "Nothing needs attention right now."
-            : `${total} thing${total === 1 ? "" : "s"} need attention. Open a card to see the quotation, or nudge the rep.`}
-        </p>
-      </div>
-
+      <PageHeader
+        title="Deal health"
+        context={
+          total === 0 ? "Nothing needs attention" : `${total} ${total === 1 ? "item needs" : "items need"} attention`
+        }
+      />
       <KpiRow kpis={kpis} />
-
-      <div className="mt-6">
+      <div className="mt-5">
         <AlertColumns
           stalled={stalled}
           anomalies={anomalies}

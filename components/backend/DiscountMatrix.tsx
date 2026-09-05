@@ -75,22 +75,24 @@ export function DiscountMatrix({
   }
 
   return (
-    <Card>
-      <div className="flex items-start justify-between gap-4 px-5 pt-4 pb-2">
+    /* Constrained: a three-column grid stretched across 1400px leaves each input marooned
+       at the far edge of its cell, which is what made this screen look broken. */
+    <Card className="max-w-[620px]">
+      <div className="flex items-start justify-between gap-4 border-b border-border px-4 py-3">
         <div>
-          <h2 className="text-[15px] font-semibold">Discount ceilings</h2>
-          <p className="text-[12px] text-muted">
-            The most a rep may discount before the quotation needs approval. Services are usually strictest.
+          <h2>Discount ceilings</h2>
+          <p className="mt-0.5 text-[12px] text-muted">
+            The most a rep may discount before approval is needed. Services are deliberately strictest.
           </p>
         </div>
         {canEdit ? (
           <Button variant="primary" loading={busy} disabled={!dirty || invalid} onClick={save}>
-            Save ceilings
+            Save
           </Button>
         ) : null}
       </div>
 
-      <div className="overflow-x-auto px-5 pb-5">
+      <div className="overflow-x-auto px-4 py-3">
         <table className="table">
           <thead>
             <tr>

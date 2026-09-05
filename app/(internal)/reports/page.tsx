@@ -6,6 +6,7 @@ import { APPROVAL_FILTERS, PERIODS, parseFilters } from "@/lib/report-filters";
 import { runReport } from "@/lib/services/reports";
 import { ReportFilters } from "@/components/reports/ReportFilters";
 import { ReportTable } from "@/components/reports/ReportTable";
+import { PageHeader } from "@/components/shell/PageHeader";
 
 export const metadata: Metadata = { title: "Reports" };
 
@@ -34,16 +35,11 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
-      <div className="mb-5 flex items-end justify-between gap-4">
-        <div>
-          <h1>Reports</h1>
-          <p className="mt-1 text-[13px] text-muted">
-            {totals.quotations} quotation{totals.quotations === 1 ? "" : "s"} — {summary}
-          </p>
-        </div>
-        <p className="print-only text-[12px] text-muted">Generated {formatDate(new Date())}</p>
-      </div>
-
+      <PageHeader
+        title="Reports"
+        context={`${totals.quotations} quotation${totals.quotations === 1 ? "" : "s"} · ${summary}`}
+        actions={<p className="print-only text-[11px] text-muted">Generated {formatDate(new Date())}</p>}
+      />
       <ReportFilters filters={scoped} reps={can(user, "reports:all") ? reps : []} categories={categories} products={products} />
       <ReportTable rows={rows} totals={totals} summary={summary} />
     </>

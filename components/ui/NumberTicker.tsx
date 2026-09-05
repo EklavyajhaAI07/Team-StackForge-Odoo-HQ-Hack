@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { cn } from "@/lib/cn";
 
 /**
  * Counts from the previous value to the new one over `duration` ms (§3.4 motion #1).
@@ -56,8 +55,10 @@ export function NumberTicker({
   }, [value, duration, format]);
 
   // Server render and first paint show the exact value; the effect takes over on updates.
+  // No font is imposed here: a figure inside a table wants mono, a headline figure wants
+  // the display face. The caller decides, otherwise every big number ends up looking like code.
   return (
-    <span ref={ref} className={cn("num", className)}>
+    <span ref={ref} className={className}>
       {format(value)}
     </span>
   );

@@ -31,7 +31,7 @@ export function TopNav({ user }: { user: SessionUser }) {
 
   function reload() {
     router.refresh();
-    toast({ title: "Data reloaded", tone: "info", durationMs: 1800 });
+    toast({ title: "Data reloaded", tone: "info", durationMs: 1600 });
   }
 
   const initials = user.name
@@ -41,14 +41,16 @@ export function TopNav({ user }: { user: SessionUser }) {
     .join("")
     .toUpperCase();
 
+  const onBackend = pathname.startsWith("/backend");
+
   return (
-    <header className="no-print sticky top-0 z-50 border-b border-border bg-bg/90 backdrop-blur">
-      <div className="mx-auto flex h-14 w-full max-w-[1440px] items-center justify-between px-6">
-        <div className="flex items-center gap-6">
-          <Link href="/quotations" className="display text-[17px] font-bold tracking-tight">
-            DealFlow360
+    <header className="no-print sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-md">
+      <div className="mx-auto flex h-11 w-full max-w-[1400px] items-center justify-between gap-6 px-5">
+        <div className="flex min-w-0 items-center gap-5">
+          <Link href="/quotations" className="display shrink-0 text-[13px] tracking-tight">
+            DealFlow<span className="text-primary">360</span>
           </Link>
-          <nav className="flex items-center gap-1" aria-label="Primary">
+          <nav className="flex items-center gap-0.5" aria-label="Primary">
             {NAV.map((n) => {
               const active = pathname === n.href || pathname.startsWith(n.href + "/");
               return (
@@ -56,12 +58,14 @@ export function TopNav({ user }: { user: SessionUser }) {
                   key={n.href}
                   href={n.href}
                   className={cn(
-                    "rounded-[8px] px-3 py-1.5 text-[13px] font-medium transition-colors",
-                    active ? "bg-raised text-text" : "text-muted hover:text-text",
+                    "relative flex h-11 items-center px-2.5 text-[13px] transition-colors",
+                    active ? "text-text" : "text-muted hover:text-text-dim",
                   )}
                   aria-current={active ? "page" : undefined}
                 >
                   {n.label}
+                  {/* The active tab is marked by a rule on the nav's own edge, not a filled chip. */}
+                  {active ? <span className="absolute inset-x-2 -bottom-px h-px bg-text" /> : null}
                 </Link>
               );
             })}
@@ -70,26 +74,23 @@ export function TopNav({ user }: { user: SessionUser }) {
 
         <div className="flex items-center gap-1">
           <button type="button" onClick={reload} className="btn btn-ghost btn-sm" title="Re-fetch everything on this page">
-            <IconRefresh size={14} />
-            Reload data
+            <IconRefresh size={13} />
+            <span className="hidden lg:inline">Reload</span>
           </button>
-          <Link
-            href="/backend"
-            className={cn("btn btn-ghost btn-sm", pathname.startsWith("/backend") && "bg-raised text-text")}
-          >
-            <IconGrid size={14} />
-            Go to backend
+          <Link href="/backend" className={cn("btn btn-ghost btn-sm", onBackend && "bg-raised text-text")}>
+            <IconGrid size={13} />
+            <span className="hidden lg:inline">Backend</span>
           </Link>
-          <button type="button" onClick={closeWorkspace} disabled={closing} className="btn btn-ghost btn-sm">
-            <IconLogout size={14} />
-            Close workspace
+          <button type="button" onClick={closeWorkspace} disabled={closing} className="btn btn-ghost btn-sm" title="Sign out">
+            <IconLogout size={13} />
+            <span className="hidden lg:inline">Sign out</span>
           </button>
-          <div className="ml-3 flex items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-soft text-[11px] font-semibold text-primary">
+          <div className="ml-2 flex items-center gap-2 border-l border-border pl-3">
+            <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-primary-soft text-[10px] font-semibold text-primary">
               {initials}
             </span>
-            <span className="text-[13px] font-medium">{user.name}</span>
-            <span className="text-[12px] text-muted">{roleLabel(user.role)}</span>
+            <span className="hidden text-[13px] md:inline">{user.name}</span>
+            <span className="hidden text-[11px] text-faint lg:inline">{roleLabel(user.role)}</span>
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@ export default async function InternalLayout({ children }: { children: React.Rea
       <body className="min-h-full">
         <ToastProvider>
           <TopNav user={user} />
-          <main className="mx-auto w-full max-w-[1440px] px-6 py-6">{children}</main>
+          <main className="mx-auto w-full max-w-[1400px] px-5 py-5">{children}</main>
         </ToastProvider>
       </body>
     </html>

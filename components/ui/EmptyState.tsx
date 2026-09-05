@@ -17,14 +17,14 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-start justify-center rounded-[12px] border border-dashed border-border-strong",
-        compact ? "px-4 py-5" : "px-6 py-10",
+        "flex flex-col items-start justify-center rounded-[10px] border border-dashed border-border",
+        compact ? "px-3.5 py-3.5" : "px-5 py-8",
         className,
       )}
     >
-      <p className="text-[14px] font-medium">{title}</p>
-      {description ? <p className="mt-1 max-w-[52ch] text-[13px] text-muted">{description}</p> : null}
-      {action ? <div className="mt-4">{action}</div> : null}
+      <p className="text-[13px] font-medium">{title}</p>
+      {description ? <p className="mt-1 max-w-[56ch] text-[12px] text-muted">{description}</p> : null}
+      {action ? <div className="mt-3.5">{action}</div> : null}
     </div>
   );
 }

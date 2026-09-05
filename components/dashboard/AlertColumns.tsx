@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
-import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Pill, StatusPill } from "@/components/ui/Pill";
+import { StatusPill } from "@/components/ui/Pill";
 import { useToast } from "@/components/ui/Toast";
 import { IconBell, IconClock, IconTruck } from "@/components/ui/icons";
 import { formatDate, plural } from "@/lib/format";
@@ -138,15 +137,14 @@ function Column({
 }) {
   return (
     <section className="flex flex-col">
-      <header className="mb-2 flex items-start justify-between gap-2">
-        <div>
-          <h2 className="flex items-center gap-2 text-[15px] font-semibold">
-            <span className={tone === "warn" ? "text-warn" : "text-danger"}>{icon}</span>
-            {title}
-          </h2>
-          <p className="mt-0.5 text-[12px] text-muted">{caption}</p>
+      {/* The count belongs beside the title it counts, not pinned to the far edge of the column. */}
+      <header className="mb-2">
+        <div className="flex items-center gap-2">
+          <span className={count === 0 ? "text-faint" : tone === "warn" ? "text-warn" : "text-danger"}>{icon}</span>
+          <h2>{title}</h2>
+          <span className="num text-[12px] text-faint">{count}</span>
         </div>
-        <Pill tone={count === 0 ? "money" : tone}>{count}</Pill>
+        <p className="mt-0.5 text-[12px] text-muted">{caption}</p>
       </header>
       {count === 0 ? <EmptyState compact title="All clear" description={empty} /> : <div className="flex flex-col gap-2">{children}</div>}
     </section>
@@ -197,25 +195,33 @@ function AlertCard({
   }
 
   return (
-    <div className="card px-3 py-2.5 transition-colors hover:border-border-strong">
+    <div className="card group px-3 py-2.5 transition-colors hover:border-border-strong">
       <div className="flex items-start justify-between gap-3">
         <Link href={href} className="min-w-0 flex-1">
           <div className="flex items-baseline gap-2">
             <span className="truncate text-[13px] font-medium">{title}</span>
-            <span className="num text-[11px] text-muted">{number}</span>
+            <span className="num text-[11px] text-faint">{number}</span>
           </div>
           <p className="mt-1 text-[12px]">{headline}</p>
-          <p className="mt-0.5 text-[11px] text-muted">{detail}</p>
         </Link>
         <div className="shrink-0 text-right">{right}</div>
       </div>
-      {canNudge ? (
-        <div className="mt-2 flex justify-end">
-          <Button size="sm" variant="ghost" loading={busy} onClick={nudge}>
-            Nudge rep
-          </Button>
-        </div>
-      ) : null}
+      {/* Detail and the escalation share a line, so the card stays three rows tall. */}
+      <div className="mt-1.5 flex items-center justify-between gap-3">
+        <p className="min-w-0 truncate text-[11px] text-muted" title={detail}>
+          {detail}
+        </p>
+        {canNudge ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={nudge}
+            className="shrink-0 text-[11px] text-muted underline-offset-2 transition-colors hover:text-text hover:underline disabled:opacity-50"
+          >
+            {busy ? "Nudging…" : "Nudge rep"}
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }
