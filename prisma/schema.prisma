@@ -1,0 +1,384 @@
+// DealFlow360 — schema per CLAUDE.md §4.
+// DECISION: the column set is exactly the spec's. A handful of Prisma relation fields
+// (no extra columns) were added purely for query ergonomics: QuotationLine→Product/Variant/Plan,
+// Stock→Product, PriceListItem→Product, HistoricalOrder→User, Shipment→Warehouse,
+// Backorder→Product, Approval→User(approver), PortalToken→Quotation.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SALES_REP
+  SALES_MANAGER
+  FINANCE
+  ADMIN
+}
+
+enum Tier {
+  BRONZE
+  SILVER
+  GOLD
+}
+
+enum ProductKind {
+  ONE_TIME
+  RECURRING
+}
+
+enum QuoteStatus {
+  DRAFT
+  PENDING_MANAGER
+  PENDING_FINANCE
+  APPROVED
+  SENT
+  UNDER_NEGOTIATION
+  CONFIRMED
+  REJECTED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  RETURNED
+}
+
+enum PlanInterval {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum CancelRule {
+  PRORATED_CREDIT
+  NO_REFUND
+}
+
+enum OrderStatus {
+  CONFIRMED
+  IN_FULFILLMENT
+  PARTIALLY_SHIPPED
+  COMPLETED
+}
+
+enum ShipmentStatus {
+  PLANNED
+  SHIPPED
+  DELIVERED
+}
+
+enum InvoiceKind {
+  ONE_TIME
+  RECURRING
+  CREDIT_NOTE
+}
+
+enum InvoiceStatus {
+  DRAFT
+  POSTED
+  PAID
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role
+  quotations   Quotation[]
+  createdAt    DateTime @default(now())
+
+  approvals        Approval[]
+  historicalOrders HistoricalOrder[]
+}
+
+model Customer {
+  id      String @id @default(cuid())
+  name    String
+  company String
+  email   String @unique
+  tier    Tier
+  city    String
+
+  quotations   Quotation[]
+  portalTokens PortalToken[]
+  history      HistoricalOrder[]
+}
+
+model PortalToken {
+  id          String    @id @default(cuid())
+  token       String    @unique
+  customerId  String
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  quotationId String
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  expiresAt   DateTime
+  usedAt      DateTime?
+
+  @@index([quotationId])
+}
+
+model Category {
+  id       String           @id @default(cuid())
+  name     String           @unique
+  products Product[]
+  policies DiscountPolicy[]
+}
+
+model Product {
+  id            String           @id @default(cuid())
+  name          String
+  sku           String           @unique
+  categoryId    String
+  category      Category         @relation(fields: [categoryId], references: [id])
+  kind          ProductKind
+  unit          String
+  cost          Int
+  listPrice     Int
+  taxPct        Float
+  description   String
+  isPromoted    Boolean          @default(false)
+  attributeName String?
+  variants      ProductVariant[]
+
+  lines      QuotationLine[]
+  stock      Stock[]
+  priceItems PriceListItem[]
+  backorders Backorder[]
+}
+
+model ProductVariant {
+  id         String  @id @default(cuid())
+  productId  String
+  product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  value      String
+  extraPrice Int
+
+  lines QuotationLine[]
+}
+
+model PriceListItem {
+  id        String  @id @default(cuid())
+  tier      Tier
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  price     Int
+
+  @@unique([tier, productId])
+}
+
+// effective list price = PriceListItem(tier, product) ?? product.listPrice
+
+model DiscountPolicy {
+  id         String   @id @default(cuid())
+  tier       Tier
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  ceilingPct Float
+
+  @@unique([tier, categoryId])
+}
+
+model ApprovalConfig {
+  id                     Int   @id @default(1)
+  managerBlendedMaxPts   Float @default(3) // blended ≤ this → manager only
+  financeLineOveragePts  Float @default(5) // any line over by > this → +finance
+  financeAmountThreshold Int   @default(50000000) // order total (paise) → +finance
+  stalledDays            Int   @default(3)
+  anomalySigma           Float @default(2)
+}
+
+model SubscriptionPlan {
+  id         String       @id @default(cuid())
+  name       String
+  interval   PlanInterval
+  cancelRule CancelRule   @default(PRORATED_CREDIT)
+
+  lines QuotationLine[]
+}
+
+model Warehouse {
+  id                 String  @id @default(cuid())
+  name               String
+  city               String
+  shippingCostWeight Int // per-shipment cost proxy, paise
+  stock              Stock[]
+
+  shipments Shipment[]
+}
+
+model Stock {
+  id          String    @id @default(cuid())
+  warehouseId String
+  warehouse   Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  qty         Int
+
+  @@unique([warehouseId, productId])
+}
+
+model Quotation {
+  id               String      @id @default(cuid())
+  number           String      @unique
+  customerId       String
+  customer         Customer    @relation(fields: [customerId], references: [id])
+  repId            String
+  rep              User        @relation(fields: [repId], references: [id])
+  status           QuoteStatus @default(DRAFT)
+  blendedRiskScore Float       @default(0)
+  maxLineOverage   Float       @default(0)
+  promisedDate     DateTime?
+  lines            QuotationLine[]
+  approvals        Approval[]
+  messages         PortalMessage[]
+  order            Order?
+  createdAt        DateTime    @default(now())
+  lastActivityAt   DateTime    @default(now())
+
+  portalTokens PortalToken[]
+
+  @@index([status])
+  @@index([repId])
+}
+
+model QuotationLine {
+  id          String            @id @default(cuid())
+  quotationId String
+  quotation   Quotation         @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product           @relation(fields: [productId], references: [id])
+  variantId   String?
+  variant     ProductVariant?   @relation(fields: [variantId], references: [id])
+  planId      String?
+  plan        SubscriptionPlan? @relation(fields: [planId], references: [id])
+  qty         Int
+  unitPrice   Int
+  discountPct Float             @default(0)
+  isRecurring Boolean           @default(false)
+
+  @@index([quotationId])
+}
+
+model Approval {
+  id          String         @id @default(cuid())
+  quotationId String
+  quotation   Quotation      @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  step        Int
+  role        Role
+  status      ApprovalStatus @default(PENDING)
+  approverId  String?
+  approver    User?          @relation(fields: [approverId], references: [id])
+  reason      String?
+  actedAt     DateTime?
+
+  @@index([quotationId])
+}
+
+model PortalMessage {
+  id                 String    @id @default(cuid())
+  quotationId        String
+  quotation          Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+  lineId             String?
+  authorType         String // "CUSTOMER" | "REP"
+  body               String
+  counterDiscountPct Float?
+  createdAt          DateTime  @default(now())
+
+  @@index([quotationId])
+}
+
+model Order {
+  id           String         @id @default(cuid())
+  quotationId  String         @unique
+  quotation    Quotation      @relation(fields: [quotationId], references: [id])
+  status       OrderStatus    @default(CONFIRMED)
+  promisedDate DateTime?
+  shipments    Shipment[]
+  backorders   Backorder[]
+  invoices     Invoice[]
+  schedule     BillingEntry[]
+}
+
+model Shipment {
+  id          String         @id @default(cuid())
+  orderId     String
+  order       Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  warehouseId String
+  warehouse   Warehouse      @relation(fields: [warehouseId], references: [id])
+  status      ShipmentStatus @default(PLANNED)
+  cost        Int
+  lines       Json // [{productId, qty}]
+}
+
+model Backorder {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  qty       Int
+  status    String  @default("OPEN") // OPEN | CONSOLIDATED
+}
+
+model Invoice {
+  id       String        @id @default(cuid())
+  orderId  String
+  order    Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  kind     InvoiceKind
+  amount   Int
+  tax      Int
+  status   InvoiceStatus @default(DRAFT)
+  dueDate  DateTime?
+  payments Payment[]
+}
+
+model BillingEntry {
+  id      String   @id @default(cuid())
+  orderId String
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  lineId  String
+  billOn  DateTime
+  amount  Int
+  status  String   @default("SCHEDULED") // SCHEDULED | INVOICED
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  invoiceId String
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amount    Int
+  method    String
+  paidAt    DateTime @default(now())
+}
+
+model AuditEvent {
+  id         String   @id @default(cuid())
+  entityType String
+  entityId   String
+  actorType  String
+  actorId    String?
+  action     String
+  meta       Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+}
+
+model HistoricalOrder {
+  id               String   @id @default(cuid())
+  repId            String
+  rep              User     @relation(fields: [repId], references: [id])
+  customerId       String
+  customer         Customer @relation(fields: [customerId], references: [id])
+  orderDiscountPct Float
+  total            Int
+  productIds       String[]
+  createdAt        DateTime
+}
