@@ -568,6 +568,19 @@ tr.flash td {
   animation: df-drift 40s linear infinite;
   pointer-events: none;
 }
+/* The landing hero carries the same drift a touch quieter, because it sits behind
+   readable copy rather than a single centred card. */
+.ambient-hero {
+  opacity: 0.35;
+}
+
+/* Smooth anchor scrolling, scoped to the landing page so no internal screen inherits it,
+   and off entirely when the visitor has asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html.landing {
+    scroll-behavior: smooth;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .flash,
