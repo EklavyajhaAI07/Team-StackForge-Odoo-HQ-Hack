@@ -1,146 +1,841 @@
 # DealFlow360
 
 <p align="center">
-  <img src="./assets/readme/hero.svg" alt="DealFlow360 – Self‑governing B2B sales operations" width="100%">
+  <img src="./assets/readme/hero.svg" alt="DealFlow360 — Self-governing B2B sales operations" width="100%" />
 </p>
 
 <p align="center">
-  <strong>Quotations that route themselves, warehouse splits that explain themselves, hybrid billing with real proration, and a customer portal that is a genuinely separate, restricted view.</strong>
+  <strong>Self-governing B2B sales operations, with business rules that execute consistently and every important action remaining traceable.</strong>
 </p>
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js 16"></a>
-  <a href="#"><img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript" alt="TypeScript"></a>
-  <a href="#"><img src="https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql" alt="PostgreSQL"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Prisma-5-2D3748?style=flat-square&logo=prisma" alt="Prisma"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Test-Node.js-339933?style=flat-square&logo=node.js" alt="Test"></a>
-  <a href="#"><img src="https://img.shields.io/badge/Odoo_Hackathon_2026-Finals-8B2B26?style=flat-square" alt="Odoo Hackathon 2026 Finals"></a>
+  Built by <strong>Team StackForge</strong> for the <strong>Odoo Hackathon 2026 Finals</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js 16" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/PostgreSQL-16-336791?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma" alt="Prisma" />
+  <img src="https://img.shields.io/badge/RBAC-Enabled-635BFF?style=flat-square" alt="RBAC" />
+  <img src="https://img.shields.io/badge/Realtime-SSE-00A67E?style=flat-square" alt="Server-Sent Events" />
+  <img src="https://img.shields.io/badge/Odoo_Hackathon_2026-Finalist-875A7B?style=flat-square" alt="Odoo Hackathon 2026 Finals" />
+</p>
+
+<p align="center">
+  <code>Next.js 16 App Router</code> ·
+  <code>PostgreSQL</code> ·
+  <code>Prisma</code> ·
+  <code>Pure Business Engines</code> ·
+  <code>RBAC</code> ·
+  <code>SSE</code> ·
+  <code>Localhost-first</code>
 </p>
 
 ---
 
-## 🧭 The Problem
+## Overview
 
-B2B deal execution is fragmented. Sales teams waste days waiting for approvals, finance loses margin to siloed warehouse data, and customers are left in the dark.
+**DealFlow360** is a B2B deal operations platform designed around a simple architectural principle:
 
-- **Margin leakage** – Sales reps lack real‑time visibility into product costs and warehouse stock, so they undersell or promise unavailable inventory.
-- **Approval delays** – Every discount or custom terms need manager sign‑off, often via email or spreadsheets.
-- **Fragmented warehouse stock** – No single source of truth for available inventory across locations, leading to overselling or split shipments that surprise the customer.
-- **Hybrid billing complexity** – Mixed subscriptions, one‑time items, and usage‑based charges make invoicing error‑prone and hard to explain.
-- **Slow customer negotiation** – Customers can't see the impact of their counter‑offers in real time, forcing back‑and‑forth emails.
+```text
+RULES / CONFIG
+      ↓
+   ENGINES
+      ↓
+   WORKFLOW
+      ↓
+    AUDIT
 
----
+RBAC + SEPARATE ACCESS REALMS
+```
 
-## 💡 The Solution
+Instead of spreading critical commercial rules across UI components, database queries, spreadsheets, and manual decisions, DealFlow360 isolates business logic into deterministic engines.
 
-DealFlow360 is a **self‑governing B2B deal engine** that encodes your business rules into configurable policies, then lets the system enforce them automatically. It turns a quote into a traceable workflow:
+API routes coordinate the workflow.
+RBAC controls access.
+`AuditEvent` records actions.
+Server-Sent Events propagate updates.
 
-> **Quote → Risk Scoring → Approval Routing → Warehouse Allocation → Billing (with proration) → Customer Counter → Re‑approval → Confirmation → Payment**
-
-Every step is driven by **pure business engines** (no hidden side‑effects), audited via an immutable `AuditEvent` log, and broadcasted in real‑time through Server‑Sent Events (SSE). The result is a transparent, fast, and trustworthy experience for both internal teams and external customers.
-
----
-
-## ⚡ Key Differentiators
-
-| Config‑driven | Pure Engines | Real‑time SSE | Audit Trail | RBAC + Separate Realms |
-|---------------|--------------|---------------|-------------|--------------------------|
-| Rules live in config, not code | `lib/engine/*` are pure functions (input → output) | Instant updates to both internal and portal views | Every action logged with context | Internal staff and customers have fully isolated auth and views |
+The result is more than a CRUD dashboard. It is a governed deal-execution system whose important business decisions can be **tested, inspected, traced, and demonstrated independently**.
 
 ---
 
-## 🔄 End‑to‑End Deal Lifecycle
+## The Problem
 
-<img src="./assets/readme/deal-flow.svg" alt="Deal lifecycle flow" width="100%">
+B2B deal execution becomes difficult when quotations, approvals, inventory decisions, billing calculations, and customer communication operate as disconnected processes.
 
----
+### Margin leakage
 
-## 🧱 Architecture
+Sales decisions become risky when pricing, discount logic, and operational constraints are handled manually or inconsistently.
 
-<img src="./assets/readme/architecture.svg" alt="Architecture diagram" width="100%">
+### Approval delays
 
-The system is built around four foundational layers:
+Commercial exceptions frequently depend on manual manager intervention, spreadsheets, messages, or disconnected approval chains.
 
-1. **CONFIG** – Policies, approval matrices, warehouse mappings, and proration rules.
-2. **ENGINES** – Pure functions in `lib/engine` that compute risk, routing, allocation, billing, anomaly detection, and upsell ranking.
-3. **WORKFLOW** – API routes orchestrate data, call engines, persist changes, and emit SSE events.
-4. **AUDIT** – Every mutation writes an `AuditEvent`, creating an immutable chain of custody.
+### Fragmented warehouse decisions
 
-**RBAC + Separate Auth Realms** ensure that internal users (sales, managers, finance, admin) operate in a dark, feature‑rich shell, while external customers see only their own quotations via a lightweight portal (`/portal/q/<token>`).
+Inventory distributed across warehouses creates allocation decisions that must remain predictable and explainable.
 
----
+### Hybrid billing complexity
 
-## ⚙️ Business Engines (Pure Functions)
+Subscription-style and proportional billing scenarios require precise proration instead of approximate calculations.
 
-All business logic lives in `lib/engine/` as pure functions – no database calls, no side effects. They are easily testable and maintainable.
+### Disconnected customer experience
 
-- **Risk Scoring** – Evaluates quote attributes (discount depth, customer history, product mix) to assign a risk level (low/medium/high) and recommend an approval path.
-- **Approval Routing** – Determines the required approvers based on risk score and organizational rules.
-- **Warehouse Split** – Allocates ordered quantities across multiple warehouses to maximize availability, with fallback explanations.
-- **Proration** – Calculates correct amounts for hybrid billing (subscriptions, one‑time, usage) with day‑exact proportional adjustments.
-- **Anomaly Detection** – Flags unusual patterns (e.g., suspicious discounts, stock inconsistencies) before they become problems.
-- **Upsell Ranking** – Suggests complementary products based on the quote content and warehouse stock.
+Internal deal operations and customer-facing access should not share the same unrestricted application surface.
+
+DealFlow360 brings these concerns into one controlled workflow.
 
 ---
 
-## 🗄️ Database & Schema
+## The Solution
 
-The data model (defined in `prisma/schema.prisma`) captures the entire deal lifecycle:
+DealFlow360 treats the deal lifecycle as a combination of **deterministic business engines and governed workflow orchestration**.
 
-- **User**, **Role** – RBAC for internal staff.
-- **Quotation**, **LineItem** – Core quote structure.
-- **Approval**, **ApprovalStep** – Multi‑stage approvals with status and timestamps.
-- **Warehouse**, **Stock** – Inventory across locations.
-- **Billing**, **Invoice**, **Payment** – Billing records and payment status.
-- **AuditEvent** – Immutable log of all significant actions (who, what, when, context).
-- **CustomerPortalToken** – Secure, token‑based access for customer views.
+The verified implementation focuses on:
 
-Relationships enforce referential integrity, and Prisma migrations keep the schema in sync.
+* **Risk scoring**
+* **Approval routing**
+* **Warehouse split logic**
+* **Billing proration**
+* **Restricted customer portal access**
+* **Role-Based Access Control**
+* **Audit events**
+* **Server-Sent Events**
+* **Local PostgreSQL persistence through Prisma**
+* **Automated testing of core business calculations**
 
----
+Instead of allowing business decisions to become hidden inside route handlers or frontend code:
 
-## 🔐 RBAC & Security
-
-- **Internal realms** – JWT tokens issued to staff; roles (`sales_rep`, `sales_manager`, `finance`, `admin`) control access to internal pages and API endpoints.
-- **Customer realm** – Separate JWT tokens scoped to a single quotation; customers can view their quote, submit a counter‑offer, and see updates in real‑time.
-- **Middleware** validates tokens and enforces route‑level permissions.
-- All passwords are hashed (bcrypt), and tokens use a strong secret.
+> **Engines decide. Workflows coordinate. RBAC restricts. Audit records. SSE propagates.**
 
 ---
 
-## 📡 Real‑Time Sync (SSE)
+## Core Differentiators
 
-Server‑Sent Events (SSE) deliver live updates to both internal dashboards and customer portals. When a quote is approved, updated, or countered, all connected clients receive the new state without polling. This creates a responsive, collaborative feel.
-
----
-
-## 🔍 Auditability
-
-Every business‑critical action – creating a quote, routing for approval, approving/rejecting, allocating warehouse, billing, counter‑offer – persists an `AuditEvent` with:
-
-- `userId` (or `customerTokenId`)
-- `action` (e.g., `QUOTE_CREATED`, `APPROVAL_GRANTED`, `WAREHOUSE_ALLOCATED`)
-- `targetId` (e.g., quotation id)
-- `oldValue` / `newValue` (JSON snapshots of relevant state)
-- `metadata` (IP, user agent, context)
-
-This provides a complete, tamper‑evident history for compliance and debugging.
+| Principle                    | Implementation                                                                    | Why it matters                                                                |
+| ---------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Pure Business Engines**    | Business rules live under `lib/engine/*` as input → output functions              | Critical business math can be tested without database calls                   |
+| **Governed Workflow**        | `app/api/*` resolves data, invokes engines and persists mutations                 | Workflow logic remains separated from business calculations                   |
+| **RBAC**                     | Authorization utilities restrict internal actions                                 | Users operate according to defined responsibilities                           |
+| **Separate Access Surfaces** | Internal workspace and restricted customer portal                                 | Customer access is not simply an internal dashboard with hidden navigation    |
+| **Auditability**             | Important mutations write an `AuditEvent`                                         | Decisions remain traceable                                                    |
+| **Realtime Updates**         | Server-Sent Events are emitted after workflow mutations                           | Connected views can receive state changes without a separate realtime service |
+| **Localhost-first Runtime**  | Local PostgreSQL, self-hosted fonts, no documented CDN or external API dependency | Hackathon demonstrations remain less dependent on internet services           |
 
 ---
 
-## 🖥️ Tech Stack
+## End-to-End Deal Flow
 
-- **Framework** – Next.js 16 (App Router) with TypeScript.
-- **Database** – PostgreSQL 16.
-- **ORM** – Prisma 5.
-- **Authentication** – Custom JWT (internal & customer realms).
-- **Authorization** – RBAC (role‑based).
-- **Real‑time** – Server‑Sent Events (SSE).
-- **Validation** – Zod.
-- **Testing** – Node.js native test runner (`node:test`).
-- **Styling** – Hand‑rolled UI primitives (no external component libraries).
-- **Fonts** – Self‑hosted, no CDNs.
+<p align="center">
+  <img src="./assets/readme/deal-flow.svg" alt="DealFlow360 verified deal lifecycle" width="100%" />
+</p>
+
+At a high level, the verified decision pipeline can be represented as:
+
+```text
+Quotation
+    ↓
+Risk Scoring
+    ↓
+Approval Routing
+    ↓
+Warehouse Split
+    ↓
+Billing / Proration
+    ↓
+Restricted Customer Portal
+```
+
+The system deliberately separates **business computation** from **workflow orchestration**.
+
+That means risk, routing, warehouse allocation, and proration logic can be evaluated independently of the persistence layer.
 
 ---
 
-## 📁 Repository Structure
+## Architecture
+
+<p align="center">
+  <img src="./assets/readme/architecture.svg" alt="DealFlow360 architecture showing access surfaces, API workflow, pure business engines, persistence, audit and realtime events" width="100%" />
+</p>
+
+### Architectural Mental Model
+
+```text
+┌──────────────────────────────────────────────┐
+│                ACCESS SURFACES               │
+│                                              │
+│   Internal Workspace    Customer Portal      │
+│       JWT Realm          Restricted View     │
+│            │                   │             │
+└────────────┼───────────────────┼─────────────┘
+             │
+             ▼
+┌──────────────────────────────────────────────┐
+│                API / WORKFLOW                │
+│                                              │
+│   Resolve Data → Authorize → Invoke Engine   │
+│              → Persist Mutation              │
+└──────────────────────┬───────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────┐
+│              BUSINESS ENGINES                │
+│                                              │
+│   Risk · Routing · Proration · Warehouse     │
+│                                              │
+│           Pure Input → Output Logic          │
+└──────────────────────┬───────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────┐
+│                 PERSISTENCE                  │
+│                                              │
+│            PostgreSQL + Prisma               │
+└──────────────────────┬───────────────────────┘
+                       │
+              ┌────────┴────────┐
+              ▼                 ▼
+         AuditEvent          SSE Event
+              │                 │
+              ▼                 ▼
+         Traceability      Realtime Sync
+```
+
+---
+
+## Architecture Layers
+
+| Layer                | Responsibility                                             |
+| -------------------- | ---------------------------------------------------------- |
+| **Access Surfaces**  | Separate internal workspace and restricted customer portal |
+| **Authorization**    | Auth-realm utilities and RBAC                              |
+| **API Routes**       | Resolve application data and coordinate workflow           |
+| **Business Engines** | Execute deterministic commercial rules                     |
+| **Persistence**      | PostgreSQL through Prisma                                  |
+| **Audit**            | Record mutation-driven `AuditEvent` entries                |
+| **Realtime**         | Emit Server-Sent Events after supported mutations          |
+
+---
+
+## Business Engines
+
+Critical commercial logic lives inside:
+
+```text
+lib/engine/*
+```
+
+These engines are structured as **pure functions**.
+
+```text
+INPUT
+  ↓
+BUSINESS RULE
+  ↓
+OUTPUT
+```
+
+They do not perform database calls themselves.
+
+This separation makes the rules easier to:
+
+* understand
+* test
+* debug
+* demonstrate
+* maintain
+* change without coupling them directly to persistence logic
+
+### Verified Engine Coverage
+
+| Engine Concern       | Purpose                                                   | Automated Test Coverage |
+| -------------------- | --------------------------------------------------------- | :---------------------: |
+| **Risk Scoring**     | Evaluate deal risk through deterministic business logic   |            ✅            |
+| **Approval Routing** | Determine approval workflow based on business rules       |            ✅            |
+| **Warehouse Split**  | Calculate allocation across available warehouse inventory |            ✅            |
+| **Proration**        | Calculate proportional billing values                     |            ✅            |
+
+The engine layer is one of DealFlow360's most important architectural decisions.
+
+---
+
+## Request-to-Event Workflow
+
+A typical mutation follows this path:
+
+```text
+Client Request
+      ↓
+app/api/*
+      ↓
+Resolve Data
+      ↓
+Authentication + RBAC
+      ↓
+lib/engine/*
+      ↓
+Business Decision
+      ↓
+Persist Mutation
+      ↓
+AuditEvent
+      ↓
+Server-Sent Event
+      ↓
+Connected Client Update
+```
+
+This creates a clear separation between:
+
+```text
+DECISION
+   ↓
+WORKFLOW
+   ↓
+TRACEABILITY
+   ↓
+REALTIME DELIVERY
+```
+
+---
+
+## RBAC & Separate Access Realms
+
+DealFlow360 separates internal operations from customer-facing access.
+
+```text
+app/(auth)
+    │
+    └── Login + redirect
+
+app/(internal)
+    │
+    └── Internal application shell
+        + JWT internal realm
+
+app/(portal)
+    │
+    └── Restricted customer portal
+
+lib/*.ts
+    │
+    └── Auth realms
+        RBAC
+        Audit
+        SSE
+        Money utilities
+```
+
+### Seeded Internal Roles
+
+The provided demo environment includes:
+
+* **Sales Rep**
+* **Sales Manager**
+* **Finance**
+* **Admin**
+
+RBAC utilities are responsible for keeping role-specific operations controlled.
+
+### Customer Isolation
+
+The customer experience exists under a separate portal surface:
+
+```text
+/portal/q/<token>
+```
+
+This is important architecturally.
+
+A customer portal should not simply be an internal dashboard where navigation elements have been hidden. DealFlow360 maintains a distinct customer-facing surface instead.
+
+---
+
+## Realtime Sync with SSE
+
+DealFlow360 uses **Server-Sent Events** for mutation-driven realtime updates.
+
+```text
+Mutation
+   ↓
+Database Update
+   ↓
+AuditEvent
+   ↓
+SSE Emit
+   ↓
+Connected Client
+```
+
+SSE provides a lightweight server-to-client communication mechanism without requiring a separate realtime platform.
+
+The documented route flow is:
+
+```text
+Request
+  ↓
+app/api/* resolves data
+  ↓
+lib/engine/* evaluates rules
+  ↓
+mutation is persisted
+  ↓
+AuditEvent is written
+  ↓
+Server-Sent Event is emitted
+```
+
+---
+
+## Auditability
+
+Auditability is part of the workflow rather than an afterthought.
+
+Important route mutations write an:
+
+```text
+AuditEvent
+```
+
+This creates the governance chain:
+
+```text
+BUSINESS DECISION
+       ↓
+WORKFLOW MUTATION
+       ↓
+AUDIT RECORD
+       ↓
+REALTIME EVENT
+```
+
+That architecture makes important actions easier to trace during development, debugging, demonstration, and future operational review.
+
+---
+
+## Database & Persistence
+
+DealFlow360 uses:
+
+```text
+PostgreSQL
+     +
+   Prisma
+```
+
+The `prisma/` directory contains:
+
+```text
+prisma/
+├── schema
+├── migrations
+└── seed
+```
+
+Prisma acts as the data-access layer between the application workflow and PostgreSQL.
+
+The seed process creates demo data and prints:
+
+* internal login information
+* a ready customer portal link
+
+---
+
+## Tech Stack
+
+| Area                        | Technology / Approach                          |
+| --------------------------- | ---------------------------------------------- |
+| **Framework**               | Next.js 16 App Router                          |
+| **Language**                | TypeScript                                     |
+| **Database**                | PostgreSQL                                     |
+| **ORM**                     | Prisma                                         |
+| **Business Logic**          | Pure functions under `lib/engine/*`            |
+| **Internal Authentication** | JWT internal realm                             |
+| **Authorization**           | RBAC utilities                                 |
+| **Customer Access**         | Restricted portal                              |
+| **Realtime**                | Server-Sent Events                             |
+| **Auditability**            | `AuditEvent`                                   |
+| **Testing**                 | Node.js native `node:test`                     |
+| **UI**                      | Hand-rolled UI primitives + feature components |
+| **Fonts**                   | Self-hosted                                    |
+| **Runtime Model**           | Localhost-first                                |
+
+---
+
+## Repository Structure
+
+```text
+.
+├── app/
+│   ├── (auth)/
+│   │   └── Login + redirect
+│   │
+│   ├── (internal)/
+│   │   └── Internal application shell
+│   │       + JWT internal realm
+│   │
+│   ├── (portal)/
+│   │   └── Restricted customer portal
+│   │
+│   └── api/
+│       └── Route handlers
+│           Mutations
+│           SSE
+│
+├── lib/
+│   ├── engine/
+│   │   └── Pure business rules
+│   │       No database calls
+│   │
+│   └── *.ts
+│       └── Auth realms
+│           RBAC
+│           Audit
+│           SSE
+│           Money utilities
+│
+├── prisma/
+│   ├── schema
+│   ├── migrations
+│   └── seed
+│
+├── components/
+│   └── UI primitives
+│       + feature components
+│
+└── assets/
+    └── readme/
+        ├── hero.svg
+        ├── architecture.svg
+        └── deal-flow.svg
+```
+
+---
+
+## Local Setup
+
+### Prerequisites
+
+Make sure you have:
+
+* **Node.js 20.9+**
+* **PostgreSQL installed locally**
+* permission to create/access the `dealflow360` database
+
+The documented default connection assumes:
+
+```text
+postgresql://<you>@localhost:5432/dealflow360
+```
+
+---
+
+### 1. Create the Database
+
+```bash
+createdb dealflow360
+```
+
+---
+
+### 2. Create the Environment File
+
+```bash
+cp .env.example .env
+```
+
+Adjust `DATABASE_URL` if your PostgreSQL username or configuration differs.
+
+> Never commit local secrets, database credentials, JWT secrets, or production environment values.
+
+---
+
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+### 4. Apply Prisma Migrations
+
+```bash
+npx prisma migrate deploy
+```
+
+This creates the required database tables.
+
+---
+
+### 5. Seed Demo Data
+
+```bash
+npx prisma db seed
+```
+
+The seed process creates demo data and prints:
+
+* login credentials
+* a ready customer portal link
+
+---
+
+### 6. Start DealFlow360
+
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## Demo Accounts
+
+The seeded internal accounts use the same demo password:
+
+```text
+demo1234
+```
+
+| Role          | Email                   |
+| ------------- | ----------------------- |
+| Sales Rep     | `priya@dealflow.local`  |
+| Sales Rep     | `arjun@dealflow.local`  |
+| Sales Manager | `meera@dealflow.local`  |
+| Finance       | `vikram@dealflow.local` |
+| Admin         | `admin@dealflow.local`  |
+
+> These are intentionally seeded local demo credentials, not production credentials.
+
+---
+
+## Customer Portal Demo
+
+The database seed prints a customer portal URL:
+
+```text
+/portal/q/<token>
+```
+
+For the hackathon demonstration:
+
+1. Sign in to DealFlow360 using an internal demo account.
+2. Copy the portal URL printed by the seed process.
+3. Open it in a private/incognito browser window.
+4. Keep the internal workspace and customer portal open side-by-side.
+
+This provides a simple way to demonstrate that the internal and customer experiences are separated.
+
+---
+
+## Testing the Business Math
+
+Run:
+
+```bash
+npm test
+```
+
+The documented `node:test` suite covers:
+
+```text
+✓ Risk Scoring
+✓ Approval Routing
+✓ Proration
+✓ Warehouse Split
+```
+
+Because the engine layer contains pure functions, the core business logic can be tested without performing database operations inside those engines.
+
+That gives judges a direct way to verify that important commercial calculations are not only represented visually in the UI.
+
+---
+
+## Localhost-First Demo Posture
+
+DealFlow360 is designed to run locally with:
+
+* Next.js 16 App Router
+* local PostgreSQL
+* Prisma
+* self-hosted fonts
+* no documented CDN dependency
+* no documented external API runtime dependency
+
+```text
+Browser
+   ↓
+Next.js
+   ↓
+Application Logic
+   ↓
+PostgreSQL
+```
+
+This reduces dependence on external network services during a hackathon demonstration.
+
+> PostgreSQL remains a required local runtime dependency.
+
+---
+
+## Hackathon Demo Sequence
+
+A concise demo sequence:
+
+### 01. Start
+
+```bash
+npm run dev
+```
+
+Launch the locally seeded environment.
+
+### 02. Enter the Internal Workspace
+
+Sign in using one of the seeded internal accounts.
+
+Show the separation between internal application access and the customer portal.
+
+### 03. Demonstrate Risk & Approval Logic
+
+Walk through quotation decision logic and explain that the calculations originate from pure business engines rather than frontend conditions.
+
+```text
+Quote
+  ↓
+Risk Engine
+  ↓
+Approval Routing
+```
+
+### 04. Demonstrate Warehouse Split
+
+Show the deterministic warehouse allocation behavior.
+
+```text
+Required Quantity
+       ↓
+Warehouse Split Engine
+       ↓
+Allocation Result
+```
+
+### 05. Demonstrate Proration
+
+Show billing calculations generated through the proration engine.
+
+### 06. Open the Customer Portal
+
+Use the seeded:
+
+```text
+/portal/q/<token>
+```
+
+link in an incognito window.
+
+Demonstrate the customer-facing experience beside the internal workspace.
+
+### 07. Demonstrate Traceability
+
+Trigger a supported mutation and explain:
+
+```text
+Request
+  ↓
+Engine
+  ↓
+Database Mutation
+  ↓
+AuditEvent
+  ↓
+SSE
+```
+
+### 08. Prove the Business Logic
+
+Finish with:
+
+```bash
+npm test
+```
+
+This demonstrates that the critical business calculations can be verified independently of the UI.
+
+---
+
+## Why This Design Matters
+
+A business operations platform should not rely on hidden conditions spread across dozens of UI components.
+
+DealFlow360 instead follows a predictable architecture:
+
+```text
+CONFIG / RULES
+      │
+      ▼
+PURE BUSINESS ENGINES
+      │
+      ▼
+CONTROLLED WORKFLOW
+      │
+      ├──────────────► AUDIT
+      │
+      └──────────────► REALTIME SSE
+```
+
+With access controlled independently through:
+
+```text
+RBAC + SEPARATE AUTH REALMS
+```
+
+This makes the architecture easier to reason about and gives evaluators a clear answer to four important questions:
+
+| Question                            | DealFlow360 Answer |
+| ----------------------------------- | ------------------ |
+| **Where are business rules?**       | `lib/engine/*`     |
+| **Who can execute operations?**     | Auth realms + RBAC |
+| **How do we know what happened?**   | `AuditEvent`       |
+| **How do clients receive changes?** | Server-Sent Events |
+
+---
+
+## Team StackForge
+
+**Odoo Hackathon 2026 Finals**
+
+| Member                     | Contribution                |
+| -------------------------- | --------------------------- |
+| *Add verified member name* | *Add verified contribution* |
+| *Add verified member name* | *Add verified contribution* |
+| *Add verified member name* | *Add verified contribution* |
+| *Add verified member name* | *Add verified contribution* |
+
+---
+
+## DealFlow360 in One Line
+
+> **A B2B deal operations system where business rules live in testable engines, workflows remain access-controlled, mutations stay auditable, and application updates can propagate in realtime.**
+
+<br>
+
+<div align="center">
+
+### Built for governed deal execution.
+
+**Team StackForge · Odoo Hackathon 2026 Finals**
+
+`Rules → Engines → Workflow → Audit`
+
+**RBAC + Separate Access Realms**
+
+</div>
