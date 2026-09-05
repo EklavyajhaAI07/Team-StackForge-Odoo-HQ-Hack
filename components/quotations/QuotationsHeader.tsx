@@ -7,18 +7,21 @@ import { NewQuotationButton, type CustomerOption } from "./NewQuotationButton";
 export function QuotationsHeader({
   view,
   count,
+  scope,
   customers,
   canCreate,
 }: {
   view: "table" | "kanban";
   count: number;
+  /** Whose quotations these are, so the caption never overclaims. */
+  scope: "mine" | "team";
   customers: CustomerOption[];
   canCreate: boolean;
 }) {
   return (
     <PageHeader
       title={view === "table" ? "Quotations" : "Pipeline"}
-      context={`${count} open and recent across the team`}
+      context={count === 0 ? "Nothing here yet" : `${count} open and recent ${scope === "team" ? "across the team" : "of yours"}`}
       actions={
         <>
           <div className="flex rounded-[6px] border border-border p-px" role="tablist" aria-label="View">

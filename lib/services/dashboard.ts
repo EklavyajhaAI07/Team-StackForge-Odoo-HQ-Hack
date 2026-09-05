@@ -1,6 +1,8 @@
 // Deal-health service (§5.6). The statistics live in lib/engine/anomaly.ts as pure functions;
 // this module only resolves rows and shapes them for the screen.
+import type { Role } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { can } from "@/lib/rbac";
 import { flagDiscountAnomalies, isSlipping, isStalled, repDiscountStats, weightedAvgDiscount } from "@/lib/engine/anomaly";
 import { quotationTotals } from "@/lib/quotes";
 import { getConfig } from "./quotation";
@@ -49,11 +51,18 @@ export type Kpis = {
 
 const OPEN_STATUSES = ["DRAFT", "PENDING_MANAGER", "PENDING_FINANCE", "APPROVED", "SENT", "UNDER_NEGOTIATION"];
 
-export async function loadDealHealth(now = new Date()) {
+/**
+ * Scoped the same way as the quotation list: a rep sees their own deals, an approver sees the
+ * team. A brand-new rep therefore opens an empty dashboard rather than somebody else's alerts.
+ */
+export async function loadDealHealth(viewer?: { id: string; role: Role }, now = new Date()) {
+  const teamWide = !viewer || can(viewer, "quotations:all");
+  const mine = teamWide ? undefined : { repId: viewer.id };
   const config = await getConfig(prisma);
 
   const [quotations, orders, history] = await Promise.all([
     prisma.quotation.findMany({
+      where: mine,
       include: {
         customer: { select: { company: true } },
         rep: { select: { id: true, name: true } },
@@ -62,6 +71,7 @@ export async function loadDealHealth(now = new Date()) {
       orderBy: { lastActivityAt: "asc" },
     }),
     prisma.order.findMany({
+      where: mine ? { quotation: { repId: viewer!.id } } : undefined,
       include: {
         shipments: { select: { status: true } },
         quotation: {

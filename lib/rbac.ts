@@ -2,6 +2,7 @@ import type { Role } from "@prisma/client";
 
 export type Action =
   | "quotation:view"
+  | "quotations:all"
   | "quotation:create"
   | "quotation:edit"
   | "quotation:send"
@@ -33,6 +34,7 @@ const ROLE_ACTIONS: Record<Role, Set<Action>> = {
   ]),
   SALES_MANAGER: new Set<Action>([
     "quotation:view",
+    "quotations:all",
     "quotation:create",
     "quotation:edit",
     "quotation:send",
@@ -46,6 +48,7 @@ const ROLE_ACTIONS: Record<Role, Set<Action>> = {
   ]),
   FINANCE: new Set<Action>([
     "quotation:view",
+    "quotations:all",
     "approval:finance",
     "fulfillment:decide",
     "billing:manage",
@@ -55,6 +58,7 @@ const ROLE_ACTIONS: Record<Role, Set<Action>> = {
   ]),
   ADMIN: new Set<Action>([
     "quotation:view",
+    "quotations:all",
     "quotation:create",
     "quotation:edit",
     "quotation:send",

@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Deal health" };
 
 export default async function DashboardPage() {
   const user = await requireSessionUser();
-  const { config, stalled, anomalies, slippage, kpis } = await loadDealHealth();
+  const { config, stalled, anomalies, slippage, kpis } = await loadDealHealth(user);
   const total = stalled.length + anomalies.length + slippage.length;
 
   return (

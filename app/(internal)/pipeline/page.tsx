@@ -14,7 +14,7 @@ export const metadata: Metadata = { title: "Pipeline" };
 
 export default async function PipelinePage() {
   const user = await requireSessionUser();
-  const [quotations, customers, config] = await Promise.all([listQuotations(), listCustomers(), getApprovalConfig()]);
+  const [quotations, customers, config] = await Promise.all([listQuotations(user), listCustomers(), getApprovalConfig()]);
 
   const columns = PIPELINE_COLUMNS.map((col) => ({
     ...col,
@@ -24,7 +24,8 @@ export default async function PipelinePage() {
 
   return (
     <>
-      <QuotationsHeader view="kanban" count={quotations.length} customers={customers} canCreate={can(user, "quotation:create")} />
+      <QuotationsHeader view="kanban" count={quotations.length} customers={customers} scope={can(user, "quotations:all") ? "team" : "mine"}
+        canCreate={can(user, "quotation:create")} />
       <div className="grid grid-cols-5 gap-3">
         {columns.map((col) => {
           const value = col.items.reduce((s, q) => s + quotationTotals(q.lines).total, 0);

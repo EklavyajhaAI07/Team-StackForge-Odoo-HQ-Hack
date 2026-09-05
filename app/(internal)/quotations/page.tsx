@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Quotations" };
 
 export default async function QuotationsPage() {
   const user = await requireSessionUser();
-  const [quotations, customers, config] = await Promise.all([listQuotations(), listCustomers(), getApprovalConfig()]);
+  const [quotations, customers, config] = await Promise.all([listQuotations(user), listCustomers(), getApprovalConfig()]);
 
   const rows = quotations.map((q) => ({
     id: q.id,
@@ -29,7 +29,8 @@ export default async function QuotationsPage() {
 
   return (
     <>
-      <QuotationsHeader view="table" count={rows.length} customers={customers} canCreate={can(user, "quotation:create")} />
+      <QuotationsHeader view="table" count={rows.length} customers={customers} scope={can(user, "quotations:all") ? "team" : "mine"}
+        canCreate={can(user, "quotation:create")} />
       {rows.length === 0 ? (
         <EmptyState title="No quotations yet" description="Create one to see the pipeline." />
       ) : (

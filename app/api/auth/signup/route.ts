@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { createInternalSession } from "@/lib/auth";
 import { ApiError, handle, json, parseBody } from "@/lib/api";
+import { mailEnabled, sendOwnerSignupNotice, sendWelcomeEmail } from "@/lib/mail";
 
 /**
  * A1 — internal users register with standard credentials.
@@ -33,6 +34,18 @@ export async function POST(req: Request) {
 
     // Straight into the workspace; a fresh account should not have to log in twice.
     await createInternalSession(user);
-    return json({ ok: true, user }, { status: 201 });
+
+    // Mail is best-effort and deliberately not awaited into the response. Registration has
+    // already succeeded; a slow or misconfigured SMTP host must not turn that into an error.
+    void Promise.allSettled([sendWelcomeEmail(user), sendOwnerSignupNotice(user)]).then((results) => {
+      for (const [i, r] of results.entries()) {
+        const which = i === 0 ? "welcome" : "owner notice";
+        if (r.status === "fulfilled" && !r.value.sent && r.value.reason !== "SMTP is not configured") {
+          console.warn(`[mail] ${which} not sent: ${r.value.reason}`);
+        }
+      }
+    });
+
+    return json({ ok: true, user, mail: mailEnabled() }, { status: 201 });
   });
 }
