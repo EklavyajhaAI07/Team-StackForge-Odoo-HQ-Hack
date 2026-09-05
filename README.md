@@ -809,6 +809,24 @@ This makes the architecture easier to reason about and gives evaluators a clear 
 
 ---
 
+---
+
+## What We Would Build Next
+
+The eight-step flow is airtight, so the next work is depth rather than breadth.
+
+**Approval delegation and out-of-office.** Today a chain stalls if the one manager who can clear step one is away. Delegation rules and an escalation timer would let the chain re-route itself the way the discount already does.
+
+**Warehouse split weighted by promised date.** The split engine currently optimises shipping cost and completeness. It should also weigh the promised delivery date, so a cheaper two-shipment plan loses to a pricier one that actually lands on time.
+
+**Usage-based billing.** One-time and recurring lines already reconcile on a single order. Metered lines are the missing third kind, and the proration engine is already shaped to take them.
+
+**Margin anomalies, not just discount anomalies.** The dashboard catches a rep discounting past their own average. It cannot yet catch a rep who holds the discount steady while quietly shifting the mix toward low-margin products.
+
+**Approval analytics.** Every decision is already in `AuditEvent` with who, when and why. Turning that into cycle-time reporting, showing where deals actually wait, is a query away rather than a rebuild.
+
+**Multi-currency.** Explicitly a bonus in the problem statement and deliberately skipped. Money is already stored as integer minor units behind a single `formatMoney()`, so the change is a currency column and a rate table rather than an audit of every arithmetic path.
+
 ## Team StackForge
 
 **Odoo Hackathon 2026 Finals**

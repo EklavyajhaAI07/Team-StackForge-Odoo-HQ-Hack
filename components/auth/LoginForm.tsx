@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
@@ -71,7 +72,14 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <div className="mt-8 border-t border-border pt-5">
+      <p className="mt-5 text-[13px] text-muted">
+        New here?{" "}
+        <Link href="/signup" className="text-text underline underline-offset-2">
+          Create an account
+        </Link>
+      </p>
+
+      <div className="mt-7 border-t border-border pt-5">
         <p className="text-[13px] text-muted">
           Demo accounts — password <span className="num text-text-dim">{DEMO_PASSWORD}</span>. Pick one to sign straight in.
         </p>

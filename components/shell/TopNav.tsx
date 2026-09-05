@@ -81,9 +81,9 @@ export function TopNav({ user }: { user: SessionUser }) {
             <IconGrid size={13} />
             <span className="hidden lg:inline">Backend</span>
           </Link>
-          <button type="button" onClick={closeWorkspace} disabled={closing} className="btn btn-ghost btn-sm" title="Sign out">
+          <button type="button" onClick={closeWorkspace} disabled={closing} className="btn btn-ghost btn-sm" title="Close the workspace and sign out">
             <IconLogout size={13} />
-            <span className="hidden lg:inline">Sign out</span>
+            <span className="hidden lg:inline">Close workspace</span>
           </button>
           <div className="ml-2 flex items-center gap-2 border-l border-border pl-3">
             <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-primary-soft text-[11px] font-semibold text-primary">
