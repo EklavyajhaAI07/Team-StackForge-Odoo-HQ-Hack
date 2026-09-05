@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { requireSessionUser } from "@/lib/auth";
 import { can } from "@/lib/rbac";
 import { assess, getConfig, getPolicyCeilings, getQuotationDetail } from "@/lib/services/quotation";
-import { formatMoney, formatPct } from "@/lib/money";
+import { displayCurrency, formatMoney, formatPct } from "@/lib/money";
 import { lineNet } from "@/lib/quotes";
 import { Card } from "@/components/ui/Card";
 import { StepList } from "@/components/approval/StepList";
@@ -19,6 +19,7 @@ export default async function ApprovalPage({ params }: { params: Promise<{ id: s
   if (!q) notFound();
   const [ceilings, config] = await Promise.all([getPolicyCeilings(prisma, q.customer.tier), getConfig(prisma)]);
   const { risk, totals, decision } = assess(q, ceilings, config);
+  const currency = displayCurrency(q.currency, q.fxRate);
 
   const pending = q.approvals.find((a) => a.status === "PENDING");
   const roleOk = pending ? can(user, pending.role === "FINANCE" ? "approval:finance" : "approval:manager") : false;
@@ -59,7 +60,7 @@ export default async function ApprovalPage({ params }: { params: Promise<{ id: s
                       <td className={`num ${p.overage > 0 ? "text-danger" : ""}`}>{formatPct(l.discountPct)}</td>
                       <td className="num text-muted">{formatPct(p.ceiling)}</td>
                       <td className={`num ${p.overage > 0 ? "text-danger" : "text-money"}`}>{p.overage > 0 ? `+${p.overage.toFixed(1)}` : "0.0"}</td>
-                      <td className="num">{formatMoney(lineNet(l))}</td>
+                      <td className="num">{formatMoney(lineNet(l), { currency })}</td>
                     </tr>
                   );
                 })}
@@ -68,7 +69,7 @@ export default async function ApprovalPage({ params }: { params: Promise<{ id: s
                 <tr>
                   <td colSpan={5}>Blended (revenue-weighted)</td>
                   <td className={`num ${risk.blended > 0 ? "text-danger" : "text-money"}`}>{risk.blended.toFixed(1)} pts</td>
-                  <td className="num">{formatMoney(totals.net)}</td>
+                  <td className="num">{formatMoney(totals.net, { currency })}</td>
                 </tr>
               </tfoot>
             </table>

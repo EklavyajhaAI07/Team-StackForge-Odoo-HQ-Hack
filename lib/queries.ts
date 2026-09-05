@@ -5,6 +5,7 @@ import { can } from "./rbac";
 
 export const quotationListInclude = {
   customer: true,
+  currency: true,
   rep: { select: { id: true, name: true } },
   lines: { include: { product: { select: { taxPct: true } } } },
 } as const;

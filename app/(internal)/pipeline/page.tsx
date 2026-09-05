@@ -4,7 +4,7 @@ import { requireSessionUser } from "@/lib/auth";
 import { can } from "@/lib/rbac";
 import { getApprovalConfig, listCustomers, listQuotations } from "@/lib/queries";
 import { PIPELINE_COLUMNS, quotationTotals } from "@/lib/quotes";
-import { formatMoneyCompact } from "@/lib/money";
+import { BASE_CURRENCY, formatMoneyCompact } from "@/lib/money";
 import { daysSince } from "@/lib/format";
 import { QuotationsHeader } from "@/components/quotations/QuotationsHeader";
 import { RiskChip } from "@/components/quotations/RiskChip";
@@ -67,7 +67,15 @@ export default async function PipelinePage() {
                             {days === 0 ? "today" : `${days}d`}
                           </span>
                         </div>
-                        <div className="mt-1.5 text-[12px] text-muted">{q.rep.name}</div>
+                        <div className="mt-1.5 flex items-center justify-between gap-2 text-[12px] text-muted">
+                          <span className="truncate">{q.rep.name}</span>
+                          {/* Values here are the company's reporting currency; the tag says whose deal is quoted otherwise. */}
+                          {q.currencyCode !== BASE_CURRENCY.code ? (
+                            <span className="num shrink-0 text-faint" title={`Quoted to the customer in ${q.currencyCode}`}>
+                              {q.currencyCode}
+                            </span>
+                          ) : null}
+                        </div>
                       </Link>
                     );
                   })

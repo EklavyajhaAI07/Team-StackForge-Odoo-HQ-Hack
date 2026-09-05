@@ -370,6 +370,16 @@ textarea {
   padding: 0 8px;
   font-size: 13px;
 }
+/* A stock level sitting at or below its reorder point. Defined here rather than as utility
+   classes on the element, because `.input` sets colour and border and would win. */
+.input-low {
+  color: var(--warn);
+  border-color: var(--warn);
+}
+.input-low:disabled {
+  /* Read-only viewers still need to see which lines are short. */
+  opacity: 0.85;
+}
 textarea.input {
   height: auto;
   min-height: 76px;

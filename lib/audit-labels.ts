@@ -29,6 +29,7 @@ const LABELS: Record<string, string> = {
   "split-overridden": "Applied a manual warehouse override",
   "stock-arrived": "Simulated stock arrival",
   "backorder-consolidated": "Consolidated the backorder",
+  "reorder-point-reached": "Stock reached a reorder point",
   "shipment-status": "Updated a shipment",
   "invoice-generated": "Generated a recurring invoice",
   "payment-recorded": "Recorded a payment",

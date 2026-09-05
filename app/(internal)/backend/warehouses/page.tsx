@@ -15,13 +15,20 @@ export default async function WarehousesPage() {
   ]);
 
   const stock: Record<string, number> = {};
-  for (const w of warehouses) for (const s of w.stock) stock[`${w.id}:${s.productId}`] = s.qty;
+  const reorderPoints: Record<string, number> = {};
+  for (const w of warehouses) {
+    for (const s of w.stock) {
+      stock[`${w.id}:${s.productId}`] = s.qty;
+      reorderPoints[`${w.id}:${s.productId}`] = s.reorderPoint;
+    }
+  }
 
   return (
     <WarehouseConfig
       warehouses={warehouses.map((w) => ({ id: w.id, name: w.name, city: w.city, shippingCostWeight: w.shippingCostWeight }))}
       products={products}
       stock={stock}
+      reorderPoints={reorderPoints}
       canEdit={can(user, "config:all")}
     />
   );

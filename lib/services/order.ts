@@ -20,6 +20,7 @@ export const orderDetailInclude = {
   quotation: {
     include: {
       customer: true,
+      currency: true,
       lines: { include: { product: true, plan: true, variant: true }, orderBy: { id: "asc" } },
     },
   },

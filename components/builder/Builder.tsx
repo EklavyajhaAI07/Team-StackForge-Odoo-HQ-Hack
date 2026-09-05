@@ -201,9 +201,9 @@ export function Builder(props: Props) {
     <div className="grid grid-cols-12 gap-5">
       <div className="col-span-12 flex flex-col gap-5 xl:col-span-7">
         {props.permissions.canEdit ? (
-          <ProductPicker catalog={props.catalog} categories={props.categories} plans={props.plans} onAdd={addProduct} tier={props.quotation.customerTier} />
+          <ProductPicker currency={props.quotation.currency} catalog={props.catalog} categories={props.categories} plans={props.plans} onAdd={addProduct} tier={props.quotation.customerTier} />
         ) : null}
-        <CartTable
+        <CartTable currency={props.quotation.currency}
           lines={lines}
           plans={props.plans}
           risk={risk}

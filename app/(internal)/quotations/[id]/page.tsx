@@ -10,6 +10,7 @@ import { Builder } from "@/components/builder/Builder";
 import type { BuilderLine, CatalogItem } from "@/components/builder/types";
 import { CounterInbox, type CounterView } from "@/components/quotations/CounterInbox";
 import { LiveQuotation } from "@/components/quotations/LiveQuotation";
+import { displayCurrency } from "@/lib/money";
 
 export const metadata: Metadata = { title: "Builder" };
 
@@ -76,6 +77,7 @@ export default async function BuilderPage({ params }: { params: Promise<{ id: st
         history,
         products: products.map((p) => ({ id: p.id, name: p.name, isPromoted: p.isPromoted, cost: p.cost, netUnit: tierPrices.get(p.id) ?? p.listPrice })),
         productNames: names,
+        minMarginPct: config.upsellMinMarginPct,
       })
     : [];
 
@@ -109,11 +111,19 @@ export default async function BuilderPage({ params }: { params: Promise<{ id: st
       <LiveQuotation quotationId={q.id} />
       {counters.length > 0 ? (
         <div className="mb-5">
-          <CounterInbox quotationId={q.id} counters={counters} canAnswer={owns} />
+          <CounterInbox quotationId={q.id} counters={counters} canAnswer={owns} currency={displayCurrency(q.currency, q.fxRate)} />
         </div>
       ) : null}
       <Builder
-      quotation={{ id: q.id, number: q.number, status: q.status, repId: q.repId, customerCompany: q.customer.company, customerTier: q.customer.tier }}
+      quotation={{
+        id: q.id,
+        number: q.number,
+        status: q.status,
+        repId: q.repId,
+        customerCompany: q.customer.company,
+        customerTier: q.customer.tier,
+        currency: displayCurrency(q.currency, q.fxRate),
+      }}
       lines={lines}
       catalog={catalog}
       categories={categories.map((c) => ({ id: c.id, name: c.name }))}

@@ -11,7 +11,7 @@ import { Table, TableWrap, Td, Th } from "@/components/ui/Table";
 import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/cn";
 import { formatDate } from "@/lib/format";
-import { formatMoney } from "@/lib/money";
+import { formatMoney, type DisplayCurrency } from "@/lib/money";
 
 export type BillingInvoice = {
   id: string;
@@ -87,6 +87,7 @@ export function Billing({
   subscriptions,
   canManage,
   nowIso,
+  currency,
 }: {
   orderId: string;
   invoices: BillingInvoice[];
@@ -94,6 +95,8 @@ export function Billing({
   subscriptions: BillingSubscription[];
   canManage: boolean;
   nowIso: string;
+  /** Invoices, schedule and credit notes are all stated in what the customer is billed. */
+  currency: DisplayCurrency;
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -141,7 +144,7 @@ export function Billing({
     try {
       const result = await request<{ invoice: { amount: number } }>("invoice", { entryId: entry.id });
       if (result) {
-        toast({ title: "Recurring invoice posted", description: formatMoney(result.invoice.amount), tone: "money" });
+        toast({ title: "Recurring invoice posted", description: formatMoney(result.invoice.amount, { currency }), tone: "money" });
         router.refresh();
       }
     } finally {
@@ -248,7 +251,7 @@ export function Billing({
         method: paymentMethod,
       });
       if (result) {
-        toast({ title: result.status === "PAID" ? "Invoice paid" : "Payment recorded", description: result.outstandingAfter ? `${formatMoney(result.outstandingAfter)} remains` : "Balance cleared", tone: "money" });
+        toast({ title: result.status === "PAID" ? "Invoice paid" : "Payment recorded", description: result.outstandingAfter ? `${formatMoney(result.outstandingAfter, { currency })} remains` : "Balance cleared", tone: "money" });
         setPaymentInvoice(null);
         router.refresh();
       }
@@ -265,10 +268,10 @@ export function Billing({
       </section>
 
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-        <Metric label="Invoiced" value={formatMoney(totals.invoiced)} />
-        <Metric label="Received" value={formatMoney(totals.received)} tone="money" />
-        <Metric label="Outstanding" value={formatMoney(totals.outstanding)} tone={totals.outstanding > 0 ? "warn" : "money"} />
-        <Metric label="Credit notes" value={formatMoney(totals.credits)} tone="money" />
+        <Metric label="Invoiced" value={formatMoney(totals.invoiced, { currency })} />
+        <Metric label="Received" value={formatMoney(totals.received, { currency })} tone="money" />
+        <Metric label="Outstanding" value={formatMoney(totals.outstanding, { currency })} tone={totals.outstanding > 0 ? "warn" : "money"} />
+        <Metric label="Credit notes" value={formatMoney(totals.credits, { currency })} tone="money" />
       </div>
 
       <Card>
@@ -288,11 +291,11 @@ export function Billing({
                     <tr key={invoice.id}>
                       <Td><Pill tone={kindTone(invoice.kind)}>{kindLabel(invoice.kind)}</Pill></Td>
                       <Td className="text-muted">{invoice.dueDate ? formatDate(invoice.dueDate) : credit ? "Issued credit" : "—"}</Td>
-                      <Td numeric className={credit ? "text-money" : undefined}>{credit ? "−" : ""}{formatMoney(invoice.amount)}</Td>
-                      <Td numeric className={credit ? "text-money" : undefined}>{credit ? "−" : ""}{formatMoney(invoice.tax)}</Td>
-                      <Td numeric className={cn("font-medium", credit && "text-money")}>{credit ? "−" : ""}{formatMoney(total)}</Td>
+                      <Td numeric className={credit ? "text-money" : undefined}>{credit ? "−" : ""}{formatMoney(invoice.amount, { currency })}</Td>
+                      <Td numeric className={credit ? "text-money" : undefined}>{credit ? "−" : ""}{formatMoney(invoice.tax, { currency })}</Td>
+                      <Td numeric className={cn("font-medium", credit && "text-money")}>{credit ? "−" : ""}{formatMoney(total, { currency })}</Td>
                       <Td><StatusPill status={invoice.status} map={INVOICE_STATUS} /></Td>
-                      <Td numeric>{credit ? "—" : formatMoney(paid)}</Td>
+                      <Td numeric>{credit ? "—" : formatMoney(paid, { currency })}</Td>
                       {canManage ? <Td className="text-right">{invoice.status === "POSTED" && !credit ? <Button size="sm" variant="money" onClick={() => openPayment(invoice)}>Record payment</Button> : null}</Td> : null}
                     </tr>
                   );
@@ -318,7 +321,7 @@ export function Billing({
                     <tr key={entry.id}>
                       <Td><div className="font-medium">{entry.productName}</div><div className="text-[12px] text-muted">{entry.planName}</div></Td>
                       <Td className="num">{formatDate(entry.billOn)}</Td>
-                      <Td numeric>{formatMoney(entry.amount)}</Td>
+                      <Td numeric>{formatMoney(entry.amount, { currency })}</Td>
                       <Td><Pill tone={entry.status === "INVOICED" ? "money" : due ? "warn" : "neutral"}>{entry.status === "INVOICED" ? "Invoiced" : due ? "Due now" : "Scheduled"}</Pill></Td>
                       {canManage ? <Td className="text-right">{entry.status === "SCHEDULED" ? <Button size="sm" variant="secondary" disabled={!due} loading={busy === `invoice:${entry.id}`} onClick={() => generateInvoice(entry)}>{due ? "Generate invoice" : "Not due"}</Button> : null}</Td> : null}
                     </tr>
@@ -341,7 +344,7 @@ export function Billing({
                   <tr key={line.id}>
                     <Td><div className="font-medium">{line.productName}</div><div className="text-[12px] text-muted">{line.planName}</div></Td>
                     <Td numeric className={line.qty === 0 ? "text-muted" : undefined}>{line.qty === 0 ? "Cancelled" : line.qty}</Td>
-                    <Td numeric>{formatMoney(line.netUnit)}</Td>
+                    <Td numeric>{formatMoney(line.netUnit, { currency })}</Td>
                     <Td><Pill tone={line.cancelRule === "PRORATED_CREDIT" ? "money" : "neutral"}>{line.cancelRule === "PRORATED_CREDIT" ? "Prorated credit" : "No refund"}</Pill></Td>
                     {canManage ? <Td className="text-right">{line.qty > 0 ? <div className="flex justify-end gap-2"><Button size="sm" variant="ghost" onClick={() => openQuantity(line)}>Change qty</Button><Button size="sm" variant="danger" onClick={() => openCancellation(line)}>Cancel</Button></div> : null}</Td> : null}
                   </tr>
@@ -358,18 +361,18 @@ export function Billing({
         <div className="flex flex-col gap-4">
           <Field label="New quantity"><Input numeric type="number" min={1} value={newQty} onChange={(event) => { setNewQty(event.target.value); setQuantityPreview(null); }} /></Field>
           <Field label="Effective date"><Input type="date" value={effectiveAt} onChange={(event) => { setEffectiveAt(event.target.value); setQuantityPreview(null); }} /></Field>
-          {quantityPreview ? <PreviewCard preview={quantityPreview} /> : <p className="text-[13px] text-muted">Preview first to see the current-cycle charge or credit before changing future billing entries.</p>}
+          {quantityPreview ? <PreviewCard currency={currency} preview={quantityPreview} /> : <p className="text-[13px] text-muted">Preview first to see the current-cycle charge or credit before changing future billing entries.</p>}
         </div>
       </Modal>
 
       <Modal open={!!cancelLine} onClose={() => setCancelLine(null)} title="Cancel subscription line" description={cancelLine ? `${cancelLine.productName} · ${cancelLine.cancelRule === "PRORATED_CREDIT" ? "prorated credit policy" : "no-refund policy"}` : undefined} footer={<><Button variant="ghost" onClick={() => setCancelLine(null)}>Keep subscription</Button><Button variant="secondary" loading={busy === "cancel-preview"} onClick={previewCancel}>Preview cancellation</Button><Button variant="danger" disabled={!cancelPreview} loading={busy === "cancel-apply"} onClick={applyCancel}>Cancel line</Button></>}>
         <div className="flex flex-col gap-4">
           <Field label="Effective date"><Input type="date" value={effectiveAt} onChange={(event) => { setEffectiveAt(event.target.value); setCancelPreview(null); }} /></Field>
-          {cancelPreview ? <CancellationCard preview={cancelPreview} /> : <p className="text-[13px] text-muted">Future billing entries will be removed. Preview to see whether the current cycle also receives a credit note.</p>}
+          {cancelPreview ? <CancellationCard currency={currency} preview={cancelPreview} /> : <p className="text-[13px] text-muted">Future billing entries will be removed. Preview to see whether the current cycle also receives a credit note.</p>}
         </div>
       </Modal>
 
-      <Modal open={!!paymentInvoice} onClose={() => setPaymentInvoice(null)} title="Record payment" description={paymentInvoice ? `${kindLabel(paymentInvoice.kind)} invoice · ${formatMoney(paymentInvoice.amount + paymentInvoice.tax)} total` : undefined} footer={<><Button variant="ghost" onClick={() => setPaymentInvoice(null)}>Cancel</Button><Button variant="money" loading={busy === "payment"} onClick={applyPayment}>Record payment</Button></>}>
+      <Modal open={!!paymentInvoice} onClose={() => setPaymentInvoice(null)} title="Record payment" description={paymentInvoice ? `${kindLabel(paymentInvoice.kind)} invoice · ${formatMoney(paymentInvoice.amount + paymentInvoice.tax, { currency })} total` : undefined} footer={<><Button variant="ghost" onClick={() => setPaymentInvoice(null)}>Cancel</Button><Button variant="money" loading={busy === "payment"} onClick={applyPayment}>Record payment</Button></>}>
         <div className="flex flex-col gap-4">
           <Field label="Amount received (₹)"><Input numeric inputMode="decimal" value={paymentAmount} onChange={(event) => setPaymentAmount(event.target.value)} /></Field>
           <Field label="Method"><Select value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)}><option>UPI</option><option>Bank transfer</option><option>Card</option><option>Cheque</option><option>Cash</option></Select></Field>
@@ -383,13 +386,13 @@ function Metric({ label, value, tone = "neutral" }: { label: string; value: stri
   return <Card className="px-4 py-3"><p className="text-[13px] text-muted">{label}</p><p className={cn("num mt-1 text-[22px] font-semibold", tone === "money" && "text-money", tone === "warn" && "text-warn")}>{value}</p></Card>;
 }
 
-function PreviewCard({ preview }: { preview: ProrationPreview }) {
+function PreviewCard({ preview, currency }: { preview: ProrationPreview; currency: DisplayCurrency }) {
   const result = preview.result;
   const label = result.kind === "INVOICE" ? "Prorated charge" : result.kind === "CREDIT_NOTE" ? "Prorated credit" : "No current-cycle document";
-  return <div className="rounded-[8px] border border-border bg-bg/40 px-3 py-3"><div className="flex items-center justify-between gap-3"><Pill tone={previewTone(result.kind)}>{label}</Pill><span className={cn("num font-semibold", result.kind === "CREDIT_NOTE" && "text-money")}>{result.amount ? `${result.kind === "CREDIT_NOTE" ? "−" : "+"}${formatMoney(result.amount)}` : "—"}</span></div><p className="mt-2 text-[14px] text-muted">{result.explanation}</p><p className="mt-1 text-[13px] text-muted">{preview.cycle.remainingDays} of {preview.cycle.periodDays} days remain · future cycle: <span className="num">{formatMoney(result.newCycleAmount)}</span></p></div>;
+  return <div className="rounded-[8px] border border-border bg-bg/40 px-3 py-3"><div className="flex items-center justify-between gap-3"><Pill tone={previewTone(result.kind)}>{label}</Pill><span className={cn("num font-semibold", result.kind === "CREDIT_NOTE" && "text-money")}>{result.amount ? `${result.kind === "CREDIT_NOTE" ? "−" : "+"}${formatMoney(result.amount, { currency })}` : "—"}</span></div><p className="mt-2 text-[14px] text-muted">{result.explanation}</p><p className="mt-1 text-[13px] text-muted">{preview.cycle.remainingDays} of {preview.cycle.periodDays} days remain · future cycle: <span className="num">{formatMoney(result.newCycleAmount, { currency })}</span></p></div>;
 }
 
-function CancellationCard({ preview }: { preview: CancellationPreview }) {
+function CancellationCard({ preview, currency }: { preview: CancellationPreview; currency: DisplayCurrency }) {
   const result = preview.result;
-  return <div className="rounded-[8px] border border-border bg-bg/40 px-3 py-3"><div className="flex items-center justify-between gap-3"><Pill tone={previewTone(result.kind)}>{result.kind === "CREDIT_NOTE" ? "Credit note" : "No credit note"}</Pill>{result.amount ? <span className="num font-semibold text-money">−{formatMoney(result.amount)}</span> : null}</div><p className="mt-2 text-[14px] text-muted">{result.explanation}</p><p className="mt-1 text-[13px] text-muted">{preview.cycle.remainingDays} of {preview.cycle.periodDays} days remain. Future scheduled cycles will be removed.</p></div>;
+  return <div className="rounded-[8px] border border-border bg-bg/40 px-3 py-3"><div className="flex items-center justify-between gap-3"><Pill tone={previewTone(result.kind)}>{result.kind === "CREDIT_NOTE" ? "Credit note" : "No credit note"}</Pill>{result.amount ? <span className="num font-semibold text-money">−{formatMoney(result.amount, { currency })}</span> : null}</div><p className="mt-2 text-[14px] text-muted">{result.explanation}</p><p className="mt-1 text-[13px] text-muted">{preview.cycle.remainingDays} of {preview.cycle.periodDays} days remain. Future scheduled cycles will be removed.</p></div>;
 }

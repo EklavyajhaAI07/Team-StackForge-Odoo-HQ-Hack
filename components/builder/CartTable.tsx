@@ -12,6 +12,7 @@ import type { RiskResult } from "@/lib/engine/risk";
 import { formatMoney } from "@/lib/money";
 import { lineNet, type Totals } from "@/lib/quotes";
 import type { BuilderLine, PlanOpt } from "./types";
+import type { DisplayCurrency } from "@/lib/money";
 
 export function CartTable({
   lines,
@@ -22,7 +23,7 @@ export function CartTable({
   onPatch,
   onRemove,
   onOrderDiscount,
-}: {
+  currency,}: {
   lines: BuilderLine[];
   plans: PlanOpt[];
   risk: RiskResult;
@@ -31,7 +32,8 @@ export function CartTable({
   onPatch: (lineId: string, patch: { qty?: number; discountPct?: number; variantId?: string | null; planId?: string | null }) => void;
   onRemove: (lineId: string) => void;
   onOrderDiscount: (pct: number) => void;
-}) {
+  /** The quotation's currency — every figure on this screen is what the customer pays. */
+  currency: DisplayCurrency;}) {
   const [orderPct, setOrderPct] = useState("");
   const overageById = new Map(risk.perLine.map((p) => [p.lineId, p.overage]));
 
@@ -124,7 +126,7 @@ export function CartTable({
                         l.qty
                       )}
                     </td>
-                    <td className="num">{formatMoney(l.unitPrice)}</td>
+                    <td className="num">{formatMoney(l.unitPrice, { currency })}</td>
                     <td className="num">
                       {canEdit ? (
                         <div className="inline-flex flex-col items-end gap-0.5">
@@ -154,7 +156,7 @@ export function CartTable({
                         <span className={over > 0 ? "text-danger" : undefined}>{l.discountPct}%</span>
                       )}
                     </td>
-                    <td className="num">{formatMoney(lineNet(l))}</td>
+                    <td className="num">{formatMoney(lineNet(l), { currency })}</td>
                     {canEdit ? (
                       <td className="w-8 text-right">
                         <button type="button" aria-label={`Remove ${l.name}`} className="rounded p-1 text-muted hover:text-danger" onClick={() => onRemove(l.id)}>
@@ -197,14 +199,14 @@ export function CartTable({
         )}
         <dl className="grid min-w-[260px] grid-cols-[1fr_auto] gap-x-6 gap-y-1 text-[14px]">
           <dt className="text-muted">Subtotal (list)</dt>
-          <dd className="num text-right">{formatMoney(totals.list)}</dd>
+          <dd className="num text-right">{formatMoney(totals.list, { currency })}</dd>
           <dt className="text-muted">Discount</dt>
-          <dd className="num text-right text-danger">{totals.discount > 0 ? `−${formatMoney(totals.discount)}` : formatMoney(0)}</dd>
+          <dd className="num text-right text-danger">{totals.discount > 0 ? `−${formatMoney(totals.discount, { currency })}` : formatMoney(0, { currency })}</dd>
           <dt className="text-muted">Tax</dt>
-          <dd className="num text-right">{formatMoney(totals.tax)}</dd>
+          <dd className="num text-right">{formatMoney(totals.tax, { currency })}</dd>
           <dt className="border-t border-border pt-1 font-semibold">Total</dt>
           <dd className="border-t border-border pt-1 text-right text-[16px] font-semibold">
-            <NumberTicker value={totals.total} format={(n) => formatMoney(Math.round(n))} className="num" />
+            <NumberTicker value={totals.total} format={(n) => formatMoney(Math.round(n), { currency })} className="num" />
           </dd>
         </dl>
       </div>

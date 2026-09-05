@@ -5,6 +5,7 @@ import { ApiError } from "@/lib/api";
 import { getPortalSession, type PortalSession } from "@/lib/portal-auth";
 import { quotationTotals } from "@/lib/quotes";
 import type { QuotationDetail } from "./quotation";
+import { displayCurrency } from "@/lib/money";
 
 type Db = Tx | typeof prisma;
 
@@ -91,6 +92,9 @@ export function toPortalView(q: QuotationDetail) {
     contact: q.customer.name,
     repName: q.rep.name,
     createdAt: q.createdAt.toISOString(),
+    // The customer reads their own document in their own currency, at the rate this
+    // quotation snapshotted — never a rate that has moved since it was sent.
+    currency: displayCurrency(q.currency, q.fxRate),
     lines,
     totals,
     generalMessages: q.messages
@@ -113,6 +117,7 @@ export async function loadPortalQuotation(db: Db, quotationId: string) {
     where: { id: quotationId },
     include: {
       customer: true,
+      currency: true,
       rep: { select: { id: true, name: true, email: true } },
       lines: {
         include: { product: { include: { category: true, variants: true } }, variant: true, plan: true },

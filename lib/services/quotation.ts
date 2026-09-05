@@ -13,6 +13,7 @@ type Db = Tx | typeof prisma;
 
 export const quotationDetailInclude = {
   customer: true,
+  currency: true,
   rep: { select: { id: true, name: true, email: true } },
   lines: {
     include: {
@@ -61,7 +62,7 @@ export async function getTierPrices(db: Db, tier: Tier): Promise<Map<string, num
   return new Map(rows.map((r) => [r.productId, r.price]));
 }
 
-export async function getConfig(db: Db): Promise<RoutingConfig & { stalledDays: number; anomalySigma: number }> {
+export async function getConfig(db: Db): Promise<RoutingConfig & { stalledDays: number; anomalySigma: number; upsellMinMarginPct: number }> {
   const row = (await db.approvalConfig.findUnique({ where: { id: 1 } })) ?? (await db.approvalConfig.create({ data: { id: 1 } }));
   return row;
 }

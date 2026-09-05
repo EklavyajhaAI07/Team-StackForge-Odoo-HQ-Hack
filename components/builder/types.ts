@@ -1,3 +1,4 @@
+import type { DisplayCurrency } from "@/lib/money";
 export type VariantOpt = { id: string; value: string; extraPrice: number };
 export type PlanOpt = { id: string; name: string; interval: string; cancelRule: string };
 
@@ -63,6 +64,8 @@ export type BuilderQuotation = {
   repId: string;
   customerCompany: string;
   customerTier: string;
+  /** What this customer is quoted in, at the rate the quotation snapshotted. */
+  currency: DisplayCurrency;
 };
 
 export type BuilderPermissions = {

@@ -57,9 +57,23 @@ async function wipe() {
   await prisma.subscriptionPlan.deleteMany();
   await prisma.warehouse.deleteMany();
   await prisma.customer.deleteMany();
+  await prisma.currency.deleteMany();
   await prisma.user.deleteMany();
   await prisma.approvalConfig.deleteMany();
 }
+
+// Indicative mid-market rates, held locally. Nothing here calls an FX service at runtime —
+// rates are configuration a finance user edits in the backend, like every other threshold.
+const CURRENCIES = [
+  { code: "INR", name: "Indian rupee", symbol: "₹", locale: "en-IN", minorUnits: 2, rateFromBase: 1, isBase: true },
+  { code: "USD", name: "US dollar", symbol: "$", locale: "en-US", minorUnits: 2, rateFromBase: 0.012, isBase: false },
+  { code: "EUR", name: "Euro", symbol: "€", locale: "de-DE", minorUnits: 2, rateFromBase: 0.011, isBase: false },
+  { code: "GBP", name: "Pound sterling", symbol: "£", locale: "en-GB", minorUnits: 2, rateFromBase: 0.0094, isBase: false },
+  { code: "AED", name: "UAE dirham", symbol: "AED", locale: "en-AE", minorUnits: 2, rateFromBase: 0.044, isBase: false },
+  { code: "SGD", name: "Singapore dollar", symbol: "S$", locale: "en-SG", minorUnits: 2, rateFromBase: 0.016, isBase: false },
+  // Yen has no minor unit at all, which is the case that catches a formatter assuming 2 decimals.
+  { code: "JPY", name: "Japanese yen", symbol: "¥", locale: "ja-JP", minorUnits: 0, rateFromBase: 1.83, isBase: false },
+] as const;
 
 async function main() {
   console.log("Seeding DealFlow360…");
@@ -77,15 +91,20 @@ async function main() {
   const meera = users["meera@dealflow.local"];
   const vikram = users["vikram@dealflow.local"];
 
+  // ── Currencies ───────────────────────────────────────────────────────────
+  for (const c of CURRENCIES) await prisma.currency.create({ data: { ...c } });
+
   // ── Customers ────────────────────────────────────────────────────────────
+  // Two customers are quoted in a foreign currency, so the multi-currency path is exercised
+  // by the seeded data rather than only by something a demo has to set up by hand.
   const customersData = [
-    { company: "Acme Industries", name: "Rohit Kulkarni", email: "rohit@acmeindustries.in", tier: "GOLD", city: "Pune" },
-    { company: "Beta Traders", name: "Sunita Agarwal", email: "sunita@betatraders.in", tier: "SILVER", city: "Surat" },
-    { company: "Nimbus Retail", name: "Karan Bhatia", email: "karan@nimbusretail.in", tier: "BRONZE", city: "Jaipur" },
-    { company: "Orion Labs", name: "Dr. Neha Joshi", email: "neha@orionlabs.in", tier: "GOLD", city: "Hyderabad" },
-    { company: "Zenith Corp", name: "Farhan Sheikh", email: "farhan@zenithcorp.in", tier: "SILVER", city: "Mumbai" },
+    { company: "Acme Industries", name: "Rohit Kulkarni", email: "rohit@acmeindustries.in", tier: "GOLD", city: "Pune", currencyCode: "INR" },
+    { company: "Beta Traders", name: "Sunita Agarwal", email: "sunita@betatraders.in", tier: "SILVER", city: "Surat", currencyCode: "INR" },
+    { company: "Nimbus Retail", name: "Karan Bhatia", email: "karan@nimbusretail.in", tier: "BRONZE", city: "Jaipur", currencyCode: "INR" },
+    { company: "Orion Labs", name: "Dr. Neha Joshi", email: "neha@orionlabs.in", tier: "GOLD", city: "Hyderabad", currencyCode: "USD" },
+    { company: "Zenith Corp", name: "Farhan Sheikh", email: "farhan@zenithcorp.in", tier: "SILVER", city: "Mumbai", currencyCode: "AED" },
   ] as const;
-  const customers: Record<string, { id: string; tier: Tier; company: string }> = {};
+  const customers: Record<string, { id: string; tier: Tier; company: string; currencyCode: string }> = {};
   for (const c of customersData) {
     const row = await prisma.customer.create({ data: { ...c } });
     customers[c.company] = row;
@@ -215,26 +234,27 @@ async function main() {
   const east = await prisma.warehouse.create({ data: { name: "East Depot", city: "Kolkata", shippingCostWeight: R(650) } });
   const south = await prisma.warehouse.create({ data: { name: "South Hub", city: "Bengaluru", shippingCostWeight: R(560) } });
   // Laptop ×10 cannot come from one place (forces a 2-warehouse split); Rugged Tablet is short everywhere.
-  const stock: [string, number, number, number][] = [
-    ["HW-LAP-14", 6, 3, 8],
-    ["HW-SCL-150", 12, 4, 0],
-    ["HW-PRN-TL", 20, 10, 15],
-    ["HW-SCN-2D", 30, 0, 25],
-    ["HW-TAB-10", 2, 1, 0],
-    ["HW-SW-24", 5, 8, 3],
-    ["HW-UPS-1K", 10, 6, 12],
-    ["HW-PPR-A4", 200, 150, 90],
-    ["HW-CHR-ERG", 15, 0, 20],
-    ["HW-MON-27", 9, 12, 4],
-    ["HW-WAP", 14, 5, 10],
+  // Last column is the reorder point (A4): at or below it, that warehouse needs restocking.
+  const stock: [string, number, number, number, number][] = [
+    ["HW-LAP-14", 6, 3, 8, 5],
+    ["HW-SCL-150", 12, 4, 0, 5],
+    ["HW-PRN-TL", 20, 10, 15, 8],
+    ["HW-SCN-2D", 30, 0, 25, 6],
+    ["HW-TAB-10", 2, 1, 0, 4],
+    ["HW-SW-24", 5, 8, 3, 4],
+    ["HW-UPS-1K", 10, 6, 12, 5],
+    ["HW-PPR-A4", 200, 150, 90, 100],
+    ["HW-CHR-ERG", 15, 0, 20, 6],
+    ["HW-MON-27", 9, 12, 4, 6],
+    ["HW-WAP", 14, 5, 10, 6],
   ];
-  for (const [s, m, e, so] of stock) {
+  for (const [s, m, e, so, reorderPoint] of stock) {
     for (const [wh, qty] of [
       [main, m],
       [east, e],
       [south, so],
     ] as const) {
-      await prisma.stock.create({ data: { warehouseId: wh.id, productId: sku(s).id, qty } });
+      await prisma.stock.create({ data: { warehouseId: wh.id, productId: sku(s).id, qty, reorderPoint } });
     }
   }
 
@@ -290,7 +310,7 @@ async function main() {
 
   async function createQuotation(input: {
     number: string;
-    customer: { id: string; tier: Tier };
+    customer: { id: string; tier: Tier; currencyCode: string };
     rep: { id: string };
     status: "DRAFT" | "PENDING_MANAGER" | "PENDING_FINANCE" | "APPROVED" | "SENT" | "UNDER_NEGOTIATION" | "CONFIRMED" | "REJECTED";
     createdAt: Date;
@@ -325,6 +345,10 @@ async function main() {
         promisedDate: new Date(input.createdAt.getTime() + 14 * DAY),
         createdAt: input.createdAt,
         lastActivityAt: input.lastActivityAt,
+        // The same snapshot the create-quotation route takes, so seeded and live quotations
+        // are indistinguishable in how they hold their rate.
+        currencyCode: input.customer.currencyCode,
+        fxRate: CURRENCIES.find((c) => c.code === input.customer.currencyCode)!.rateFromBase,
         lines: { create: lineData },
       },
       include: { lines: { include: { product: true } } },

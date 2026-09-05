@@ -9,6 +9,7 @@ import { IconPlus, IconSearch } from "@/components/ui/icons";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/money";
 import type { CatalogItem, PlanOpt } from "./types";
+import type { DisplayCurrency } from "@/lib/money";
 
 export function ProductPicker({
   catalog,
@@ -16,13 +17,14 @@ export function ProductPicker({
   plans,
   tier,
   onAdd,
-}: {
+  currency,}: {
   catalog: CatalogItem[];
   categories: { id: string; name: string }[];
   plans: PlanOpt[];
   tier: string;
   onAdd: (item: CatalogItem, variantId: string | null, planId: string | null) => Promise<void>;
-}) {
+  /** The quotation's currency — every figure on this screen is what the customer pays. */
+  currency: DisplayCurrency;}) {
   const [category, setCategory] = useState(categories[0]?.id ?? "");
   const [query, setQuery] = useState("");
   const [choice, setChoice] = useState<Record<string, { variantId?: string; planId?: string }>>({});
@@ -117,7 +119,7 @@ export function ProductPicker({
                     </Select>
                   ) : null}
                   <div className="w-[120px] text-right">
-                    <div className="num text-[14px]">{formatMoney(price)}</div>
+                    <div className="num text-[14px]">{formatMoney(price, { currency })}</div>
                     {p.tierPrice != null && p.tierPrice !== p.listPrice ? (
                       <div className="text-[12px] text-info">{tierLabel} price</div>
                     ) : null}

@@ -7,6 +7,10 @@ import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/money";
 import type { WarehouseView } from "./Fulfillment";
 
+type SplitResponse = {
+  replenishment?: { productName: string; warehouseName: string; qty: number; reorderPoint: number; suggestedOrderQty: number }[];
+};
+
 export function ManualOverride({
   orderId,
   demand,
@@ -16,7 +20,8 @@ export function ManualOverride({
   orderId: string;
   demand: { productId: string; name?: string; qty: number }[];
   warehouses: WarehouseView[];
-  onDone: () => void;
+  /** Receives the split response so the caller can surface anything it reports, such as a reorder point being reached. */
+  onDone: (data?: SplitResponse) => void;
 }) {
   const [alloc, setAlloc] = useState<Record<string, Record<string, string>>>({});
   const [busy, setBusy] = useState(false);
@@ -59,7 +64,7 @@ export function ManualOverride({
         setErrors(Array.isArray(data.details) ? data.details : [data.error ?? "Could not apply the override"]);
         return;
       }
-      onDone();
+      onDone(data);
     } finally {
       setBusy(false);
     }

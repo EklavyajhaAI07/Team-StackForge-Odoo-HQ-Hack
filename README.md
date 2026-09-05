@@ -808,6 +808,7 @@ This makes the architecture easier to reason about and gives evaluators a clear 
 | **Who can execute operations?**     | Auth realms + RBAC |
 | **How do we know what happened?**   | `AuditEvent`       |
 | **How do clients receive changes?** | Server-Sent Events |
+| **What currency is an amount in?**  | Base minor units in storage; the quotation's snapshotted rate at the edge |
 
 ---
 
@@ -827,7 +828,11 @@ The eight-step flow is airtight, so the next work is depth rather than breadth.
 
 **Approval analytics.** Every decision is already in `AuditEvent` with who, when and why. Turning that into cycle-time reporting, showing where deals actually wait, is a query away rather than a rebuild.
 
-**Multi-currency.** Explicitly a bonus in the problem statement and deliberately skipped. Money is already stored as integer minor units behind a single `formatMoney()`, so the change is a currency column and a rate table rather than an audit of every arithmetic path.
+**Multi-company.** Multi-currency is built; tenancy is not. Scoping every model, query and RBAC check by company is a structural change rather than an additive one, and the problem statement marks it a bonus.
+
+**Rate feeds.** Exchange rates are configuration a finance user maintains by hand, which is correct for a system that makes no external network calls. A daily import would be the natural next step wherever that constraint does not apply.
+
+**Replenishment purchase orders.** The reorder point fires and says how much to order. Turning that into an actual purchase order, with a supplier and a lead time, is the half that is missing.
 
 ## Team StackForge
 

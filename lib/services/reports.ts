@@ -14,6 +14,8 @@ export type ReportRow = {
   company: string;
   tier: string;
   repName: string;
+  /** What the customer is quoted in. Report money stays in the base currency so totals add up. */
+  currencyCode: string;
   status: string;
   lineCount: number;
   units: number;
@@ -93,6 +95,7 @@ export async function runReport(filters: ReportFilters) {
       company: q.customer.company,
       tier: q.customer.tier,
       repName: q.rep.name,
+      currencyCode: q.currencyCode,
       status: q.status,
       lineCount: q.lines.length,
       units: q.lines.reduce((s, l) => s + l.qty, 0),

@@ -76,9 +76,28 @@ export function Fulfillment({
     }
   }
 
+  /** A restock warning earns its own toast — it is a different job, for a different person. */
+  function announceReplenishment(data: { replenishment?: { productName: string; warehouseName: string; qty: number; reorderPoint: number; suggestedOrderQty: number }[] }) {
+    const lines = data.replenishment ?? [];
+    if (lines.length === 0) return;
+    const first = lines[0];
+    toast({
+      title: lines.length === 1 ? "One line reached its reorder point" : `${lines.length} lines reached their reorder point`,
+      description:
+        lines.length === 1
+          ? `${first.productName} at ${first.warehouseName} is down to ${first.qty} against a reorder point of ${first.reorderPoint}. Order ${first.suggestedOrderQty} more.`
+          : `Starting with ${first.productName} at ${first.warehouseName}, now at ${first.qty}.`,
+      tone: "warn",
+      durationMs: 8000,
+    });
+  }
+
   async function acceptPlan(plan: SplitPlan) {
     const data = await post(`/api/orders/${order.id}/split`, { mode: "ACCEPT", planKey: plan.key }, plan.key);
-    if (data) toast({ title: "Split accepted", description: plan.label, tone: "money" });
+    if (data) {
+      toast({ title: "Split accepted", description: plan.label, tone: "money" });
+      announceReplenishment(data);
+    }
   }
 
   async function consolidate() {
@@ -329,9 +348,10 @@ export function Fulfillment({
           orderId={order.id}
           demand={remaining}
           warehouses={warehouses}
-          onDone={() => {
+          onDone={(data) => {
             setOverrideOpen(false);
             toast({ title: "Manual split applied", tone: "money" });
+            announceReplenishment(data ?? {});
             router.refresh();
           }}
         />

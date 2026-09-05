@@ -14,6 +14,7 @@ type Config = {
   financeAmountThreshold: number;
   stalledDays: number;
   anomalySigma: number;
+  upsellMinMarginPct: number;
 };
 
 /** The numbers routing.ts and anomaly.ts read. Nothing in the engines hardcodes them. */
@@ -26,6 +27,7 @@ export function ApprovalThresholds({ config, canEdit }: { config: Config; canEdi
     financeAmountThresholdRupees: String(Math.round(config.financeAmountThreshold / 100)),
     stalledDays: String(config.stalledDays),
     anomalySigma: String(config.anomalySigma),
+    upsellMinMarginPct: String(config.upsellMinMarginPct),
   });
   const [busy, setBusy] = useState(false);
 
@@ -35,15 +37,22 @@ export function ApprovalThresholds({ config, canEdit }: { config: Config; canEdi
     financeAmountThreshold: Math.round(Number(draft.financeAmountThresholdRupees) * 100),
     stalledDays: Math.round(Number(draft.stalledDays)),
     anomalySigma: Number(draft.anomalySigma),
+    upsellMinMarginPct: Number(draft.upsellMinMarginPct),
   };
   const invalid =
-    Object.values(parsed).some((v) => Number.isNaN(v)) || parsed.stalledDays < 1 || parsed.anomalySigma <= 0 || parsed.managerBlendedMaxPts < 0;
+    Object.values(parsed).some((v) => Number.isNaN(v)) ||
+    parsed.stalledDays < 1 ||
+    parsed.anomalySigma <= 0 ||
+    parsed.managerBlendedMaxPts < 0 ||
+    parsed.upsellMinMarginPct < 0 ||
+    parsed.upsellMinMarginPct > 100;
   const dirty =
     parsed.managerBlendedMaxPts !== config.managerBlendedMaxPts ||
     parsed.financeLineOveragePts !== config.financeLineOveragePts ||
     parsed.financeAmountThreshold !== config.financeAmountThreshold ||
     parsed.stalledDays !== config.stalledDays ||
-    parsed.anomalySigma !== config.anomalySigma;
+    parsed.anomalySigma !== config.anomalySigma ||
+    parsed.upsellMinMarginPct !== config.upsellMinMarginPct;
 
   async function save() {
     setBusy(true);
@@ -91,6 +100,9 @@ export function ApprovalThresholds({ config, canEdit }: { config: Config; canEdi
           </Field>
           <Field label="Anomaly sensitivity" hint="Standard deviations above the rep's own average">
             <Input numeric type="number" min={0.1} step={0.1} disabled={!canEdit} value={draft.anomalySigma} onChange={(e) => setDraft((d) => ({ ...d, anomalySigma: e.target.value }))} />
+          </Field>
+          <Field label="Upsell margin floor" hint="Suggestions below this margin are never shown to a rep">
+            <Input numeric type="number" min={0} max={100} step={1} disabled={!canEdit} value={draft.upsellMinMarginPct} onChange={(e) => setDraft((d) => ({ ...d, upsellMinMarginPct: e.target.value }))} />
           </Field>
         </div>
       </Card>

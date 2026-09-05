@@ -18,6 +18,7 @@ export default async function ApprovalsPage() {
         financeAmountThreshold: config.financeAmountThreshold,
         stalledDays: config.stalledDays,
         anomalySigma: config.anomalySigma,
+        upsellMinMarginPct: config.upsellMinMarginPct,
       }}
       canEdit={can(user, "config:all")}
     />

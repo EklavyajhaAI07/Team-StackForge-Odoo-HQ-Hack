@@ -7,18 +7,20 @@ import { Pill } from "@/components/ui/Pill";
 import { IconSparkle } from "@/components/ui/icons";
 import { formatMoney } from "@/lib/money";
 import type { CatalogItem, UpsellItem } from "./types";
+import type { DisplayCurrency } from "@/lib/money";
 
 export function UpsellPanel({
   items,
   catalog,
   canAdd,
   onAdd,
-}: {
+  currency,}: {
   items: UpsellItem[];
   catalog: CatalogItem[];
   canAdd: boolean;
   onAdd: (item: CatalogItem) => Promise<void>;
-}) {
+  /** The quotation's currency — every figure on this screen is what the customer pays. */
+  currency: DisplayCurrency;}) {
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState<string | null>(null);
   const visible = items.filter((i) => !dismissed.has(i.productId));
@@ -50,7 +52,7 @@ export function UpsellPanel({
                       </p>
                     </div>
                     <div className="text-right">
-                      <div className="num text-[14px] text-money">+{formatMoney(u.marginDelta, { whole: true })}</div>
+                      <div className="num text-[14px] text-money">+{formatMoney(u.marginDelta, { whole: true, currency })}</div>
                       <div className="text-[11px] text-muted">margin per unit</div>
                     </div>
                   </div>

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { requireSessionUser } from "@/lib/auth";
-import { learnedPairs, MIN_UPSELL_MARGIN_PCT } from "@/lib/engine/upsell";
+import { learnedPairs } from "@/lib/engine/upsell";
+import { getApprovalConfig } from "@/lib/queries";
 import { Card } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Pill } from "@/components/ui/Pill";
@@ -11,9 +13,10 @@ export const metadata: Metadata = { title: "Upsell pairs" };
 /** Read-only by design (§9): the pairs are learned from order history, not authored. */
 export default async function UpsellPage() {
   await requireSessionUser();
-  const [history, products] = await Promise.all([
+  const [history, products, config] = await Promise.all([
     prisma.historicalOrder.findMany({ select: { productIds: true } }),
     prisma.product.findMany({ select: { id: true, name: true, isPromoted: true } }),
+    getApprovalConfig(),
   ]);
 
   const names = Object.fromEntries(products.map((p) => [p.id, p.name]));
@@ -26,7 +29,11 @@ export default async function UpsellPage() {
         <h2>Learned from order history</h2>
         <p className="text-[13px] text-muted">
           How often two products were bought together across {history.length} past orders. The builder ranks suggestions by this count,
-          weights promoted items 1.5×, and drops anything below {MIN_UPSELL_MARGIN_PCT}% margin. There is nothing to author here.
+          weights promoted items 1.5×, and drops anything below the{" "}
+          <Link href="/backend/approvals" className="text-primary hover:underline">
+            {config.upsellMinMarginPct}% margin floor
+          </Link>
+          . The pairs themselves are not authored — they are counted from what customers actually bought together.
         </p>
       </div>
       <div className="max-h-[560px] overflow-auto px-5 pb-5">

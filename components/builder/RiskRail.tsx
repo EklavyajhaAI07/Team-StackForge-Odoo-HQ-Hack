@@ -57,7 +57,7 @@ export function RiskRail({
           <div className="text-right">
             <p className="text-[13px] text-muted">Order total</p>
             <p className="display mt-0.5 text-[26px] font-semibold">
-              <NumberTicker value={totals.total} format={(n) => formatMoney(Math.round(n), { whole: true })} />
+              <NumberTicker value={totals.total} format={(n) => formatMoney(Math.round(n), { whole: true, currency: quotation.currency })} />
             </p>
           </div>
         </div>
@@ -98,7 +98,7 @@ export function RiskRail({
         </div>
       </Card>
 
-      <UpsellPanel items={upsell} catalog={catalog} canAdd={permissions.canEdit} onAdd={onAddUpsell} />
+      <UpsellPanel currency={quotation.currency} items={upsell} catalog={catalog} canAdd={permissions.canEdit} onAdd={onAddUpsell} />
     </div>
   );
 }

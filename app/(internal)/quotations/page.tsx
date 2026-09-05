@@ -25,6 +25,7 @@ export default async function QuotationsPage() {
     maxLineOverage: q.maxLineOverage,
     lastActivityAt: q.lastActivityAt.toISOString(),
     lineCount: q.lines.length,
+    currencyCode: q.currencyCode,
   }));
 
   return (

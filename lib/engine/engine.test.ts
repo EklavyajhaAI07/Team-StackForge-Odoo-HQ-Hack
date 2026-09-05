@@ -5,6 +5,7 @@ import { computeRisk, effectiveListPrice } from "./risk";
 import { routeQuotation } from "./routing";
 import { addInterval, calculateProration, prorateQtyChange, prorateCancel, buildSchedule, currentCycle } from "./proration";
 import { planSplit } from "./split";
+import { belowReorderPoint, crossedBelowReorderPoint } from "./replenishment";
 
 // ── Risk (§5.1) ─────────────────────────────────────────────────────────────
 
@@ -136,4 +137,54 @@ test("split: prefers a single complete warehouse, otherwise greedy multi-warehou
   const single = planSplit([{ productId: "ups", qty: 5 }], warehouses);
   assert.equal(single.recommended.shipments.length, 1);
   assert.equal(single.recommended.shipments[0].warehouseId, "main");
+});
+
+// ── Replenishment (§A4) ─────────────────────────────────────────────────────
+
+test("replenishment: flags lines at or below the reorder point, worst first, and ignores disabled ones", () => {
+  const levels = [
+    { warehouseId: "main", productId: "lap", qty: 6, reorderPoint: 5 }, // above — fine
+    { warehouseId: "east", productId: "lap", qty: 5, reorderPoint: 5 }, // exactly on it — flagged
+    { warehouseId: "east", productId: "tab", qty: 0, reorderPoint: 4 }, // empty — most urgent
+    { warehouseId: "south", productId: "scl", qty: 2, reorderPoint: 5 }, // 3 under
+    { warehouseId: "south", productId: "ppr", qty: 1, reorderPoint: 0 }, // rule switched off
+  ];
+
+  const flags = belowReorderPoint(levels);
+  assert.deepEqual(
+    flags.map((f) => `${f.warehouseId}:${f.productId}`),
+    ["east:tab", "south:scl", "east:lap"],
+    "empty first, then by shortfall; the reorderPoint 0 line is never flagged",
+  );
+
+  // Sitting exactly on the point is a trigger, not a miss — but the shortfall is zero.
+  const onThePoint = flags.find((f) => f.productId === "lap")!;
+  assert.equal(onThePoint.shortfall, 0);
+  assert.equal(onThePoint.outOfStock, false);
+  // Target is 2× the reorder point, so 5 on hand against a point of 5 asks for 5 more.
+  assert.equal(onThePoint.suggestedOrderQty, 5);
+
+  const empty = flags.find((f) => f.productId === "tab")!;
+  assert.equal(empty.outOfStock, true);
+  assert.equal(empty.shortfall, 4);
+  assert.equal(empty.suggestedOrderQty, 8);
+});
+
+test("replenishment: crossing the point reports only the lines that changed side", () => {
+  const before = [
+    { warehouseId: "main", productId: "lap", qty: 6, reorderPoint: 5 },
+    { warehouseId: "east", productId: "tab", qty: 1, reorderPoint: 4 }, // already low before
+  ];
+  const after = [
+    { warehouseId: "main", productId: "lap", qty: 4, reorderPoint: 5 }, // crossed on this shipment
+    { warehouseId: "east", productId: "tab", qty: 0, reorderPoint: 4 }, // still low, not news
+  ];
+
+  const crossed = crossedBelowReorderPoint(before, after);
+  assert.equal(crossed.length, 1, "a line that was already below must not be reported again");
+  assert.equal(crossed[0].productId, "lap");
+  assert.equal(crossed[0].shortfall, 1);
+
+  // Nothing moves, nothing is reported.
+  assert.deepEqual(crossedBelowReorderPoint(after, after), []);
 });

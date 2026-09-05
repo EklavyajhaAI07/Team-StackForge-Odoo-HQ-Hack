@@ -20,6 +20,7 @@ export default async function BackendLayout({ children }: { children: React.Reac
           { href: "/backend/approvals", label: "Approval thresholds" },
           { href: "/backend/products", label: "Products" },
           { href: "/backend/pricing", label: "Price lists" },
+          { href: "/backend/currencies", label: "Currencies" },
           { href: "/backend/warehouses", label: "Warehouses & stock" },
           { href: "/backend/plans", label: "Plans" },
           { href: "/backend/upsell", label: "Upsell pairs" },

@@ -9,6 +9,7 @@ import { Pill } from "@/components/ui/Pill";
 import { useToast } from "@/components/ui/Toast";
 import { relativeTime } from "@/lib/format";
 import { formatMoney } from "@/lib/money";
+import type { DisplayCurrency } from "@/lib/money";
 
 export type CounterView = {
   id: string;
@@ -24,7 +25,17 @@ export type CounterView = {
 };
 
 /** Requested changes waiting on the rep. Accepting re-runs routing, which may re-open approval. */
-export function CounterInbox({ quotationId, counters, canAnswer }: { quotationId: string; counters: CounterView[]; canAnswer: boolean }) {
+export function CounterInbox({
+  quotationId,
+  counters,
+  canAnswer,
+  currency,
+}: {
+  quotationId: string;
+  counters: CounterView[];
+  canAnswer: boolean;
+  currency: DisplayCurrency;
+}) {
   const router = useRouter();
   const { toast } = useToast();
   const [busy, setBusy] = useState<string | null>(null);
@@ -99,7 +110,7 @@ export function CounterInbox({ quotationId, counters, canAnswer }: { quotationId
                 ) : (
                   <Pill tone="money">Within the {c.ceilingPct}% ceiling</Pill>
                 )}
-                <span className="num text-muted">line becomes {formatMoney(c.lineTotalAfter, { whole: true })}</span>
+                <span className="num text-muted">line becomes {formatMoney(c.lineTotalAfter, { whole: true, currency })}</span>
               </div>
 
               {canAnswer ? (

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Kebab } from "@/components/ui/Kebab";
 import { StatusPill, TierPill } from "@/components/ui/Pill";
 import { Table, TableWrap, Td, Th } from "@/components/ui/Table";
-import { formatMoney } from "@/lib/money";
+import { BASE_CURRENCY, formatMoney } from "@/lib/money";
 import { relativeTime } from "@/lib/format";
 import { RiskChip } from "./RiskChip";
 
@@ -20,6 +20,7 @@ export type QuotationRow = {
   maxLineOverage: number;
   lastActivityAt: string;
   lineCount: number;
+  currencyCode: string;
 };
 
 export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; managerMax: number }) {
@@ -63,6 +64,13 @@ export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; ma
                 <span className="flex items-center gap-2">
                   <span className="truncate font-medium">{r.company}</span>
                   <TierPill tier={r.tier} />
+                  {/* Totals in this table are the company's reporting currency, so a foreign
+                      deal is tagged rather than silently shown as if it were rupees. */}
+                  {r.currencyCode !== BASE_CURRENCY.code ? (
+                    <span className="num shrink-0 text-[12px] text-faint" title={`Quoted to the customer in ${r.currencyCode}`}>
+                      {r.currencyCode}
+                    </span>
+                  ) : null}
                 </span>
               </Td>
               <Td className="truncate text-muted">{r.rep}</Td>

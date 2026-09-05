@@ -6,6 +6,7 @@ import { can } from "@/lib/rbac";
 import { getOrderForQuotation } from "@/lib/services/order";
 import { Billing } from "@/components/billing/Billing";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { displayCurrency } from "@/lib/money";
 
 export const metadata: Metadata = { title: "Billing" };
 
@@ -24,6 +25,7 @@ export default async function BillingPage({ params }: { params: Promise<{ id: st
   return (
     <Billing
       orderId={order.id}
+      currency={displayCurrency(order.quotation.currency, order.quotation.fxRate)}
       canManage={can(user, "billing:manage")}
       nowIso={new Date().toISOString()}
       invoices={order.invoices.map((invoice) => ({

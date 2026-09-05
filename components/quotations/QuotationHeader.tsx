@@ -2,6 +2,7 @@ import Link from "next/link";
 import { StatusPill, TierPill } from "@/components/ui/Pill";
 import { IconChevronRight } from "@/components/ui/icons";
 import { formatDate } from "@/lib/format";
+import { BASE_CURRENCY } from "@/lib/money";
 
 export function QuotationHeader({
   quotation,
@@ -14,9 +15,13 @@ export function QuotationHeader({
     createdAt: Date;
     customer: { company: string; name: string; tier: string; city: string };
     rep: { name: string };
+    currencyCode: string;
+    fxRate: number;
   };
 }) {
   const q = quotation;
+  // Only worth saying when it is not the ledger currency — otherwise it is noise on every screen.
+  const foreign = q.currencyCode !== BASE_CURRENCY.code;
   return (
     <div className="flex items-start justify-between gap-6">
       <div>
@@ -42,6 +47,11 @@ export function QuotationHeader({
           <span>Rep {q.rep.name}</span>
           <span>Created {formatDate(q.createdAt)}</span>
           {q.promisedDate ? <span>Promised {formatDate(q.promisedDate)}</span> : null}
+          {foreign ? (
+            <span className="text-warn" title="Rate captured when this quotation was created, so it cannot move underneath a sent quote">
+              {`Quoted in ${q.currencyCode} at ${q.fxRate} per ${BASE_CURRENCY.symbol}1`}
+            </span>
+          ) : null}
         </div>
       </div>
     </div>

@@ -106,9 +106,30 @@ model Customer {
   tier    Tier
   city    String
 
+  // What this customer is quoted and invoiced in. Amounts are still STORED in base minor
+  // units everywhere; this decides presentation and the rate a new quotation snapshots.
+  currencyCode String   @default("INR")
+  currency     Currency @relation(fields: [currencyCode], references: [code])
+
   quotations   Quotation[]
   portalTokens PortalToken[]
   history      HistoricalOrder[]
+}
+
+/// Presentation currencies. Exactly one row is the base (rate 1); every stored amount is
+/// in the base currency's minor unit, so engine maths never has to know currencies exist.
+model Currency {
+  code         String  @id // ISO 4217, e.g. "INR"
+  name         String
+  symbol       String
+  locale       String // for Intl grouping, e.g. "en-IN"
+  minorUnits   Int     @default(2)
+  /// Units of this currency per 1 unit of the base currency.
+  rateFromBase Float   @default(1)
+  isBase       Boolean @default(false)
+
+  customers  Customer[]
+  quotations Quotation[]
 }
 
 model PortalToken {
@@ -192,6 +213,7 @@ model ApprovalConfig {
   financeAmountThreshold Int   @default(50000000) // order total (paise) → +finance
   stalledDays            Int   @default(3)
   anomalySigma           Float @default(2)
+  upsellMinMarginPct     Float @default(15) // suggestions below this margin are never shown
 }
 
 model SubscriptionPlan {
@@ -220,6 +242,8 @@ model Stock {
   productId   String
   product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   qty         Int
+  /// Replenishment rule (A4): at or below this level the line needs restocking. 0 disables it.
+  reorderPoint Int @default(0)
 
   @@unique([warehouseId, productId])
 }
@@ -235,6 +259,13 @@ model Quotation {
   blendedRiskScore Float       @default(0)
   maxLineOverage   Float       @default(0)
   promisedDate     DateTime?
+
+  // Snapshotted from the customer when the quotation is created. A rate that moves afterwards
+  // must not silently reprice a quotation someone has already been sent.
+  currencyCode String   @default("INR")
+  currency     Currency @relation(fields: [currencyCode], references: [code])
+  fxRate       Float    @default(1)
+
   lines            QuotationLine[]
   approvals        Approval[]
   messages         PortalMessage[]

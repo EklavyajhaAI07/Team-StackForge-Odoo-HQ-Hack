@@ -24,6 +24,7 @@ const CUSTOMER_STATUS: Record<string, { label: string; tone: "neutral" | "info" 
 
 export function PortalDocument({ quotation, validUntil }: { quotation: PortalView; validUntil: string }) {
   const router = useRouter();
+  const currency = quotation.currency;
   const [openLine, setOpenLine] = useState<string | null>(null);
   const [comment, setComment] = useState("");
   const [counter, setCounter] = useState("");
@@ -111,7 +112,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
           <p className="mt-2 text-[15px] text-muted">
             <span className="num">{quotation.number}</span> is confirmed for {quotation.company}. Our team will be in touch about delivery and invoicing.
           </p>
-          <p className="num mt-6 text-[26px] font-semibold">{formatMoney(quotation.totals.total)}</p>
+          <p className="num mt-6 text-[26px] font-semibold">{formatMoney(quotation.totals.total, { currency })}</p>
           <p className="text-[13px] text-muted">including tax</p>
         </div>
       </main>
@@ -245,9 +246,9 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
                   )}
                 </td>
                 <td className="num align-top">{l.qty}</td>
-                <td className="num align-top">{formatMoney(l.unitPrice)}</td>
+                <td className="num align-top">{formatMoney(l.unitPrice, { currency })}</td>
                 <td className="num align-top">{l.discountPct > 0 ? formatPct(l.discountPct) : "—"}</td>
-                <td className="num align-top">{formatMoney(l.lineTotal)}</td>
+                <td className="num align-top">{formatMoney(l.lineTotal, { currency })}</td>
               </tr>
             ))}
           </tbody>
@@ -256,19 +257,19 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
               <td colSpan={4} className="text-right text-muted">
                 Subtotal
               </td>
-              <td className="num">{formatMoney(quotation.totals.net)}</td>
+              <td className="num">{formatMoney(quotation.totals.net, { currency })}</td>
             </tr>
             <tr>
               <td colSpan={4} className="text-right text-muted">
                 Tax
               </td>
-              <td className="num">{formatMoney(quotation.totals.tax)}</td>
+              <td className="num">{formatMoney(quotation.totals.tax, { currency })}</td>
             </tr>
             <tr>
               <td colSpan={4} className="text-right">
                 Total
               </td>
-              <td className="num text-[16px]">{formatMoney(quotation.totals.total)}</td>
+              <td className="num text-[16px]">{formatMoney(quotation.totals.total, { currency })}</td>
             </tr>
           </tfoot>
         </table>
@@ -292,7 +293,7 @@ export function PortalDocument({ quotation, validUntil }: { quotation: PortalVie
         <div className="mx-auto flex w-full max-w-[720px] items-center justify-between gap-4 px-6 py-3">
           <div className="min-w-0">
             <p className="text-[13px] text-muted">Total including tax</p>
-            <p className="num text-[22px] font-semibold">{formatMoney(quotation.totals.total)}</p>
+            <p className="num text-[22px] font-semibold">{formatMoney(quotation.totals.total, { currency })}</p>
           </div>
           <div className="flex items-center gap-2">
             <Button

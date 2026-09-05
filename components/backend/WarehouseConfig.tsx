@@ -18,34 +18,57 @@ export function WarehouseConfig({
   warehouses,
   products,
   stock,
+  reorderPoints,
   canEdit,
 }: {
   warehouses: Warehouse[];
   products: Product[];
   stock: Record<string, number>;
+  /** Replenishment rule per warehouse and product, keyed the same way as `stock`. */
+  reorderPoints: Record<string, number>;
   canEdit: boolean;
 }) {
   const router = useRouter();
   const { toast } = useToast();
+  const cellKeys = useMemo(() => warehouses.flatMap((w) => products.map((p) => `${w.id}:${p.id}`)), [warehouses, products]);
   const [draft, setDraft] = useState<Record<string, string>>(() =>
     Object.fromEntries(warehouses.flatMap((w) => products.map((p) => [`${w.id}:${p.id}`, String(stock[`${w.id}:${p.id}`] ?? 0)]))),
+  );
+  const [points, setPoints] = useState<Record<string, string>>(() =>
+    Object.fromEntries(warehouses.flatMap((w) => products.map((p) => [`${w.id}:${p.id}`, String(reorderPoints[`${w.id}:${p.id}`] ?? 0)]))),
   );
   const [busy, setBusy] = useState(false);
   const [adding, setAdding] = useState(false);
   const [newWarehouse, setNewWarehouse] = useState({ name: "", city: "", cost: "" });
 
   const dirty = useMemo(
-    () => Object.entries(draft).some(([key, v]) => (Number(v) || 0) !== (stock[key] ?? 0)),
-    [draft, stock],
+    () =>
+      cellKeys.some(
+        (key) => (Number(draft[key]) || 0) !== (stock[key] ?? 0) || (Number(points[key]) || 0) !== (reorderPoints[key] ?? 0),
+      ),
+    [cellKeys, draft, points, stock, reorderPoints],
   );
-  const invalid = Object.values(draft).some((v) => v === "" || Number.isNaN(Number(v)) || Number(v) < 0);
+  const bad = (v: string | undefined) => v === undefined || v === "" || Number.isNaN(Number(v)) || Number(v) < 0;
+  const invalid = Object.values(draft).some(bad) || Object.values(points).some(bad);
+
+  /** A line is low when a reorder point is set and stock has reached it. Mirrors needsRestock(). */
+  const isLow = (key: string) => {
+    const point = Number(points[key]) || 0;
+    return point > 0 && (Number(draft[key]) || 0) <= point;
+  };
+  const lowCount = cellKeys.filter(isLow).length;
 
   async function saveStock() {
     setBusy(true);
     try {
-      const cells = Object.entries(draft).map(([key, v]) => {
+      const cells = cellKeys.map((key) => {
         const [warehouseId, productId] = key.split(":");
-        return { warehouseId, productId, qty: Math.max(0, Math.round(Number(v) || 0)) };
+        return {
+          warehouseId,
+          productId,
+          qty: Math.max(0, Math.round(Number(draft[key]) || 0)),
+          reorderPoint: Math.max(0, Math.round(Number(points[key]) || 0)),
+        };
       });
       const res = await fetch("/api/config/stock", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ cells }) });
       const data = await res.json().catch(() => ({}));
@@ -53,7 +76,15 @@ export function WarehouseConfig({
         toast({ title: data.error ?? "Could not save stock", tone: "danger" });
         return;
       }
-      toast({ title: `${data.changed} stock ${data.changed === 1 ? "level" : "levels"} saved`, tone: "money" });
+      const saved = [
+        data.changed ? `${data.changed} stock ${data.changed === 1 ? "level" : "levels"}` : null,
+        data.reorderPointsChanged ? `${data.reorderPointsChanged} reorder ${data.reorderPointsChanged === 1 ? "point" : "points"}` : null,
+      ].filter(Boolean);
+      toast({
+        title: `${saved.join(" and ")} saved`,
+        description: data.lowCount ? `${data.lowCount} lines are at or below their reorder point.` : "Nothing needs restocking.",
+        tone: data.lowCount ? "warn" : "money",
+      });
       router.refresh();
     } finally {
       setBusy(false);
@@ -109,12 +140,14 @@ export function WarehouseConfig({
                 <th className="num">Shipping cost</th>
                 <th className="num">Products stocked</th>
                 <th className="num">Units on hand</th>
+                <th className="num">Needs restocking</th>
               </tr>
             </thead>
             <tbody>
               {warehouses.map((w) => {
                 const held = products.filter((p) => (stock[`${w.id}:${p.id}`] ?? 0) > 0);
                 const units = held.reduce((s, p) => s + (stock[`${w.id}:${p.id}`] ?? 0), 0);
+                const low = products.filter((p) => isLow(`${w.id}:${p.id}`)).length;
                 return (
                   <tr key={w.id}>
                     <td className="font-medium">{w.name}</td>
@@ -122,6 +155,7 @@ export function WarehouseConfig({
                     <td className="num">{formatMoney(w.shippingCostWeight, { whole: true })}</td>
                     <td className="num">{held.length}</td>
                     <td className="num">{units}</td>
+                    <td className={low > 0 ? "num text-warn" : "num text-faint"}>{low > 0 ? `${low} lines` : "None"}</td>
                   </tr>
                 );
               })}
@@ -132,8 +166,12 @@ export function WarehouseConfig({
 
       <Card>
         <SaveBar
-          title="Stock on hand"
-          description="What the split engine may draw from. A product short everywhere becomes a backorder."
+          title="Stock on hand and reorder points"
+          description={
+            lowCount > 0
+              ? `What the split engine may draw from. ${lowCount} ${lowCount === 1 ? "line is" : "lines are"} at or below the reorder point.`
+              : "What the split engine may draw from. A product short everywhere becomes a backorder."
+          }
           dirty={dirty}
           busy={busy}
           disabled={invalid || !canEdit}
@@ -147,7 +185,8 @@ export function WarehouseConfig({
                 <th>Product</th>
                 {warehouses.map((w) => (
                   <th key={w.id} className="num">
-                    {w.name}
+                    <div>{w.name}</div>
+                    <div className="text-[12px] font-normal text-faint">on hand · reorder at</div>
                   </th>
                 ))}
                 <th className="num">Total</th>
@@ -162,21 +201,41 @@ export function WarehouseConfig({
                       <div className="font-medium">{p.name}</div>
                       <div className="num text-[12px] text-muted">{p.sku}</div>
                     </td>
-                    {warehouses.map((w) => (
-                      <td key={w.id} className="num">
-                        <Input
-                          numeric
-                          dense
-                          type="number"
-                          min={0}
-                          disabled={!canEdit}
-                          className="w-20"
-                          value={draft[`${w.id}:${p.id}`] ?? "0"}
-                          onChange={(e) => setDraft((d) => ({ ...d, [`${w.id}:${p.id}`]: e.target.value }))}
-                          aria-label={`${p.name} at ${w.name}`}
-                        />
-                      </td>
-                    ))}
+                    {warehouses.map((w) => {
+                      const key = `${w.id}:${p.id}`;
+                      const low = isLow(key);
+                      return (
+                        <td key={w.id} className="num">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <Input
+                              numeric
+                              dense
+                              type="number"
+                              min={0}
+                              disabled={!canEdit}
+                              // The tint is the rule showing its working: stock has reached the point beside it.
+                              className={low ? "w-[68px] input-low" : "w-[68px]"}
+                              value={draft[key] ?? "0"}
+                              onChange={(e) => setDraft((d) => ({ ...d, [key]: e.target.value }))}
+                              aria-label={`${p.name} on hand at ${w.name}`}
+                            />
+                            <span aria-hidden className="text-[12px] text-faint">·</span>
+                            <Input
+                              numeric
+                              dense
+                              type="number"
+                              min={0}
+                              disabled={!canEdit}
+                              className="w-[60px] text-muted"
+                              value={points[key] ?? "0"}
+                              onChange={(e) => setPoints((d) => ({ ...d, [key]: e.target.value }))}
+                              aria-label={`${p.name} reorder point at ${w.name}`}
+                              title="Reorder point — 0 switches the rule off for this line"
+                            />
+                          </div>
+                        </td>
+                      );
+                    })}
                     <td className={total === 0 ? "num text-danger" : "num"}>{total}</td>
                   </tr>
                 );

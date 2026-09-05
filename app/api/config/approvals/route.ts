@@ -9,6 +9,7 @@ const schema = z.object({
   financeAmountThreshold: z.number().int().min(0),
   stalledDays: z.number().int().min(1).max(365),
   anomalySigma: z.number().min(0.1).max(10),
+  upsellMinMarginPct: z.number().min(0).max(100),
 });
 
 /** PUT /api/config/approvals — the thresholds routing reads. Never hardcoded anywhere else. */
@@ -28,6 +29,7 @@ export async function PUT(req: Request) {
         if (before.financeAmountThreshold !== row.financeAmountThreshold) changes.push(`finance amount ${before.financeAmountThreshold} → ${row.financeAmountThreshold} paise`);
         if (before.stalledDays !== row.stalledDays) changes.push(`stalled after ${before.stalledDays} → ${row.stalledDays} days`);
         if (before.anomalySigma !== row.anomalySigma) changes.push(`anomaly ${before.anomalySigma}σ → ${row.anomalySigma}σ`);
+        if (before.upsellMinMarginPct !== row.upsellMinMarginPct) changes.push(`upsell margin floor ${before.upsellMinMarginPct}% → ${row.upsellMinMarginPct}%`);
       }
       if (changes.length) {
         await logAudit(tx, {
