@@ -1,4 +1,4 @@
-<img src="./app/public/logo.svg" alt="DealFlow360 Logo" width="120" height="75">
+<img src="./app/public/logo.svg" alt="DealFlow360 Logo" width="150" height="90">
 
 <p align="center">
   <img src="./assets/readme/hero.svg" alt="DealFlow360 — Self-governing B2B sales operations" width="100%" />
