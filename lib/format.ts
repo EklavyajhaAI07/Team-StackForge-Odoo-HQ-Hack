@@ -42,3 +42,10 @@ export function daysSince(d: Date | string, now: Date = new Date()): number {
 export function plural(n: number, one: string, many = `${one}s`): string {
   return `${n} ${n === 1 ? one : many}`;
 }
+
+/** True when `date` is in the past. Kept in a helper so pages don't read the clock inline. */
+export function isPast(date: Date | string | null | undefined): boolean {
+  if (!date) return false;
+  const d = typeof date === "string" ? new Date(date) : date;
+  return d.getTime() < new Date().getTime();
+}

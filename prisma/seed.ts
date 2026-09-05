@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // DealFlow360 seed — §7. Realism is a judging feature: believable margins, a rep who discounts
 // too much, co-purchase patterns the upsell engine can learn, and a pipeline that is alive at login.
 import { PrismaClient, type Prisma, type Tier } from "@prisma/client";
@@ -465,6 +464,7 @@ async function main() {
         { sku: "HW-LAP-14", qty: 4, disc: 10 },
         { sku: "SV-SETUP", qty: 4, disc: 7 },
         { sku: "SV-WAR-2Y", qty: 4, disc: 7 },
+        { sku: "SB-SUP-M", qty: 1, disc: 5, plan: planMonthlyNoRefund },
       ],
     });
     const setupLine = q.lines.find((l) => l.productId === sku("SV-SETUP").id)!;
@@ -491,6 +491,7 @@ async function main() {
       lines: [
         { sku: "HW-MON-27", qty: 6, disc: 0 },
         { sku: "HW-CHR-ERG", qty: 6, disc: 0 },
+        { sku: "SB-CLOUD-ENT", qty: 6, disc: 0, plan: planYearly },
       ],
     });
     await audit("Quotation", q.id, U_(arjun.id), "created", t0, { customer: "Acme Industries" });

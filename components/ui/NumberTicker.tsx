@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/cn";
 
 /**
  * Counts from the previous value to the new one over `duration` ms (§3.4 motion #1).
- * Renders the formatted value; honours prefers-reduced-motion.
+ * The animation writes to the DOM node directly — an effect synchronising an external
+ * system — so a 60fps count-up never triggers 24 React renders.
+ * Honours prefers-reduced-motion by jumping straight to the value.
  */
 export function NumberTicker({
   value,
@@ -18,43 +20,45 @@ export function NumberTicker({
   duration?: number;
   className?: string;
 }) {
-  const [display, setDisplay] = useState(value);
-  const fromRef = useRef(value);
-  const rafRef = useRef<number | null>(null);
+  const ref = useRef<HTMLSpanElement>(null);
+  const currentRef = useRef(value);
 
   useEffect(() => {
-    const from = fromRef.current;
+    const node = ref.current;
+    const from = currentRef.current;
     const to = value;
-    if (from === to) return;
-
-    const reduce =
-      typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      fromRef.current = to;
-      setDisplay(to);
+    if (!node) return;
+    if (from === to) {
+      node.textContent = format(to);
       return;
     }
 
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      currentRef.current = to;
+      node.textContent = format(to);
+      return;
+    }
+
+    let raf = 0;
     const start = performance.now();
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
       const current = from + (to - from) * eased;
-      setDisplay(current);
-      if (t < 1) {
-        rafRef.current = requestAnimationFrame(tick);
-      } else {
-        fromRef.current = to;
-        setDisplay(to);
-      }
+      currentRef.current = current;
+      node.textContent = format(current);
+      if (t < 1) raf = requestAnimationFrame(tick);
+      else currentRef.current = to;
     };
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      fromRef.current = to;
-    };
-  }, [value, duration]);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value, duration, format]);
 
-  return <span className={cn("num", className)}>{format(display)}</span>;
+  // Server render and first paint show the exact value; the effect takes over on updates.
+  return (
+    <span ref={ref} className={cn("num", className)}>
+      {format(value)}
+    </span>
+  );
 }

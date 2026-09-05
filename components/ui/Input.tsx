@@ -1,21 +1,22 @@
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
+// `size` is a native HTML attribute (a number), so the visual size prop is named `dense`.
 export function Input({
   className,
   numeric,
-  size,
+  dense,
   ...rest
-}: InputHTMLAttributes<HTMLInputElement> & { numeric?: boolean; size?: "sm" | "md" }) {
-  return <input className={cn("input", size === "sm" && "input-sm", numeric && "input-num", className)} {...rest} />;
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & { numeric?: boolean; dense?: boolean }) {
+  return <input className={cn("input", dense && "input-sm", numeric && "input-num", className)} {...rest} />;
 }
 
 export function Select({
   className,
-  size,
+  dense,
   ...rest
-}: SelectHTMLAttributes<HTMLSelectElement> & { size?: "sm" | "md" }) {
-  return <select className={cn("input", size === "sm" && "input-sm", className)} {...rest} />;
+}: Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & { dense?: boolean }) {
+  return <select className={cn("input", dense && "input-sm", className)} {...rest} />;
 }
 
 export function Textarea({ className, ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {

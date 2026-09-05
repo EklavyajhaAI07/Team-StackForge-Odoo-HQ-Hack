@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getPortalSession } from "@/lib/portal-auth";
-import { formatDate, formatDateTime } from "@/lib/format";
+import { formatDate, formatDateTime, isPast } from "@/lib/format";
 import { formatMoney, formatPct } from "@/lib/money";
 import { lineNet, quotationTotals } from "@/lib/quotes";
 import { StatusPill } from "@/components/ui/Pill";
@@ -30,7 +30,7 @@ export default async function PortalQuotationPage({
   });
 
   if (!row) redirect("/portal/invalid?reason=missing");
-  if (row.expiresAt.getTime() < Date.now()) redirect("/portal/invalid?reason=expired");
+  if (isPast(row.expiresAt)) redirect("/portal/invalid?reason=expired");
 
   // Establish the portal-realm cookie for exactly this quotation, once.
   const session = await getPortalSession();
