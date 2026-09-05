@@ -509,8 +509,20 @@ tr.flash td {
     overflow: visible;
     border: none;
   }
-  .print-only {
+  .print-only,
+  .print-only-block {
     display: block !important;
+  }
+  /* Rows must not break across pages, and the sticky header would repeat oddly. */
+  .table thead th {
+    position: static;
+    color: #333;
+  }
+  .table tbody tr {
+    break-inside: avoid;
+  }
+  @page {
+    margin: 14mm;
   }
 }
 .print-only {
