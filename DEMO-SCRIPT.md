@@ -45,10 +45,16 @@ Take the portal link from the seed output. It changes every reseed.
 > "This is a sales desk with eight live quotations. Some are drafts, some are waiting on approval,
 > one is under negotiation with a customer. The board is the same data by stage."
 
-**Do:** point at the amber `1.3 pts` and `7.5 pts` chips.
+**Do:** point at the two chips in the **Pending approval** column — amber `1.3 pts` on the top card
+(Q-2026-0107), coral `7.5 pts` on the one below it (Q-2026-0102).
 
 > "Those numbers are how far each quote has pushed past the discount policy. That score is what
 > decides who has to approve it. Nobody picks an approver by hand."
+
+**Do:** move your finger between the two colours.
+
+> "And the colour is the decision. Amber is inside the manager's limit. Coral is past it, so finance
+> has to sign as well — which is why one says pending manager and the other says pending finance."
 
 ### 2. Build a quotation · Tab 1 · 0:20–1:05
 
