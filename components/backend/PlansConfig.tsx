@@ -70,9 +70,10 @@ export function PlansConfig({ plans, canEdit }: { plans: Plan[]; canEdit: boolea
                 <td className="font-medium">{p.name}</td>
                 <td>
                   {canEdit ? (
+                    <div className="w-[140px]">
                     <Select
                       dense
-                      className="w-[140px]"
+                      className="w-full"
                       value={p.interval}
                       onChange={(e) => save("/api/config/plans", "PATCH", { id: p.id, interval: e.target.value }, `${p.name} now bills ${INTERVAL_LABEL[e.target.value].toLowerCase()}`)}
                     >
@@ -82,21 +83,24 @@ export function PlansConfig({ plans, canEdit }: { plans: Plan[]; canEdit: boolea
                         </option>
                       ))}
                     </Select>
+                    </div>
                   ) : (
                     INTERVAL_LABEL[p.interval]
                   )}
                 </td>
                 <td>
                   {canEdit ? (
+                    <div className="w-[190px]">
                     <Select
                       dense
-                      className="w-[190px]"
+                      className="w-full"
                       value={p.cancelRule}
                       onChange={(e) => save("/api/config/plans", "PATCH", { id: p.id, cancelRule: e.target.value }, `${p.name} cancellation rule updated`)}
                     >
                       <option value="PRORATED_CREDIT">Credit the unused days</option>
                       <option value="NO_REFUND">No refund</option>
                     </Select>
+                    </div>
                   ) : (
                     <Pill tone={p.cancelRule === "NO_REFUND" ? "warn" : "money"}>
                       {p.cancelRule === "NO_REFUND" ? "No refund" : "Credit the unused days"}

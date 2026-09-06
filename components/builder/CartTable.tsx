@@ -73,26 +73,26 @@ export function CartTable({
                         <span className="num">{l.sku}</span>
                         {l.variants.length > 0 ? (
                           canEdit ? (
-                            <Select dense value={l.variantId ?? ""} onChange={(e) => onPatch(l.id, { variantId: e.target.value })} className="h-6 w-[120px] py-0 text-[12px]">
+                            <div className="inline-block w-[120px] align-middle"><Select dense value={l.variantId ?? ""} onChange={(e) => onPatch(l.id, { variantId: e.target.value })} className="h-6 w-full py-0 text-[12px]">
                               {l.variants.map((v) => (
                                 <option key={v.id} value={v.id}>
                                   {v.value}
                                 </option>
                               ))}
-                            </Select>
+                            </Select></div>
                           ) : (
                             <span>{l.variantValue}</span>
                           )
                         ) : null}
                         {l.isRecurring ? (
                           canEdit ? (
-                            <Select dense value={l.planId ?? ""} onChange={(e) => onPatch(l.id, { planId: e.target.value })} className="h-6 w-[150px] py-0 text-[12px]">
+                            <div className="inline-block w-[150px] align-middle"><Select dense value={l.planId ?? ""} onChange={(e) => onPatch(l.id, { planId: e.target.value })} className="h-6 w-full py-0 text-[12px]">
                               {plans.map((p) => (
                                 <option key={p.id} value={p.id}>
                                   {p.name}
                                 </option>
                               ))}
-                            </Select>
+                            </Select></div>
                           ) : (
                             <span>Billed {l.planName?.toLowerCase()}</span>
                           )

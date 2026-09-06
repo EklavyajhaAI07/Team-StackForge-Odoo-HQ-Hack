@@ -178,10 +178,11 @@ export function CurrencyConfig({
                   <td className="text-muted">{c.tier}</td>
                   <td className="num text-muted">{c.quotationCount}</td>
                   <td>
+                    <div className="w-40">
                     <Select
                       dense
                       disabled={!canEdit}
-                      className="w-40"
+                      className="w-full"
                       value={assigned[c.id] ?? BASE_CURRENCY.code}
                       onChange={(e) => setAssigned((a) => ({ ...a, [c.id]: e.target.value }))}
                       aria-label={`Currency for ${c.company}`}
@@ -192,6 +193,7 @@ export function CurrencyConfig({
                         </option>
                       ))}
                     </Select>
+                    </div>
                   </td>
                 </tr>
               ))}

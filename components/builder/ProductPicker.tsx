@@ -89,12 +89,13 @@ export function ProductPicker({
                     </div>
                   </div>
                   {p.variants.length > 0 ? (
+                    <div className="w-[130px] shrink-0">
                     <Select
                       dense
                       value={variantId ?? ""}
                       onChange={(e) => setChoice((c) => ({ ...c, [p.id]: { ...c[p.id], variantId: e.target.value } }))}
                       aria-label={p.attributeName ?? "Variant"}
-                      className="w-[130px]"
+                      className="w-full"
                     >
                       {p.variants.map((v) => (
                         <option key={v.id} value={v.id}>
@@ -102,14 +103,16 @@ export function ProductPicker({
                         </option>
                       ))}
                     </Select>
+                    </div>
                   ) : null}
                   {p.kind === "RECURRING" ? (
+                    <div className="w-[150px] shrink-0">
                     <Select
                       dense
                       value={planId ?? ""}
                       onChange={(e) => setChoice((c) => ({ ...c, [p.id]: { ...c[p.id], planId: e.target.value } }))}
                       aria-label="Billing plan"
-                      className="w-[150px]"
+                      className="w-full"
                     >
                       {plans.map((pl) => (
                         <option key={pl.id} value={pl.id}>
@@ -117,8 +120,9 @@ export function ProductPicker({
                         </option>
                       ))}
                     </Select>
+                    </div>
                   ) : null}
-                  <div className="w-[120px] text-right">
+                  <div className="w-[120px] shrink-0 text-right">
                     <div className="num text-[14px]">{formatMoney(price, { currency })}</div>
                     {p.tierPrice != null && p.tierPrice !== p.listPrice ? (
                       <div className="text-[12px] text-info">{tierLabel} price</div>
