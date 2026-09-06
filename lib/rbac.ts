@@ -16,6 +16,7 @@ export type Action =
   | "dashboard:view"
   | "reports:view"
   | "reports:all"
+  | "users:view"
   | "nudge";
 
 export type Actor = { id: string; role: Role };
@@ -72,6 +73,7 @@ const ROLE_ACTIONS: Record<Role, Set<Action>> = {
     "dashboard:view",
     "reports:view",
     "reports:all",
+    "users:view",
     "nudge",
   ]),
 };

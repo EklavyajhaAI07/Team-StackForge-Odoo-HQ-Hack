@@ -24,6 +24,8 @@ export default async function BackendLayout({ children }: { children: React.Reac
           { href: "/backend/warehouses", label: "Warehouses & stock" },
           { href: "/backend/plans", label: "Plans" },
           { href: "/backend/upsell", label: "Upsell pairs" },
+          // Who can sign in is the admin's business alone, so the tab is not even shown otherwise.
+          ...(can(user, "users:view") ? [{ href: "/backend/users", label: "Users" }] : []),
         ]}
       />
       {children}
