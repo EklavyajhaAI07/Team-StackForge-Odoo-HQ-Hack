@@ -103,7 +103,14 @@ export async function recomputeRisk(tx: Db, quotationId: string) {
 }
 
 /** Customer counters that the rep has not yet answered (a REP message on the same line, later). */
-export function openCounters(messages: QuotationDetail["messages"]) {
+export type CounterableMessage = {
+  authorType: string;
+  lineId: string | null;
+  counterDiscountPct: number | null;
+  createdAt: Date;
+};
+
+export function openCounters<T extends CounterableMessage>(messages: T[]): T[] {
   return messages.filter(
     (m) =>
       m.authorType === "CUSTOMER" &&

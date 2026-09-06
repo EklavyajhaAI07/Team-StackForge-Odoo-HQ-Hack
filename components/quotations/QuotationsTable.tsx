@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Kebab } from "@/components/ui/Kebab";
+import { LinkButton } from "@/components/ui/Button";
 import { StatusPill, TierPill } from "@/components/ui/Pill";
 import { Table, TableWrap, Td, Th } from "@/components/ui/Table";
 import { BASE_CURRENCY, formatMoney } from "@/lib/money";
@@ -21,6 +22,8 @@ export type QuotationRow = {
   lastActivityAt: string;
   lineCount: number;
   currencyCode: string;
+  /** Label and destination for whatever this quotation is waiting for. */
+  action: { label: string; href: string; urgent: boolean };
 };
 
 export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; managerMax: number }) {
@@ -40,6 +43,7 @@ export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; ma
           <col className="w-[62px]" />
           <col className="w-[126px]" />
           <col className="w-[96px]" />
+          <col className="w-[92px]" />
           <col className="w-[40px]" />
         </colgroup>
         <thead>
@@ -52,7 +56,8 @@ export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; ma
             <Th numeric>Lines</Th>
             <Th numeric>Total</Th>
             <Th>Activity</Th>
-            <Th aria-label="Actions" />
+            <Th aria-label="Next step" />
+            <Th aria-label="More actions" />
           </tr>
         </thead>
         <tbody>
@@ -85,6 +90,17 @@ export function QuotationsTable({ rows, managerMax }: { rows: QuotationRow[]; ma
               </Td>
               <Td numeric>{formatMoney(r.total, { whole: true })}</Td>
               <Td className="text-muted">{relativeTime(r.lastActivityAt)}</Td>
+              <Td className="text-right">
+                <LinkButton
+                  href={r.action.href}
+                  size="sm"
+                  variant={r.action.urgent ? "primary" : "secondary"}
+                  // The row itself navigates; stop the click reaching it twice.
+                  className="whitespace-nowrap"
+                >
+                  {r.action.label}
+                </LinkButton>
+              </Td>
               <Td className="text-right">
                 <Kebab
                   items={[

@@ -8,6 +8,8 @@ export const quotationListInclude = {
   currency: true,
   rep: { select: { id: true, name: true } },
   lines: { include: { product: { select: { taxPct: true } } } },
+  // Just enough to tell whether a customer counter is still unanswered.
+  messages: { select: { authorType: true, lineId: true, counterDiscountPct: true, createdAt: true } },
 } as const;
 
 /**

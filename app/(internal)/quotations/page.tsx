@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { requireSessionUser } from "@/lib/auth";
 import { can } from "@/lib/rbac";
+import { nextAction } from "@/lib/next-action";
+import { openCounters } from "@/lib/services/quotation";
 import { getApprovalConfig, listCustomers, listQuotations } from "@/lib/queries";
 import { quotationTotals } from "@/lib/quotes";
 import { QuotationsHeader } from "@/components/quotations/QuotationsHeader";
@@ -27,6 +29,7 @@ export default async function QuotationsPage() {
     lastActivityAt: q.lastActivityAt.toISOString(),
     lineCount: q.lines.length,
     currencyCode: q.currencyCode,
+    action: nextAction({ id: q.id, status: q.status, repId: q.repId, openCounters: openCounters(q.messages).length }, user),
   }));
 
   return (
