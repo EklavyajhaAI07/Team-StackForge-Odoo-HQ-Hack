@@ -1,5 +1,9 @@
 // Single source of truth for seed logins and the login-screen hint list.
-export const DEMO_PASSWORD = "demo1234";
+//
+// Not "demo1234": that string sits in public breach corpora, so Chrome interrupts every
+// sign-in with a "found in a data breach" warning — during a demo, on every login. This is
+// still obviously a shared demo credential, it just is not one anybody has leaked.
+export const DEMO_PASSWORD = "df360-demo-2026";
 
 export const DEMO_ACCOUNTS = [
   { name: "Priya Sharma", email: "priya@dealflow.local", role: "SALES_REP", blurb: "Sales rep — builds quotes" },

@@ -140,7 +140,7 @@ export default async function LandingPage() {
         <Card className="mx-auto max-w-[520px] px-6 py-7">
           <h2 className="display text-[22px]">Try it now</h2>
           <p className="mt-1 text-[14px] text-muted">
-            Seeded demo accounts — password <span className="num">demo1234</span> for all.
+            Seeded demo accounts — password <span className="num">df360-demo-2026</span> for all.
           </p>
           <ul className="mt-5 flex flex-col gap-1.5">
             {ACCOUNTS.map((a) => (

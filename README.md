@@ -604,7 +604,7 @@ http://localhost:3000
 The seeded internal accounts use the same demo password:
 
 ```text
-demo1234
+df360-demo-2026
 ```
 
 | Role          | Email                   |

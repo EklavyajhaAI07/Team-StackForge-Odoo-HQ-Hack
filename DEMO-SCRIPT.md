@@ -26,7 +26,7 @@ costs 20 seconds each time and is the main reason these demos overrun.
 | 3 | Vikram Rao, finance | `/quotations` | `vikram@dealflow.local` |
 | 4 | The customer | the portal link from the seed | no login, the link is the auth |
 
-Password is `demo1234`. Tab 4 must be a **private window**, otherwise it shares cookies with
+Password is `df360-demo-2026`. Tab 4 must be a **private window**, otherwise it shares cookies with
 your internal session and the two realms will not look separate.
 
 Take the portal link from the seed output. It changes every reseed.

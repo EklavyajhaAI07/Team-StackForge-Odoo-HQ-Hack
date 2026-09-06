@@ -346,7 +346,7 @@ In-memory `Map<quotationId, Set<controller>>`. `GET /api/events/[quotationId]` s
 ---
 
 ## 7) Seed data (`prisma/seed.ts`) — realism is a judging feature
-- Users: 2 reps (Priya, Arjun), 1 manager (Meera), 1 finance (Vikram), 1 admin. Password `demo1234`.
+- Users: 2 reps (Priya, Arjun), 1 manager (Meera), 1 finance (Vikram), 1 admin. Password `df360-demo-2026`.
 - Customers (5): Acme Industries (GOLD), Beta Traders (SILVER), Nimbus Retail (BRONZE), Orion Labs (GOLD), Zenith Corp (SILVER) — Indian cities.
 - Categories: Hardware, Services, Subscriptions. ~24 products with believable cost/list gaps (hardware margin ~35%, services ~55%, subs ~70%); 6 promoted; 2 hardware items share attribute "Pack" with variants; 4 subscription products linked to plans (Monthly/Quarterly/Yearly, PRORATED_CREDIT and one NO_REFUND).
 - Discount policy matrix: Bronze 5/3/5, Silver 10/7/10, Gold 15/10/12 (Hardware/Services/Subscriptions) — note Services deliberately strictest (mirrors the PS example).
