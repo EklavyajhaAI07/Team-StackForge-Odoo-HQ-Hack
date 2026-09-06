@@ -86,10 +86,15 @@ export function DiscountMatrix({
           </p>
         </div>
         {canEdit ? (
-          <Button variant="primary" loading={busy} disabled={!dirty || invalid} onClick={save}>
-            Save
-          </Button>
-        ) : null}
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="text-[13px] text-faint">{dirty ? "Unsaved changes" : "No changes yet"}</span>
+            <Button variant="primary" loading={busy} disabled={!dirty || invalid} onClick={save}>
+              Save
+            </Button>
+          </div>
+        ) : (
+          <span className="shrink-0 text-[13px] text-faint">Read-only</span>
+        )}
       </div>
 
       <div className="overflow-x-auto px-4 py-3">

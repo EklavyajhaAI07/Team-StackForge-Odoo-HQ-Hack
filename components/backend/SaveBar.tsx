@@ -28,8 +28,13 @@ export function SaveBar({
         <h2>{title}</h2>
         <p className="text-[13px] text-muted">{description}</p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex shrink-0 items-center gap-2">
         {extra}
+        {/* Without this, a greyed-out button is ambiguous: broken, forbidden, or simply
+            nothing to save yet? Name the state. */}
+        <span className="text-[13px] text-faint">
+          {disabled && !dirty ? "Read-only" : dirty ? "Unsaved changes" : "No changes yet"}
+        </span>
         <Button variant="primary" loading={busy} disabled={!dirty || disabled} onClick={onSave}>
           {label}
         </Button>

@@ -249,10 +249,12 @@ textarea {
   cursor: not-allowed;
 }
 /* A near-white fill at 45% is still the brightest thing on a dark screen, which draws
-   the eye to the one control that cannot be used. Disabled primaries drop to a flat chip. */
+   the eye to the one control that cannot be used. Disabled primaries drop to a flat chip —
+   but it has to stay legible as a button, or a config screen looks read-only. */
 .btn-primary:disabled {
   background: var(--raised);
-  color: var(--faint);
+  color: var(--muted);
+  border-color: var(--border-strong);
   opacity: 1;
 }
 .btn-sm {
