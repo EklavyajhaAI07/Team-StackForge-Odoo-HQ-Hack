@@ -9,6 +9,7 @@ import { daysSince } from "@/lib/format";
 import { QuotationsHeader } from "@/components/quotations/QuotationsHeader";
 import { RiskChip } from "@/components/quotations/RiskChip";
 import { TierPill } from "@/components/ui/Pill";
+import { LiveList } from "@/components/shell/LiveList";
 
 export const metadata: Metadata = { title: "Pipeline" };
 
@@ -24,6 +25,7 @@ export default async function PipelinePage() {
 
   return (
     <>
+      <LiveList />
       <QuotationsHeader view="kanban" count={quotations.length} customers={customers} scope={can(user, "quotations:all") ? "team" : "mine"}
         canCreate={can(user, "quotation:create")} />
       <div className="grid grid-cols-5 gap-3">

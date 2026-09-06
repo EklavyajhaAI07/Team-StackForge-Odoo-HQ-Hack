@@ -3,7 +3,7 @@ import { ApiError, handle, json } from "@/lib/api";
 import { logAudit } from "@/lib/audit";
 import { emit } from "@/lib/sse";
 import { confirmQuotation } from "@/lib/services/order";
-import { awaitingInternalApproval, requirePortalSession } from "@/lib/services/portal";
+import { awaitingInternalApproval, notYetOfferable, requirePortalSession } from "@/lib/services/portal";
 
 /**
  * POST /api/portal/confirm — the customer accepts the quotation (§5.5).
@@ -23,6 +23,17 @@ export async function POST() {
       if (q.customerId !== session.customerId) throw new ApiError(403, "That quotation belongs to another customer");
       if (q.status === "CONFIRMED") return { blocked: false as const, alreadyConfirmed: true, status: q.status };
       if (q.status === "REJECTED") throw new ApiError(409, "This quotation is no longer available");
+
+      if (notYetOfferable(q.status)) {
+        await logAudit(tx, {
+          entityType: "Quotation",
+          entityId: q.id,
+          actor: { type: "CUSTOMER", id: q.customerId },
+          action: "confirm-blocked",
+          meta: { status: q.status, message: "the quotation is still a draft" },
+        });
+        return { blocked: true as const, status: q.status };
+      }
 
       if (awaitingInternalApproval(q.status)) {
         await logAudit(tx, {
@@ -67,7 +78,12 @@ export async function POST() {
         {
           confirmed: false,
           status: result.status,
-          message: "Your requested terms are with our approvals team. We will come back to you shortly.",
+          // A draft is not "with approvals" — nobody has submitted it. Saying so would be
+          // both untrue and confusing to a customer who was sent it to read.
+          message:
+            result.status === "DRAFT"
+              ? "This quotation is still being prepared. Your comments have reached your account manager, and you can confirm once it is finalised."
+              : "Your requested terms are with our approvals team. We will come back to you shortly.",
         },
         { status: 409 },
       );

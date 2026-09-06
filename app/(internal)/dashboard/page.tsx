@@ -5,6 +5,7 @@ import { loadDealHealth } from "@/lib/services/dashboard";
 import { AlertColumns } from "@/components/dashboard/AlertColumns";
 import { KpiRow } from "@/components/dashboard/KpiRow";
 import { PageHeader } from "@/components/shell/PageHeader";
+import { LiveList } from "@/components/shell/LiveList";
 
 export const metadata: Metadata = { title: "Deal health" };
 
@@ -15,6 +16,7 @@ export default async function DashboardPage() {
 
   return (
     <>
+      <LiveList />
       <PageHeader
         title="Deal health"
         context={

@@ -19,8 +19,11 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
     const result = await prisma.$transaction(async (tx) => {
       const q = await requireQuotation(tx, id);
       authorize(user, "quotation:send", { repId: q.repId });
-      if (!["APPROVED", "SENT", "UNDER_NEGOTIATION"].includes(q.status)) {
-        throw new ApiError(409, "Only an approved quotation can be sent to the customer");
+      // A draft can be shared so the customer can read and comment on it while it is still
+      // being built. What approval gates is CONFIRMATION, not viewing — the portal refuses to
+      // confirm a draft or anything mid-approval, so no unapproved terms can become an order.
+      if (!["DRAFT", "APPROVED", "SENT", "UNDER_NEGOTIATION"].includes(q.status)) {
+        throw new ApiError(409, "A rejected or confirmed quotation cannot be sent to the customer");
       }
       const token = randomBytes(24).toString("base64url");
       const expiresAt = new Date(Date.now() + TOKEN_HOURS * 3_600_000);

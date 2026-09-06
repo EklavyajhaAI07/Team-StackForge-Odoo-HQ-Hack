@@ -6,6 +6,7 @@ import { quotationTotals } from "@/lib/quotes";
 import { QuotationsHeader } from "@/components/quotations/QuotationsHeader";
 import { QuotationsTable } from "@/components/quotations/QuotationsTable";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { LiveList } from "@/components/shell/LiveList";
 
 export const metadata: Metadata = { title: "Quotations" };
 
@@ -30,6 +31,7 @@ export default async function QuotationsPage() {
 
   return (
     <>
+      <LiveList />
       <QuotationsHeader view="table" count={rows.length} customers={customers} scope={can(user, "quotations:all") ? "team" : "mine"}
         canCreate={can(user, "quotation:create")} />
       {rows.length === 0 ? (

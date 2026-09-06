@@ -94,9 +94,22 @@ export function PrimaryAction({
   if (s === "DRAFT") {
     const auto = decision.kind === "AUTO_APPROVED";
     body = permissions.canSubmit ? (
-      <Button variant="primary" size="lg" className="w-full" disabled={lineCount === 0} loading={busy} onClick={submit}>
-        {auto ? "Confirm & fulfil" : "Send for approval"}
-      </Button>
+      <div className="flex flex-col gap-2">
+        <Button variant="primary" size="lg" className="w-full" disabled={lineCount === 0} loading={busy} onClick={submit}>
+          {auto ? "Confirm & fulfil" : "Send for approval"}
+        </Button>
+        {/* A draft can be shown to the customer to read and comment on. They cannot confirm
+            it — approval gates acceptance, not viewing. */}
+        {link ? (
+          <Button variant="secondary" className="w-full" icon={<IconCopy size={14} />} onClick={() => copy(link)}>
+            Copy portal link
+          </Button>
+        ) : (
+          <Button variant="ghost" size="sm" className="w-full" disabled={lineCount === 0} loading={busy} onClick={send}>
+            Share a draft link
+          </Button>
+        )}
+      </div>
     ) : (
       <p className="text-[13px] text-muted">Only the owning rep (or a manager) can submit this draft.</p>
     );

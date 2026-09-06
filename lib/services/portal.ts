@@ -35,6 +35,14 @@ export function awaitingInternalApproval(status: string): boolean {
   return status === "PENDING_MANAGER" || status === "PENDING_FINANCE";
 }
 
+/**
+ * A draft has not been through routing at all, so confirming one would create an order from
+ * terms no engine has scored and no approver has seen. Shareable to read, never to accept.
+ */
+export function notYetOfferable(status: string): boolean {
+  return status === "DRAFT";
+}
+
 export type PortalLineView = {
   id: string;
   name: string;
