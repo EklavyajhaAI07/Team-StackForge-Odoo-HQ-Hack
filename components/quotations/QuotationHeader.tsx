@@ -2,10 +2,12 @@ import Link from "next/link";
 import { StatusPill, TierPill } from "@/components/ui/Pill";
 import { IconChevronRight } from "@/components/ui/icons";
 import { formatDate } from "@/lib/format";
+import { PortalLinkButton } from "./PortalLinkButton";
 import { BASE_CURRENCY } from "@/lib/money";
 
 export function QuotationHeader({
   quotation,
+  portalUrl,
 }: {
   quotation: {
     id: string;
@@ -18,6 +20,8 @@ export function QuotationHeader({
     currencyCode: string;
     fxRate: number;
   };
+  /** The live customer link, when one has been issued. Null before the quotation is sent. */
+  portalUrl?: string | null;
 }) {
   const q = quotation;
   // Only worth saying when it is not the ledger currency — otherwise it is noise on every screen.
@@ -54,6 +58,12 @@ export function QuotationHeader({
           ) : null}
         </div>
       </div>
+      {/* Every tab can hand the customer their document; only the builder can mint the link. */}
+      {portalUrl ? (
+        <div className="shrink-0">
+          <PortalLinkButton url={portalUrl} />
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireSessionUser } from "@/lib/auth";
+import { activePortalUrl } from "@/lib/portal-url";
 import { QuotationHeader } from "@/components/quotations/QuotationHeader";
 import { QuotationTabs } from "@/components/quotations/QuotationTabs";
 import { AuditTimeline } from "@/components/quotations/AuditTimeline";
@@ -15,6 +16,7 @@ export default async function QuotationLayout({ children, params }: { children: 
       rep: { select: { name: true } },
       order: { select: { id: true, status: true } },
       approvals: { where: { status: "PENDING" }, select: { role: true } },
+      portalTokens: { select: { token: true, expiresAt: true } },
       messages: { select: { authorType: true, lineId: true, counterDiscountPct: true, createdAt: true } },
     },
   });
@@ -29,7 +31,7 @@ export default async function QuotationLayout({ children, params }: { children: 
 
   return (
     <>
-      <QuotationHeader quotation={q} />
+      <QuotationHeader quotation={q} portalUrl={activePortalUrl(q.portalTokens)} />
       <QuotationTabs id={q.id} pendingApproval={q.approvals.length > 0} openCounters={openCounters} hasOrder={!!q.order} />
       <div className="mt-5">{children}</div>
       <div className="mt-8">
